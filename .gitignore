@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Git worktrees (local checkouts, never committed)
+.claude/worktrees/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase.json.local
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Runtime data
+*.log
