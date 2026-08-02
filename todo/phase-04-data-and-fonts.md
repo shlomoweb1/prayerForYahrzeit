@@ -8,7 +8,7 @@ Sources:
 - Fonts: `/home/shlomo-framowitz/Developments/tziyun-berega/verify-legal-fonts/tmp/fonts-staging/system/` (+ provenance.tsv, seed-fonts.sh)
 
 ## P4-01 build-tehillim script → data/tehillim.json
-Status: pending | Owner: — | Started: — | Deps: —
+Status: in-progress | Owner: agent-c | Started: 2026-08-02 | Deps: —
 Details: normalize all-tehillim.json (drop unused fields, index by chapter; keep hebrew w/ nikud, transliteration, english, french). Output committed.
 - [ ] data/tehillim.json generated + schema doc
 
