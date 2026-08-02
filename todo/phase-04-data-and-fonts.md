@@ -8,12 +8,12 @@ Sources:
 - Fonts: `/home/shlomo-framowitz/Developments/tziyun-berega/verify-legal-fonts/tmp/fonts-staging/system/` (+ provenance.tsv, seed-fonts.sh)
 
 ## P4-01 build-tehillim script → data/tehillim.json
-Status: in-progress | Owner: agent-c | Started: 2026-08-02 | Deps: —
-Details: normalize all-tehillim.json (drop unused fields, index by chapter; keep hebrew w/ nikud, transliteration, english, french). Output committed.
-- [ ] data/tehillim.json generated + schema doc
+Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: —
+Details: normalize all-tehillim.json (drop unused fields, index by chapter; keep hebrew w/ nikud, transliteration, english, french). Output committed. 150 chapters / 2527 verses; recovered scraper-dropped verses (56,83,99,107,119,129,132) from live pages + cache fallback.
+- [x] data/tehillim.json generated + schema doc
 
 ## P4-02 itim harvest script → liturgy data
-Status: pending | Owner: — | Started: — | Deps: —
+Status: in-progress | Owner: agent-c | Started: 2026-08-02 | Deps: —
 Details: Playwright scrape of itim sheet → `data/liturgy.json` (fixed psalms, blessing, kaddish nusach variants, closing prayers, השכבה), `data/mishnayot-map.json` (letter → tractate/chapter). Handle page-layout drift; commit outputs (runtime fully offline).
 - [ ] structured liturgy.json + mishnayot map verified against itim page
 
