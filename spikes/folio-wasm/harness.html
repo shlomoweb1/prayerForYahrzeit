@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Folio WASM spike harness</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; background: #f5f5f4; }
+    h1 { font-size: 18px; margin: 0 0 8px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    button { font: inherit; padding: 6px 12px; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; }
+    button:hover { background: #eef2ff; }
+    #log { background: #111; color: #cfc; font: 12px/1.5 ui-monospace, monospace; padding: 10px; border-radius: 8px; white-space: pre-wrap; max-height: 45vh; overflow: auto; }
+    #preview { margin-top: 12px; border: 1px dashed #aaa; padding: 8px; background: #fff; overflow: auto; }
+    .pagerow { display: flex; gap: 8px; }
+    .pagebox { border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h1>Folio WASM spike — browser render harness</h1>
+  <div class="toolbar">
+    <button data-test="hello">1. hello (data-URI font)</button>
+    <button data-test="capture">2. capture 2-page sheet</button>
+    <button data-test="deco-logical">3. decorated words (logical)</button>
+    <button data-test="deco-reversed">4. decorated words (reversed)</button>
+    <button data-test="phone">5. phone size @page 1080x1920</button>
+    <button data-test="autoheight">6. AutoHeight @page</button>
+    <button data-test="all">ALL</button>
+    <button id="cancel">cancel</button>
+  </div>
+  <div id="log">ready — run a test (or open with ?test=&lt;name&gt;).</div>
+  <div id="preview" hidden></div>
+
+  <script src="folio-loader.js"></script>
+  <script src="capture.js"></script>
+  <script src="harness.js"></script>
+</body>
+</html>
