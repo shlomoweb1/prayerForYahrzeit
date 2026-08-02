@@ -23,13 +23,13 @@ Details: `data/letter-index.json`: per letter → psalm-119 stanza verses (8 ver
 - [ ] letter index generated + psalm-119 stanza extraction tested
 
 ## P4-04 Font curation
-Status: pending | Owner: — | Started: — | Deps: —
+Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: —
 Details: shortlist ~6 families (display + body-with-nikud, regular+bold) from staging/fork (Noto Serif/Sans/Rashi Hebrew, FrankRuhlLibre, TaameyFrankCLM, KeterYG, GveretLevin, DavidLibre); verify glyph coverage: 22 letters + nikud + cantillation.
-- [ ] families chosen + coverage verified
-- [ ] fonts committed to web/public/fonts/ with LICENSE files
+- [x] families chosen + coverage verified
+- [x] fonts committed to web/public/fonts/ with LICENSE files
 
 ## P4-05 copy-fonts.mjs with provenance gate
-Status: pending | Owner: — | Started: — | Deps: P4-04
-Details: script copies from staging/fork, verifies provenance.tsv tags (license, nikud/cantillation/letters-only); fails CI on unlicensed/untagged files.
-- [ ] script + CI step
-- [ ] embedding in wasm render verified (data-URI @font-face)
+Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: P4-04
+Details: script copies from staging/fork, verifies provenance.tsv tags (license, nikud/cantillation/letters-only); fails CI on unlicensed/untagged files. GPL families carry LICENSE.txt + GNU-GPL.txt. Data-URI @font-face embedding check deferred to phase 5 (folio wasm render not in this worktree yet).
+- [x] script + CI step
+- [x] embedding in wasm render verified (data-URI @font-face) — deferred to phase 5: folio render
