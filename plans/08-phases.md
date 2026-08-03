@@ -4,10 +4,10 @@ Execution plan. Each phase maps to a `todo/` file; phases 1–2 can run in paral
 
 | Phase | Title | Branch | todo file | Status |
 |---|---|---|---|---|
-| 1 | Web scaffold (Vite+TS, Router URL-state, Tailwind 4 + shadcn logical-props clone, i18n 4 locales, a11y widget + statement page, CI gates, Firebase init) | `feat/web-scaffold` | `todo/phase-01-scaffold.md` | pending |
-| 2 | Folio WASM spike (rebuild folio.wasm, browser worker loader, capture pipeline, decorated-word render, custom page size) | `feat/folio-spike` | `todo/phase-02-wasm-spike.md` | pending |
+| 1 | Web scaffold (P1-01..P1-08; P1-08 blocked on Firebase credentials) | `feat/web-scaffold` | `todo/phase-01-scaffold.md` | done |
+| 2 | Folio WASM spike (P2-01..P2-05; findings in spikes/folio-wasm/FINDINGS.md) | `feat/folio-spike` | `todo/phase-02-wasm-spike.md` | done |
 | 3 | Sheet builder (layout model parameterized by print/share target, sections, A4Page flow, SheetPreview + PreviewScaleWrapper, split editor step 6) | `feat/sheet-builder` | `todo/phase-03-sheet-builder.md` | pending |
-| 4 | Data + fonts (scripts, harvest itim, data/ artifacts, font curation + embedding, copy-fonts.mjs) | `feat/data-and-fonts` | `todo/phase-04-data-and-fonts.md` | pending |
+| 4 | Data + fonts (P4-01..P4-05) | `feat/data-pipeline` | `todo/phase-04-data-and-fonts.md` | done |
 | 5 | Firebase integration (Hosting rules/cache, Firestore schema + rules, Storage share flow, Auth anonymous/Google) | `feat/firebase` | `todo/phase-05-firebase.md` | pending |
 | 6 | i18n/l10n completion (es, fr, en dictionaries complete; RTL/LTR QA; share/print polish; PWA) | `feat/i18n-and-share` | `todo/phase-06-i18n-and-share.md` | pending |
 | 7 | A11y audit + launch (IS 5568 checklist, NVDA/JAWS/VoiceOver/TalkBack manual passes, Lighthouse ≥95, statement final, deploy) | `feat/a11y-launch` | `todo/phase-07-a11y-launch.md` | pending |
