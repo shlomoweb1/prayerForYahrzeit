@@ -1,0 +1,2 @@
+# Bulky inspection artifacts (regenerate with pdftoppm -png; see FINDINGS.md)
+*.png
