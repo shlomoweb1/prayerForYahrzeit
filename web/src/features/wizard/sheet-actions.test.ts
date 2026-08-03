@@ -58,7 +58,10 @@ describe('sheetFilename', () => {
 
 describe('sharePdfFile', () => {
   it('reports unsupported when navigator.share is missing', async () => {
-    const navigatorWithShare = navigator as Navigator & { share?: unknown; canShare?: unknown }
+    const navigatorWithShare = navigator as unknown as {
+      share?: undefined
+      canShare?: undefined
+    }
     navigatorWithShare.share = undefined
     navigatorWithShare.canShare = undefined
     const blob = new Blob(['%PDF'], { type: 'application/pdf' })
