@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const STEP_MIN = 1
-export const STEP_MAX = 7
+export const STEP_MAX = 6
 
 export const SECTIONS = [
   'psalms',
@@ -27,8 +27,9 @@ export const WizardQuery = z.object({
   paper: z.enum(['a4', 'letter']).default('a4').catch('a4'),
   gender: z.enum(['male', 'female']).default('male').catch('male'),
   nusach: z.enum(['ashkenaz', 'sefard']).default('ashkenaz').catch('ashkenaz'),
-  name: z.string().trim().max(100).optional().catch(undefined),
-  parent: z.string().trim().max(100).optional().catch(undefined),
+  name: z.string().max(100).optional().catch(undefined),
+  parent: z.string().max(100).optional().catch(undefined),
+  lineage: z.enum(['none', 'kohen', 'levi']).default('none').catch('none'),
   font: z.string().min(1).default('noto-serif').catch('noto-serif'),
   nikud: z.coerce.number().int().min(0).max(1).catch(1).default(1),
   deco: z.coerce.number().int().min(0).max(1).catch(1).default(1),

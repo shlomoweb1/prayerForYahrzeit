@@ -1,5 +1,5 @@
 /**
- * P3-05 Step 7 — review and download.
+ * P3-05 Step 6 — review and download.
  *
  * Shows the final sheet (scaled preview on screen, natural-size copy for
  * print) with the action bar: print, download PDF, share, save to account.
@@ -29,7 +29,7 @@ import { renderPdf, downloadPdf, performSheetShare } from '@/features/wizard/she
 import type { StepProps } from '@/features/wizard/step-registry'
 import { StepShell } from '@/features/wizard/steps/step-shell'
 
-export function Step7Review({ search }: StepProps) {
+export function Step6Review({ search }: StepProps) {
   const { t } = useTranslation()
   const { settings, layout } = useSheetDraft(search)
   const content = buildSheetContent(settings)
@@ -73,9 +73,9 @@ export function Step7Review({ search }: StepProps) {
 
   return (
     <StepShell
-      stepNumber={7}
-      titleKey="wizard.steps.7.title"
-      descriptionKey="wizard.steps.7.description"
+      stepNumber={6}
+      titleKey="wizard.steps.6.title"
+      descriptionKey="wizard.steps.6.description"
     >
       <style>{printCss}</style>
       <div className="print:hidden">

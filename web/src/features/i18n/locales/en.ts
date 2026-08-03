@@ -61,25 +61,22 @@ export const en = {
       },
       '2': {
         title: 'Gender',
-        description: 'Choose: son (ben) or daughter (bat).',
+        description: "Choose the deceased's gender: male or female.",
       },
       '3': {
         title: 'Nusach',
-        description: 'Choose the prayer rite: Ashkenaz or Sefard.',
+        description: 'Choose the prayer rite: Ashkenaz or Sephardic (Mizrahi).',
       },
       '4': {
-        title: 'Deceased name',
-        description: 'Enter the Hebrew name, as it will appear at the top of the sheet.',
+        title: 'Name',
+        description:
+          'Enter the Hebrew name and the father\'s name, as they will appear at the top of the sheet.',
       },
       '5': {
-        title: 'Father\'s name',
-        description: 'Enter the father\'s (or mother\'s) name used to identify the deceased.',
-      },
-      '6': {
         title: 'Split editor',
         description: 'Choose which sections appear and how they are distributed across pages.',
       },
-      '7': {
+      '6': {
         title: 'Review and download',
         description: 'Review the preview, then print, download or share.',
       },
@@ -89,8 +86,11 @@ export const en = {
       paper: 'Paper size',
       gender: 'Gender',
       nusach: 'Nusach',
-      name: 'Deceased name',
+      name_male: 'Deceased name',
+      name_female: 'Deceased name',
       parent: 'Father\'s name',
+      namePreview: 'Preview',
+      lineage: 'Lineage',
       font: 'Font',
       nikud: 'Vowel points',
       deco: 'Decorations',
@@ -127,7 +127,8 @@ export const en = {
         'File sharing is not supported in this browser — the file was downloaded and a link was copied.',
     },
     placeholders: {
-      name: 'e.g. Moshe ben Avraham',
+      name_male: 'e.g. Moshe David',
+      name_female: 'e.g. Sarah Rivka',
       parent: 'e.g. Avraham',
     },
     options: {
@@ -141,12 +142,12 @@ export const en = {
         letter: 'Letter',
       },
       gender: {
-        male: 'Son (ben)',
-        female: 'Daughter (bat)',
+        male: 'Male',
+        female: 'Female',
       },
       nusach: {
         ashkenaz: 'Ashkenaz',
-        sefard: 'Sefard',
+        sefard: 'Sephardic (Mizrahi)',
       },
       acrostic: {
         both: 'Deceased and parent names',
@@ -154,6 +155,41 @@ export const en = {
         parent: 'Parent name only',
         none: 'No acrostic',
       },
+      lineage: {
+        kohen: 'Kohen',
+        levi: 'Levi',
+        none: 'Yisrael',
+      },
+    },
+    hints: {
+      name_male: 'You can add a second given name too, e.g. Moshe David.',
+      name_female: 'You can add a second given name too, e.g. Sarah Rivka.',
+      target: {
+        print: 'A print-ready PDF, laid out for a home or shop printer.',
+        share: 'A shareable file, sent by link, WhatsApp or email.',
+        both: 'A print-ready file, plus a shareable version.',
+      },
+      paper: {
+        a4: 'The standard size across Israel, Europe and most of the world.',
+        letter: 'The standard size in the US and Canada.',
+      },
+      gender: {
+        male: "Matches the sheet's wording to the male form.",
+        female: "Matches the sheet's wording to the female form.",
+      },
+      nusach: {
+        ashkenaz: 'The prayer text used in Ashkenazi communities.',
+        sefard: 'The prayer text used in Sephardic and Mizrahi communities.',
+      },
+      lineage: {
+        kohen: 'Adds the title "HaKohen" before ז״ל.',
+        levi: 'Adds the title "HaLevi" before ז״ל.',
+        none: 'No lineage title added.',
+      },
+    },
+    paperDimensions: {
+      a4: '210 × 297 mm',
+      letter: '215.9 × 279.4 mm',
     },
     errors: {
       render: 'PDF render failed: {{message}}',

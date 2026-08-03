@@ -41,7 +41,7 @@ export default function WizardPage() {
   const dialogOpen = search.dialog !== undefined
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 bg-card/70 rounded-lg p-6 md:min-w-3xl">
       <h1 className="text-2xl font-semibold">{t('wizard.title')}</h1>
       <StepComponent search={search} setSearch={setSearch} />
       <div className="flex items-center justify-between gap-4">

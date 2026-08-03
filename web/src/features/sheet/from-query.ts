@@ -26,6 +26,7 @@ export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
     nusach: search.nusach as SheetNusach,
     name: search.name || undefined,
     parent: search.parent || undefined,
+    lineage: search.lineage,
     font: isSheetFontId(search.font) ? search.font : 'noto-serif',
     nikud: search.nikud,
     deco: search.deco,

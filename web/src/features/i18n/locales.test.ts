@@ -66,7 +66,7 @@ describe('i18n locale dictionaries', () => {
 
   it('he dictionary includes every wizard step title', () => {
     const steps = he.wizard.steps as Record<string, { title: string }>
-    for (let step = 1; step <= 7; step += 1) {
+    for (let step = 1; step <= 6; step += 1) {
       expect(typeof steps[String(step)]?.title).toBe('string')
     }
   })

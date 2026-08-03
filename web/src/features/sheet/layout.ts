@@ -23,6 +23,7 @@ export type SheetTarget = 'print' | 'share' | 'both'
 export type SheetPaper = 'a4' | 'letter'
 export type SheetNusach = 'ashkenaz' | 'sefard'
 export type SheetGender = 'male' | 'female'
+export type SheetLineage = 'none' | 'kohen' | 'levi'
 export type AcrosticMode = 'both' | 'name' | 'parent' | 'none'
 export type SheetFontId =
   | 'noto-serif'
@@ -39,6 +40,7 @@ export interface SheetSettings {
   nusach: SheetNusach
   name?: string
   parent?: string
+  lineage: SheetLineage
   font: SheetFontId
   nikud: number
   deco: number

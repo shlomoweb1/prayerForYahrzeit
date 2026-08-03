@@ -52,9 +52,21 @@ export type SheetBlock =
 
 export const HEADER_PREFIX = 'תפילות ולימוד לע״נ'
 
-/** Header line, e.g. תפילות ולימוד לע״נ יונתן יוסף בן צבי מרדכי ז״ל. */
+/** "בן" for male, "בת" for female — the word linking a name to its parent's. */
+export function filialWord(gender: SheetSettings['gender']): 'בן' | 'בת' {
+  return gender === 'female' ? 'בת' : 'בן'
+}
+
+/** "הכהן" / "הלוי" appended before ז״ל for Kohen/Levi lineage, else nothing. */
+export function lineageWord(lineage: SheetSettings['lineage']): string | null {
+  if (lineage === 'kohen') return 'הכהן'
+  if (lineage === 'levi') return 'הלוי'
+  return null
+}
+
+/** Header line, e.g. תפילות ולימוד לע״נ יונתן יוסף בן צבי מרדכי הלוי ז״ל. */
 export function sheetHeaderLine(settings: SheetSettings): string {
-  const genderWord = settings.gender === 'female' ? 'בת' : 'בן'
+  const genderWord = filialWord(settings.gender)
   const name = settings.name?.trim() ?? ''
   const parent = settings.parent?.trim() ?? ''
   const parts = [HEADER_PREFIX]
@@ -63,6 +75,8 @@ export function sheetHeaderLine(settings: SheetSettings): string {
     if (name) parts.push(genderWord, parent)
     else parts.push(parent)
   }
+  const lineage = lineageWord(settings.lineage)
+  if (lineage) parts.push(lineage)
   parts.push('ז״ל')
   return normalizePunctuation(parts.join(' '))
 }

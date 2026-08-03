@@ -1,7 +1,8 @@
+import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { OptionCard } from '@/components/ui/option-card'
+import { RadioGroup } from '@/components/ui/radio-group'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
 import { StepShell } from '@/features/wizard/steps/step-shell'
 
@@ -10,8 +11,13 @@ interface StepProps {
   setSearch: (patch: Partial<WizardQuery>) => void
 }
 
+const GENDER_ICONS: Record<WizardQuery['gender'], React.ReactNode> = {
+  male: <img src="icons/avatars/20215969031702585014.svg" className="size-24" />,
+  female: <img src="icons/avatars/12363769451582967218.svg" className="size-24" />,
+}
+
 export function Step2Gender({ search, setSearch }: StepProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   return (
     <StepShell
@@ -21,17 +27,19 @@ export function Step2Gender({ search, setSearch }: StepProps) {
     >
       <RadioGroup
         value={search.gender}
-        onValueChange={(value) =>
-          setSearch({ gender: value as WizardQuery['gender'] })
-        }
+        onValueChange={(value) => setSearch({ gender: value as WizardQuery['gender'] })}
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+        aria-label={t('wizard.labels.gender')}
+        dir={i18n.dir()}
       >
         {(['male', 'female'] as const).map((gender) => (
-          <div key={gender} className="flex items-center gap-2">
-            <RadioGroupItem value={gender} id={`gender-${gender}`} />
-            <Label htmlFor={`gender-${gender}`}>
-              {t(`wizard.options.gender.${gender}`)}
-            </Label>
-          </div>
+          <OptionCard
+            key={gender}
+            value={gender}
+            icon={GENDER_ICONS[gender]}
+            title={t(`wizard.options.gender.${gender}`)}
+            hint={t(`wizard.hints.gender.${gender}`)}
+          />
         ))}
       </RadioGroup>
     </StepShell>

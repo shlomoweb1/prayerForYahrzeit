@@ -1,7 +1,8 @@
+import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { OptionCard } from '@/components/ui/option-card'
+import { RadioGroup } from '@/components/ui/radio-group'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
 import { StepShell } from '@/features/wizard/steps/step-shell'
 
@@ -10,8 +11,13 @@ interface StepProps {
   setSearch: (patch: Partial<WizardQuery>) => void
 }
 
+const NUSACH_ICONS: Record<WizardQuery['nusach'], React.ReactNode> = {
+  ashkenaz: <img src="icons/torah/ashkenaz.svg" className="size-48" />,
+  sefard: <img src="icons/torah/edot-mizrach.svg" className="size-48" />,
+}
+
 export function Step3Nusach({ search, setSearch }: StepProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   return (
     <StepShell
@@ -21,17 +27,19 @@ export function Step3Nusach({ search, setSearch }: StepProps) {
     >
       <RadioGroup
         value={search.nusach}
-        onValueChange={(value) =>
-          setSearch({ nusach: value as WizardQuery['nusach'] })
-        }
+        onValueChange={(value) => setSearch({ nusach: value as WizardQuery['nusach'] })}
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+        aria-label={t('wizard.labels.nusach')}
+        dir={i18n.dir()}
       >
         {(['ashkenaz', 'sefard'] as const).map((nusach) => (
-          <div key={nusach} className="flex items-center gap-2">
-            <RadioGroupItem value={nusach} id={`nusach-${nusach}`} />
-            <Label htmlFor={`nusach-${nusach}`}>
-              {t(`wizard.options.nusach.${nusach}`)}
-            </Label>
-          </div>
+          <OptionCard
+            key={nusach}
+            value={nusach}
+            icon={NUSACH_ICONS[nusach]}
+            title={t(`wizard.options.nusach.${nusach}`)}
+            hint={t(`wizard.hints.nusach.${nusach}`)}
+          />
         ))}
       </RadioGroup>
     </StepShell>

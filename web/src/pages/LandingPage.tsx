@@ -11,18 +11,17 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col gap-10">
-      <section className="flex flex-col items-center gap-4 py-8 text-center">
+      <section className="flex flex-col items-center gap-4 py-8 text-center bg-card/50 rounded-lg">
         <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance">
           {t('landing.title')}
         </h1>
         <p className="text-muted-foreground max-w-xl text-lg">{t('landing.subtitle')}</p>
-        <Button asChild size="lg">
-          <Link to="/wizard">{t('landing.ctaStart')}</Link>
-        </Button>
       </section>
       <Card>
         <CardHeader>
-          <CardTitle>{t('landing.howItWorksTitle')}</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-center">
+            {t('landing.howItWorksTitle')}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="grid gap-3">
@@ -32,6 +31,9 @@ export default function LandingPage() {
               </li>
             ))}
           </ul>
+          <Button asChild size="lg" className="mt-6 w-full">
+            <Link to="/wizard">{t('landing.ctaStart')}</Link>
+          </Button>
         </CardContent>
       </Card>
     </div>

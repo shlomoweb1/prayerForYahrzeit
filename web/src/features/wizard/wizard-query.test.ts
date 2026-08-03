@@ -61,7 +61,7 @@ describe('WizardQuery schema', () => {
   })
 
   it('clamps out-of-range step values instead of rejecting the URL', () => {
-    expect(WizardQuery.parse({ step: '99' }).step).toBe(7)
+    expect(WizardQuery.parse({ step: '99' }).step).toBe(6)
     expect(WizardQuery.parse({ step: '-2' }).step).toBe(1)
     expect(WizardQuery.parse({ step: 'abc' }).step).toBe(1)
   })
