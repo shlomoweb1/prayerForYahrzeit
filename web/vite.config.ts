@@ -41,6 +41,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ttf,otf}'],
         globIgnores: ['**/wasm/**'],
+        // SPA: every navigation offline serves the app shell (routes render
+        // client-side from the URL).
+        navigateFallback: '/index.html',
         runtimeCaching: [
           {
             // folio.wasm (16 MB) is NOT precached — see P6-03 report note.
