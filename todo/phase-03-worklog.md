@@ -41,3 +41,12 @@ Checkpoint protocol: append after EVERY commit. Resume from the last entry.
 - sheet-css.ts: static structural rules (.izkor-page/.izkor-dline/.izkor-dword/.izkor-ddeco/…); layout numbers stay inline on elements; SHEET_STYLE_ATTR export (style tag data-izkor-sheet for capture pipeline).
 - 4 new smoke tests (sheet-document.test.tsx): header text, all item kinds render, deco off path, stylesheet injection. 60/60 pass; typecheck/lint(0 err, 9 pre-existing warnings)/build green.
 - Todo: P3-03 done; P3-04/05/06 in-progress (checkboxes updated).
+
+## 10:30 — P3-05 step 6 + step 7 committed
+- WizardQuery: added `blessing` field (0/1, default 0).
+- from-query.ts: sheetSettingsFromQuery / sheetLayoutFromQuery / useSheetDraft — single bridge from URL query to SheetSettings+SheetLayout; font validated against SHEET_FONTS keys; share target → 1080×1920 layout.
+- SheetSettingsPanel.tsx: font select (6 families), paper select, nikud/deco/blessing switches, acrostic radio, 6 section checkboxes; accordion on <lg, static panel on ≥lg (duplicated controls instance via useId).
+- step-6-split.tsx: settings + live SheetPreview; sticky bottom action bar with next→step 7.
+- step-7-review.tsx: scaled preview + natural-size off-screen print copy (.izkor-print-area, left:-200vw) + @page override from layout + visibility media rules; actions: הדפסה (window.print), הורדה/שיתוף/שמירה disabled stubs w/ TODO-for-phase-5 note.
+- i18n: wizard.labels.settings + wizard.labels.blessing + wizard.sections.* + wizard.actions.* added to en/he/es/fr.
+- Browser-verified (dev server 5199): step 6 renders 23 A4 pages 794×1123, no page overflow (max content 1023 ≤ 1025), deco on/off + nikud toggles round-trip through URL and re-render live; step 7 print area off-screen, buttons present; 375px mobile: accordion + sticky bar + scaled preview. 60 tests pass, typecheck/lint/build green.
