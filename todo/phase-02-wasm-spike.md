@@ -22,14 +22,14 @@ Details: off-screen mount (position:fixed; left:-9999px; width:794px) → docume
 - [x] 2-page sample sheet HTML → PDF in browser (page count correct) — sheet.pdf: 2 pages via 2 `.page` divs + `page-break-before`
 
 ## P2-04 Decorated-word render test (highest risk)
-Status: in-progress | Owner: agent-b | Started: 2026-08-02 | Deps: P2-02
+Status: done | Owner: agent-b | Started: 2026-08-02 | Deps: P2-02
 Details: big letter above each word (RTL, nikud) rendered through folioRender; compare visual fidelity vs screen preview; document any Folio quirks/limits.
 - [x] decorated block renders (deco-logical.pdf / deco-reversed.pdf / deco-variants.pdf produced)
-- [ ] final verdict + findings written to spikes/folio-wasm/FINDINGS.md
+- [x] final verdict + findings written to spikes/folio-wasm/FINDINGS.md — VERDICT: flex-column pattern works; inline-block+block deco breaks in Folio (words stack, deco detaches to right margin); plain RTL+niquud perfect; Latin-in-Hebrew-font renders .notdef (blank) — use fonts with Latin coverage in Phase 3
 
 ## P2-05 Multi-page + custom page size
-Status: in-progress | Owner: agent-b | Started: 2026-08-02 | Deps: P2-02
+Status: done | Owner: agent-b | Started: 2026-08-02 | Deps: P2-02
 Details: `page-break-before:always` multi-page flow; custom `@page{size:1080px 1920px}` (share target) — verify @page overrides pageSize fallback (main.go:121-127).
 - [x] explicit page breaks honored (N pages = N divs) — sheet.pdf 2 pages
 - [x] custom phone size renders — phone.pdf 810x1440pt (1080x1920px)
-- [ ] autoheight + findings verification written up in FINDINGS.md
+- [x] autoheight verified — autoheight.pdf single continuous page 810x255.6pt; JS result reports height=0 (quirk); findings in FINDINGS.md
