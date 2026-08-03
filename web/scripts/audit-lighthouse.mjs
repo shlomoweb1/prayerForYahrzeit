@@ -18,15 +18,31 @@ const MIN_SCORES = {
 const urls = process.argv.slice(2).filter((arg) => arg.startsWith('http'))
 const targets = urls.length > 0 ? urls : ['/', '/wizard']
 
+const MIME_TYPES = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
+  '.wasm': 'application/wasm',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+}
+
 function serve(distDir) {
   return createServer(async (req, res) => {
     try {
       let pathname = decodeURIComponent(new URL(req.url, BASE_URL).pathname)
       if (pathname === '/') pathname = '/index.html'
-      const file = await readFile(join(distDir, pathname)).catch(() =>
-        readFile(join(distDir, 'index.html')),
-      )
-      const type = pathname.endsWith('.html') ? 'text/html; charset=utf-8' : 'application/octet-stream'
+      const [file, served] = await readFile(join(distDir, pathname))
+        .then((data) => [data, pathname])
+        .catch(() => readFile(join(distDir, 'index.html')).then((data) => [data, 'index.html']))
+      const ext = served.slice(served.lastIndexOf('.'))
+      const type = MIME_TYPES[ext] ?? 'application/octet-stream'
       res.writeHead(200, { 'content-type': type }).end(file)
     } catch (error) {
       res.writeHead(500).end(String(error))
