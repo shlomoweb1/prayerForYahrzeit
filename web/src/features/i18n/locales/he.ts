@@ -112,6 +112,17 @@ export const he = {
       downloading: 'מרנדר…',
       share: 'שיתוף',
       save: 'שמירה לחשבון',
+      copyLink: 'העתקת קישור',
+      whatsapp: 'וואטסאפ',
+    },
+    toasts: {
+      linkCopied: 'הקישור הועתק',
+      shareSuccess: 'דף היזכור שותף',
+      shareFailed: 'השיתוף נכשל',
+    },
+    fallback: {
+      shareUnsupported:
+        'שיתוף קבצים אינו נתמך בדפדפן זה — הקובץ הורד והקישור הועתק ללוח.',
     },
     placeholders: {
       name: 'לדוגמה: משה בן אברהם',
@@ -149,7 +160,10 @@ export const he = {
       share: 'שיתוף',
       print: 'הדפסה',
       settings: 'הגדרות',
-      scaffoldNote: 'פעולה זו תושלם בשלב מאוחר יותר של הפיתוח.',
+      scaffoldNote: 'חלון זה יושלם בשלב מאוחר יותר של הפיתוח.',
+      saveNote: 'שמירה לחשבון תהיה זמינה בגרסה עתידית.',
+      shareDescription: 'שתפו את דף היזכור כקובץ PDF, או העתיקו קישור להגדרות הדף.',
+      printDescription: 'ההדפסה מתבצעת דרך תיבת הדו־שיח של הדפדפן.',
     },
   },
   a11y: {

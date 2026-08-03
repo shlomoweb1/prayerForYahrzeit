@@ -114,6 +114,17 @@ export const fr = {
       downloading: 'Rendu en cours…',
       share: 'Partager',
       save: 'Enregistrer au compte',
+      copyLink: 'Copier le lien',
+      whatsapp: 'WhatsApp',
+    },
+    toasts: {
+      linkCopied: 'Lien copié',
+      shareSuccess: 'Feuille commémorative partagée',
+      shareFailed: 'Échec du partage',
+    },
+    fallback: {
+      shareUnsupported:
+        'Le partage de fichiers n’est pas pris en charge par ce navigateur — le fichier a été téléchargé et un lien a été copié.',
     },
     placeholders: {
       name: 'ex. : Moshé ben Avraham',
@@ -145,13 +156,17 @@ export const fr = {
       },
     },
     errors: {
-      render: 'PDF render failed: {{message}}',
+      render: 'Échec du rendu PDF : {{message}}',
     },
     dialog: {
       share: 'Partager',
       print: 'Imprimer',
       settings: 'Paramètres',
-      scaffoldNote: 'Cette action sera achevée dans une phase ultérieure du développement.',
+      scaffoldNote: 'Cette boîte de dialogue sera achevée dans une phase ultérieure du développement.',
+      saveNote: 'L’enregistrement au compte sera disponible dans une version future.',
+      shareDescription:
+        'Partagez la feuille commémorative en PDF, ou copiez un lien vers les réglages de la feuille.',
+      printDescription: 'L’impression passe par la boîte de dialogue d’impression du navigateur.',
     },
   },
   a11y: {

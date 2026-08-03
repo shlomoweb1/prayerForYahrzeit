@@ -11,6 +11,18 @@
     <title>יזכור — דף זיכרון להדפסה</title>
     <script>
       ;(function () {
+        var LOCALE_KEY = 'izkor:locale:v1'
+        var LOCALES = ['he', 'en', 'es', 'fr']
+        var locale = 'he'
+        try {
+          var storedLocale = window.localStorage.getItem(LOCALE_KEY)
+          if (LOCALES.indexOf(storedLocale) !== -1) locale = storedLocale
+        } catch (e) {
+          locale = 'he'
+        }
+        var root = document.documentElement
+        root.lang = locale
+        root.dir = locale === 'he' ? 'rtl' : 'ltr'
         var KEY = 'izkor:a11y:v1'
         var classes = []
         var stored = null

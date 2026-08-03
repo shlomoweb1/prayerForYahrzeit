@@ -46,6 +46,24 @@ describe('i18n locale dictionaries', () => {
     expect(localeDirection('fr')).toBe('ltr')
   })
 
+  it('has no empty leaf values', () => {
+    for (const [locale, dict] of Object.entries(dictionaries)) {
+      for (const key of flattenKeys(dict)) {
+        const leaf = key.split('.').reduce<unknown>((acc, part) => {
+          if (acc && typeof acc === 'object') return (acc as Record<string, unknown>)[part]
+          return undefined
+        }, dict)
+        expect(String(leaf).trim().length, `${locale}:${key}`).toBeGreaterThan(0)
+      }
+    }
+  })
+
+  it('localizes user-facing errors in every locale', () => {
+    const englishError = en.wizard.errors.render
+    expect(es.wizard.errors.render).not.toBe(englishError)
+    expect(fr.wizard.errors.render).not.toBe(englishError)
+  })
+
   it('he dictionary includes every wizard step title', () => {
     const steps = he.wizard.steps as Record<string, { title: string }>
     for (let step = 1; step <= 7; step += 1) {

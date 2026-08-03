@@ -114,6 +114,17 @@ export const en = {
       downloading: 'Rendering…',
       share: 'Share',
       save: 'Save to account',
+      copyLink: 'Copy link',
+      whatsapp: 'WhatsApp',
+    },
+    toasts: {
+      linkCopied: 'Link copied',
+      shareSuccess: 'Memorial sheet shared',
+      shareFailed: 'Sharing failed',
+    },
+    fallback: {
+      shareUnsupported:
+        'File sharing is not supported in this browser — the file was downloaded and a link was copied.',
     },
     placeholders: {
       name: 'e.g. Moshe ben Avraham',
@@ -151,7 +162,11 @@ export const en = {
       share: 'Share',
       print: 'Print',
       settings: 'Settings',
-      scaffoldNote: 'This action will be completed in a later phase of development.',
+      scaffoldNote: 'This dialog will be completed in a later phase of development.',
+      saveNote: 'Saving to an account will be available in a future release.',
+      shareDescription:
+        'Share the memorial sheet as a PDF file, or copy a link to the sheet settings.',
+      printDescription: 'Printing happens through the browser print dialog.',
     },
   },
   a11y: {

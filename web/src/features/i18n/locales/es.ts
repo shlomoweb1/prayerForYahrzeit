@@ -114,6 +114,17 @@ export const es = {
       downloading: 'Renderizando…',
       share: 'Compartir',
       save: 'Guardar en la cuenta',
+      copyLink: 'Copiar enlace',
+      whatsapp: 'WhatsApp',
+    },
+    toasts: {
+      linkCopied: 'Enlace copiado',
+      shareSuccess: 'Hoja conmemorativa compartida',
+      shareFailed: 'Error al compartir',
+    },
+    fallback: {
+      shareUnsupported:
+        'Compartir archivos no es compatible con este navegador — el archivo se ha descargado y se ha copiado un enlace.',
     },
     placeholders: {
       name: 'p. ej. Moshé ben Avraham',
@@ -145,13 +156,17 @@ export const es = {
       },
     },
     errors: {
-      render: 'PDF render failed: {{message}}',
+      render: 'Error al generar el PDF: {{message}}',
     },
     dialog: {
       share: 'Compartir',
       print: 'Imprimir',
       settings: 'Ajustes',
-      scaffoldNote: 'Esta acción se completará en una fase posterior del desarrollo.',
+      scaffoldNote: 'Este diálogo se completará en una fase posterior del desarrollo.',
+      saveNote: 'Guardar en la cuenta estará disponible en una versión futura.',
+      shareDescription:
+        'Comparta la hoja conmemorativa como archivo PDF, o copie un enlace a los ajustes de la hoja.',
+      printDescription: 'La impresión se realiza mediante el diálogo de impresión del navegador.',
     },
   },
   a11y: {
