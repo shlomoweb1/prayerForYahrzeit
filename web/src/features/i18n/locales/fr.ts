@@ -111,6 +111,7 @@ export const fr = {
     actions: {
       print: 'Imprimer',
       download: 'Télécharger le PDF',
+      downloading: 'Rendu en cours…',
       share: 'Partager',
       save: 'Enregistrer au compte',
     },
@@ -142,6 +143,9 @@ export const fr = {
         parent: 'Nom du père uniquement',
         none: 'Sans acrostiche',
       },
+    },
+    errors: {
+      render: 'PDF render failed: {{message}}',
     },
     dialog: {
       share: 'Partager',

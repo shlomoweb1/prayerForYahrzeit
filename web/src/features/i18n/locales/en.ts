@@ -111,6 +111,7 @@ export const en = {
     actions: {
       print: 'Print',
       download: 'Download PDF',
+      downloading: 'Rendering…',
       share: 'Share',
       save: 'Save to account',
     },
@@ -142,6 +143,9 @@ export const en = {
         parent: 'Parent name only',
         none: 'No acrostic',
       },
+    },
+    errors: {
+      render: 'PDF render failed: {{message}}',
     },
     dialog: {
       share: 'Share',

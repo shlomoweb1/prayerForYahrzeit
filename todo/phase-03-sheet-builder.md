@@ -31,6 +31,6 @@ Details: desktop = settings panel + live preview; mobile-first = accordion setti
 - [x] step 6/7 wired to live sheet data (WizardQuery → buildSheetContent + SheetPreview; blessing added to WizardQuery; from-query.ts bridges query ↔ settings/layout)
 
 ## P3-06 Word decoration (big letter above word)
-Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P2-04 findings, P3-02
+Status: done | Owner: agent-d | Started: 2026-08-03 | Deps: P2-04 findings, P3-02
 Details: decorative large first-letter-above-word for psalms/headings (settings: deco on/off, scale). Consistent between preview and wasm render.
 - [x] decorations render in preview + PDF (WordDecoLine: flex-row/flex-column per spike P2-04; word spacing preserved; used for header, psalm titles, verses)

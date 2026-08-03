@@ -109,6 +109,7 @@ export const he = {
     actions: {
       print: 'הדפסה',
       download: 'הורדת PDF',
+      downloading: 'מרנדר…',
       share: 'שיתוף',
       save: 'שמירה לחשבון',
     },
@@ -140,6 +141,9 @@ export const he = {
         parent: 'שם האב בלבד',
         none: 'ללא אקרוסטיכון',
       },
+    },
+    errors: {
+      render: 'PDF render failed: {{message}}',
     },
     dialog: {
       share: 'שיתוף',

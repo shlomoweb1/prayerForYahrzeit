@@ -209,6 +209,11 @@ export function SheetDocument({ content, layout, settings, onMeasure }: SheetDoc
     width,
     height,
     padding: `${layout.marginY}px ${layout.marginX}px`,
+    // Text styles live on the page (not just the .izkor-sheet wrapper) so the
+    // standalone captured document inherits them — the capture drops ancestors.
+    fontFamily,
+    fontSize: layout.baseFontPx,
+    lineHeight: layout.lineHeight,
     ...(index > 0 ? { pageBreakBefore: 'always' } : {}),
   })
 
