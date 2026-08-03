@@ -33,3 +33,11 @@ Checkpoint protocol: append after EVERY commit. Resume from the last entry.
 - Next: measurement-driven page rendering — sheet CSS string, SheetDocument
   (measure → pack → render pages), PreviewScaleWrapper + SheetPreview (P3-03/04).
 
+
+## 10:05 — P3-03 renderer + P3-04 preview + P3-06 deco committed (10c4d5b)
+- SheetDocument (sheet-document.tsx): hidden measure stack at content width (data-item-id) → cumulative bottom offsets give exact stacked heights incl. margin collapse → paginate → page divs (izkor-page, pageBreakBefore always, data-izkor-content wrapper) → convergence pass (max 5): page overflow ⇒ bump first-item height via fixesRef and re-pack.
+- SheetPreview + PreviewScaleWrapper (SheetPreview.tsx, PreviewScaleWrapper.tsx): scale-to-fit via ResizeObserver; onMeasure from SheetDocument reports full stacked height so the wrapper fits ALL pages (fixed flaw where only one page height was used).
+- WordDecoLine (WordDecoLine.tsx): flex-row of flex-columns per spike FINDINGS P2-04; splitFirstCluster; used for header/psalm-title/verses. BUG FOUND + fixed by smoke test: array-rendered word spans concatenated without spaces (textContent "תפילותולימוד…"); now pushes ' ' between word columns.
+- sheet-css.ts: static structural rules (.izkor-page/.izkor-dline/.izkor-dword/.izkor-ddeco/…); layout numbers stay inline on elements; SHEET_STYLE_ATTR export (style tag data-izkor-sheet for capture pipeline).
+- 4 new smoke tests (sheet-document.test.tsx): header text, all item kinds render, deco off path, stylesheet injection. 60/60 pass; typecheck/lint(0 err, 9 pre-existing warnings)/build green.
+- Todo: P3-03 done; P3-04/05/06 in-progress (checkboxes updated).
