@@ -16,6 +16,7 @@ Details: header (תפילות ולימוד לע"נ … ז"ל), blessing (אשר 
 Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P3-02
 Details: explicit 297×210mm page divs; flow content into pages; page-break-before:always between pages; page-level overflow handling (move block to next page).
 - [x] multi-page sheet flows correctly for long names
+- [x] content model (10 sections) + sequential page packing (unit-tested)
 
 ## P3-04 SheetPreview + PreviewScaleWrapper
 Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P3-01

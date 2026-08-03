@@ -14,7 +14,22 @@ Checkpoint protocol: append after EVERY commit. Resume from the last entry.
 - Next: P3-03 — sheet content model + pagination core (pure logic + unit tests).
 
 ## 2026-08-03 09:45 — P3-03 status — content model + pagination logic
-- (placeholder — appended on next commit)
+- Committed `1086d91`: todo statuses P3-01/P3-02 done, data import paths fixed
+  (`../../data` → `../../../data`, repo-root `data/`; previously latent — would
+  break the first real import; typecheck + build green).
+- Restarted the vite dev server from the worktree (old pid 285784 was serving the
+  main repo, not the worktree; new pid 348244 on :5199).
+- Next: web/src/features/sheet/content.ts + pagination.ts (+ unit tests).
 
-## 2026-08-03 10:00 — P3-03 status — pagination tests
-- (placeholder — appended on next commit)
+## 2026-08-03 09:55 — P3-03 status — content model + packing committed
+- `web/src/features/sheet/content.ts`: 10-section content model (header, blessing,
+  psalms, letters name/parent/neshama, kaddish yatom + derabanan, mishnayot,
+  hashkava, closing) honoring settings (sections toggles, acrostic mode, blessing,
+  nikud); `buildPageItems` flattens to pagination granularity (per-verse psalm
+  bodies, splitBlocks prayer chunks, keepWithNext headings).
+- `web/src/features/sheet/pagination.ts`: pure sequential first-fit packing with
+  keep-with-next heading rule; `pagination.test.ts` + `content.test.ts` (56 tests
+  green, lint clean, typecheck green).
+- Next: measurement-driven page rendering — sheet CSS string, SheetDocument
+  (measure → pack → render pages), PreviewScaleWrapper + SheetPreview (P3-03/04).
+
