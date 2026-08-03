@@ -29,3 +29,4 @@ Thumbs.db
 
 # Runtime data
 *.log
+web/dev-dist/
