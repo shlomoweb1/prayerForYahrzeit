@@ -7,31 +7,27 @@
  * Print uses the browser print dialog with an @page override from the layout;
  * the natural-size pages are already exact A4/Letter and carry
  * page-break-before between them. Download renders the sheet off-screen,
- * sends it to the Folio wasm worker and saves the PDF blob.
+ * sends it to the Folio wasm worker and saves the PDF blob (File System
+ * Access API when available, `<a download>` fallback).
  *
- * Share/save are stubs until their services land (P4-01); they render a
- * TODO-for-phase-5 note.
+ * Share (P6-04) uses the Web Share API Level 2 file share when supported
+ * (native share sheet, incl. WhatsApp on mobile); otherwise it downloads the
+ * PDF and copies the settings link. Saving to an account is a Phase 5
+ * (Firebase) feature — kept as a visible stub below (TODO(phase-5)).
  */
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
-import { folioClient } from '@/features/folio/folio-client'
 import { useSheetDraft } from '@/features/sheet/from-query'
 import { buildSheetContent } from '@/features/sheet/content'
 import { SheetDocument } from '@/features/sheet/sheet-document'
 import { SheetPreview } from '@/features/sheet/SheetPreview'
-import { renderSheetHTML } from '@/features/render/renderSheetHTML'
+import { renderPdf, downloadPdf, performSheetShare } from '@/features/wizard/sheet-actions'
 import type { StepProps } from '@/features/wizard/step-registry'
 import { StepShell } from '@/features/wizard/steps/step-shell'
-
-function base64ToBytes(base64: string): ArrayBuffer {
-  const binary = atob(base64)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i)
-  return bytes.buffer
-}
 
 export function Step7Review({ search }: StepProps) {
   const { t } = useTranslation()
@@ -50,31 +46,30 @@ export function Step7Review({ search }: StepProps) {
     setBusy(true)
     setError(null)
     try {
-      const pdfTitle = `יזכור ${search.name?.trim() ?? ''}`.trim()
-      const html = await renderSheetHTML({
-        content,
-        layout,
-        settings,
-        pdfTitle,
-      })
-      const result = await folioClient.render(html, {
-        pageSize: layout.page.label,
-        pdfTitle,
-        pdfProfile: '',
-      })
-      const blob = new Blob([base64ToBytes(result.pdf)], { type: 'application/pdf' })
-      const url = URL.createObjectURL(blob)
-      const anchor = document.createElement('a')
-      anchor.href = url
-      anchor.download = `yizkor-${(search.name ?? 'sheet').trim().replaceAll(/\s+/g, '-')}.pdf`
-      anchor.click()
-      URL.revokeObjectURL(url)
+      const { blob, filename } = await renderPdf(search)
+      await downloadPdf(blob, filename)
     } catch (err) {
       setError(String((err as Error)?.message ?? err))
     } finally {
       setBusy(false)
     }
   }
+
+  const handleShare = async () => {
+    setBusy(true)
+    setError(null)
+    try {
+      const outcome = await performSheetShare(search)
+      if (outcome === 'shared') toast(t('wizard.toasts.shareSuccess'))
+      else if (outcome === 'fallback') toast(t('wizard.fallback.shareUnsupported'))
+    } catch (err) {
+      setError(String((err as Error)?.message ?? err))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const saveNote = t('wizard.dialog.saveNote')
 
   return (
     <StepShell
@@ -97,10 +92,11 @@ export function Step7Review({ search }: StepProps) {
           <Button onClick={() => void handleDownload()} disabled={busy}>
             {busy ? t('wizard.actions.downloading') : t('wizard.actions.download')}
           </Button>
-          <Button variant="outline" disabled title={t('wizard.dialog.scaffoldNote')}>
-            {t('wizard.actions.share')}
+          <Button variant="outline" onClick={() => void handleShare()} disabled={busy}>
+            {busy ? t('wizard.actions.downloading') : t('wizard.actions.share')}
           </Button>
-          <Button variant="outline" disabled title={t('wizard.dialog.scaffoldNote')}>
+          {/* TODO(phase-5): Firebase account save (Phase 5 skipped — keep stub). */}
+          <Button variant="outline" disabled title={saveNote}>
             {t('wizard.actions.save')}
           </Button>
         </div>
@@ -110,7 +106,7 @@ export function Step7Review({ search }: StepProps) {
           </p>
         ) : null}
         <p className="text-muted-foreground text-sm" data-todo-phase-5>
-          TODO-for-phase-5: share / save wired to their services.
+          {saveNote}
         </p>
       </div>
       <div className="izkor-print-area">

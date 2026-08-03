@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { ShareActions } from '@/features/wizard/share-actions'
 import { getStep } from '@/features/wizard/step-registry'
 import { STEP_MAX, STEP_MIN, WizardQuery } from '@/features/wizard/wizard-query'
 
@@ -76,8 +77,20 @@ function WizardPage() {
                   ? t('wizard.dialog.print')
                   : t('wizard.dialog.settings')}
             </DialogTitle>
-            <DialogDescription>{t('wizard.dialog.scaffoldNote')}</DialogDescription>
+            <DialogDescription>
+              {search.dialog === 'share'
+                ? t('wizard.dialog.shareDescription')
+                : search.dialog === 'print'
+                  ? t('wizard.dialog.printDescription')
+                  : t('wizard.dialog.scaffoldNote')}
+            </DialogDescription>
           </DialogHeader>
+          {search.dialog === 'share' ? <ShareActions search={search} /> : null}
+          {search.dialog === 'print' ? (
+            <div className="flex justify-end gap-2">
+              <Button onClick={() => window.print()}>{t('wizard.actions.print')}</Button>
+            </div>
+          ) : null}
         </DialogContent>
       </Dialog>
     </div>
