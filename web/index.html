@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="יצירת דף יזכור להדפסה — מזכרת נשמה עם תהילים, קדיש ומשניות"
+    />
+    <title>יזכור — דף זיכרון להדפסה</title>
+    <script>
+      ;(function () {
+        var KEY = 'izkor:a11y:v1'
+        var classes = []
+        var stored = null
+        try {
+          stored = JSON.parse(window.localStorage.getItem(KEY) || 'null')
+        } catch (e) {
+          stored = null
+        }
+        if (stored && typeof stored === 'object') {
+          if (stored.contrast) classes.push('a11y-contrast')
+          if (stored.mono) classes.push('a11y-mono')
+          if (stored.textSize === 125 || stored.textSize === 150) {
+            classes.push('a11y-text-' + stored.textSize)
+          }
+          if (stored.lineSpacing) classes.push('a11y-line-spacing')
+          if (stored.wordSpacing) classes.push('a11y-word-spacing')
+          if (stored.letterSpacing) classes.push('a11y-letter-spacing')
+          if (stored.readableFont) classes.push('a11y-readable-font')
+          if (stored.highlightLinks) classes.push('a11y-highlight-links')
+          if (stored.highlightHeadings) classes.push('a11y-highlight-headings')
+          if (stored.largeCursor) classes.push('a11y-large-cursor')
+          if (stored.stopAnimations) classes.push('a11y-stop-animations')
+        }
+        if (classes.length > 0) {
+          document.documentElement.classList.add.apply(
+            document.documentElement.classList,
+            classes,
+          )
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
