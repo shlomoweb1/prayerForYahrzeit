@@ -4,8 +4,8 @@
  * per-letter mishnah references (from the itim harvest).
  */
 
-import letterRaw from '../../data/letter-index.json'
-import mishnayotRaw from '../../data/mishnayot-map.json'
+import letterRaw from '../../../data/letter-index.json'
+import mishnayotRaw from '../../../data/mishnayot-map.json'
 
 import { isHebrewLetter, stripNikud } from '@/lib/hebrew'
 

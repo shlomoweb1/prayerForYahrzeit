@@ -4,7 +4,7 @@
  * verse-ending colons -> sof pasuq (see lib/hebrew).
  */
 
-import raw from '../../data/tehillim.json'
+import raw from '../../../data/tehillim.json'
 
 import { hebrewNumeral, normalizePunctuation, sofPasuq, stripNikud } from '@/lib/hebrew'
 

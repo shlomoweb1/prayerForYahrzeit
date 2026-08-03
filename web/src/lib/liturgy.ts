@@ -4,7 +4,7 @@
  * pagination granularity for the long prayer texts.
  */
 
-import raw from '../../data/liturgy.json'
+import raw from '../../../data/liturgy.json'
 
 import { normalizePunctuation, stripNikud } from '@/lib/hebrew'
 import type { SheetNusach } from '@/features/sheet/layout'

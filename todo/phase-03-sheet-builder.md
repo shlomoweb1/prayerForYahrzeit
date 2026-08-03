@@ -3,12 +3,12 @@
 Branch: `feat/sheet-builder` · Worktree: `.claude/worktrees/feat-sheet-builder` · Depends on: P1-02 (router), P2 (wasm pipeline), P4 data
 
 ## P3-01 Layout model (target-parameterized)
-Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P1-02
+Status: done | Owner: agent-d | Started: 2026-08-03 | Deps: P1-02
 Details: `SheetLayout` typed model: target (print/share/both), paper (a4|letter), page dims, base font scale (10.5–11pt print / 15–16pt share), margins (12–15mm print / ~10mm share), sections list, decoration scale. Single source for preview AND Folio HTML builder (no drift).
 - [x] SheetLayout types + default builders per target
 
 ## P3-02 Sections implementation
-Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P4 data (JSON committed), P3-01
+Status: done | Owner: agent-d | Started: 2026-08-03 | Deps: P4 data (JSON committed), P3-01
 Details: header (תפילות ולימוד לע"נ … ז"ל), blessing (אשר יצר אתכם בדין — optional <30 days), 7 fixed psalms (לג טז יז עב צא קד קל), אותיות השם + נשמה (Psalm 119 stanzas, 8 verses/letter, final ן/ף→נ/פ), קדיש יתום (nusach variants), משניות per letter, קדיש דרבנן + דאתחדתא, השכבה, closing prayers.
 - [x] each section renders from data (letters resolved from name)
 
