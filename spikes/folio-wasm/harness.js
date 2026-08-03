@@ -120,7 +120,105 @@ const Harness = (function () {
     const settings = Object.assign({}, SETTINGS, { pdfTitle: "Folio deco " + name });
     const result = await renderAndSave(name + ".pdf", wrapped, settings, { progress: true });
     // show the same block on-screen for comparison
-    showPreview(buildDecoBlock({ reversed }));
+    showPreview(buildDecoBlock({ reversed }), fontsArr);
+    return { result, ok: result.pages >= 1 };
+  }
+
+  // ---- decoration variant tests (P2-04 exploration) -------------------------
+
+  // Row 1: inline-block + block deco (current approach — expected to break in folio)
+  // Row 2: inline-block deco, vertical-align:text-top (big initial beside the word)
+  // Row 3: position:relative word + position:absolute deco above (target look)
+  function buildVariantCss() {
+    return (
+      ".vhead{font-size:16px;font-weight:700;text-align:center;margin:14px 0 6px;color:#555;}\n" +
+      ".vrow{font-family:'NotoSerifHebrew',serif;direction:rtl;text-align:center;font-size:30px;line-height:1.7;padding:12px 0;}"
+    );
+  }
+
+  function buildVariantBlock() {
+    const [first, rest] = Capture.splitFirstCluster("אַבְרָהָם");
+    const rows = [
+      '<div class="vrow">' +
+        '<span class="word" style="display:inline-block;vertical-align:bottom;text-align:center;">' +
+        '<span class="deco" style="display:block;font-size:1.9em;line-height:1.05;font-weight:700;">' + first + "</span>" +
+        rest + "</span> " +
+        Capture.decorateWords(["בֶּן"], {}) +
+        "</div>",
+      '<div class="vrow">' +
+        '<span class="word" style="display:inline-block;vertical-align:bottom;">' +
+        '<span class="deco" style="display:inline-block;font-size:1.9em;line-height:1.05;font-weight:700;vertical-align:text-top;margin-inline-end:0.08em;">' + first + "</span>" +
+        rest + "</span> " +
+        '<span class="word" style="display:inline-block;vertical-align:bottom;">' +
+        '<span class="deco" style="display:inline-block;font-size:1.9em;line-height:1.05;font-weight:700;vertical-align:text-top;margin-inline-end:0.08em;">בֶּ</span>ן</span>' +
+        "</div>",
+      '<div class="vrow">' +
+        '<span class="word" style="position:relative;display:inline-block;vertical-align:bottom;">' +
+        '<span class="deco" style="position:absolute;bottom:100%;right:0;left:0;text-align:center;font-size:1.9em;line-height:1.05;font-weight:700;">' + first + "</span>" +
+        rest + "</span> " +
+        '<span class="word" style="position:relative;display:inline-block;vertical-align:bottom;">' +
+        '<span class="deco" style="position:absolute;bottom:100%;right:0;left:0;text-align:center;font-size:1.9em;line-height:1.05;font-weight:700;">בֶּ</span>ן</span>' +
+        "</div>",
+      // Row 4: flex row of flex-column words (deco above remainder per word)
+      '<div class="vrow">' +
+        '<span style="display:flex;flex-direction:row;justify-content:center;align-items:flex-end;gap:0.4em;">' +
+        '<span style="display:flex;flex-direction:column;align-items:center;">' +
+        '<span class="deco" style="font-size:1.9em;line-height:1.05;font-weight:700;">' + first + "</span>" +
+        rest + "</span>" +
+        '<span style="display:flex;flex-direction:column;align-items:center;">' +
+        '<span class="deco" style="font-size:1.9em;line-height:1.05;font-weight:700;">בֶּ</span>ן</span>' +
+        "</span>" +
+        "</div>",
+    ];
+    return rows
+      .map(
+        (r, i) =>
+          '<div class="sheet"><div class="vhead">variant ' + (i + 1) + "</div>" + r + "</div>"
+      )
+      .join("");
+  }
+
+  async function runVariants() {
+    const fontsArr = await fonts();
+    const wrapped = Capture.wrapDocument({
+      pageCss: "@page{size:210mm 297mm;margin:0;}",
+      styles: sheetCss() + buildVariantCss(),
+      fonts: fontsArr,
+      title: "Folio deco variants",
+      bodyHtml: buildVariantBlock(),
+    });
+    const settings = Object.assign({}, SETTINGS, { pdfTitle: "Folio deco variants" });
+    const result = await renderAndSave("deco-variants.pdf", wrapped, settings, { progress: true });
+    showPreview(buildVariantBlock(), fontsArr, buildVariantCss());
+    return { result, ok: result.pages >= 1 };
+  }
+
+  // ---- nikud fidelity test ------------------------------------------------------
+
+  async function runNikud() {
+    const fontsArr = await fonts();
+    const words = ["בְּרֵאשִׁית", "בָּרָא", "אֱלֹהִים", "הַשָּׁמַיִם", "וְאֵת", "הָאָרֶץ"];
+    const lines = words.map((w) => '<div class="nline">' + w + "</div>").join("");
+    const html =
+      '<div class="sheet"><div class="head">nikud fidelity (logical order)</div>' +
+      lines +
+      "</div>";
+    const wrapped = Capture.wrapDocument({
+      pageCss: "@page{size:210mm 297mm;margin:0;}",
+      styles:
+        sheetCss() +
+        ".nline{font-family:'NotoSerifHebrew',serif;font-size:44px;line-height:1.8;direction:rtl;text-align:center;}",
+      fonts: fontsArr,
+      title: "Folio nikud fidelity",
+      bodyHtml: html,
+    });
+    const settings = Object.assign({}, SETTINGS, { pdfTitle: "Folio nikud" });
+    const result = await renderAndSave("nikud.pdf", wrapped, settings, { progress: true });
+    showPreview(
+      html,
+      fontsArr,
+      ".nline{font-family:'NotoSerifHebrew',serif;font-size:44px;line-height:1.8;direction:rtl;text-align:center;}"
+    );
     return { result, ok: result.pages >= 1 };
   }
 
@@ -162,7 +260,7 @@ const Harness = (function () {
   async function runAutoHeight() {
     const fontsArr = await fonts();
     const wrapped = Capture.wrapDocument({
-      pageCss: "@page{size:1080px;height:0;}",
+      pageCss: "@page{size:1080px 0;}", // height:0 must be inside size:, not a separate property
       styles:
         "p{font-family:'NotoSerifHebrew',serif;font-size:44px;direction:rtl;text-align:center;margin:96px 0;}",
       fonts: fontsArr,
@@ -198,13 +296,23 @@ const Harness = (function () {
     return result;
   }
 
-  function showPreview(html) {
+  function fontFaceCss(fontsArr) {
+    return fontsArr
+      .map(
+        (f) =>
+          "@font-face{font-family:'" + f.family + "';font-weight:" + f.weight +
+          ";font-style:" + f.style + ";src:url('" + f.dataUri + "');}"
+      )
+      .join("\n");
+  }
+
+  function showPreview(html, fontsArr, extraCss) {
     const el = document.getElementById("preview");
     el.hidden = false;
     el.innerHTML =
-      "<strong>On-screen reference (same HTML as the PDF):</strong><br>" +
+      "<strong>On-screen reference (same HTML + fonts as the PDF):</strong><br>" +
       '<div style="width:794px;margin-top:8px;">' +
-      '<style>' + sheetCss() + "</style>" + html +
+      "<style>" + fontFaceCss(fontsArr || []) + "\n" + sheetCss() + (extraCss || "") + "</style>" + html +
       "</div>";
   }
 
@@ -221,11 +329,17 @@ const Harness = (function () {
     capture: runCapture,
     "deco-logical": () => runDeco(false),
     "deco-reversed": () => runDeco(true),
+    variants: runVariants,
+    nikud: runNikud,
     phone: runPhone,
     autoheight: runAutoHeight,
   };
 
   async function runTest(name) {
+    if (name === "all") {
+      for (const n of Object.keys(TESTS)) await runTest(n);
+      return;
+    }
     if (!TESTS[name]) {
       log("unknown test: " + name);
       return;
@@ -241,7 +355,7 @@ const Harness = (function () {
 
   function init() {
     document.querySelectorAll("[data-test]").forEach((btn) => {
-      btn.addEventListener("click", () => runTest(btn.dataset.test));
+      btn.addEventListener("click", () => runTest(btn.dataset.test.toLowerCase()));
     });
     document.getElementById("cancel").addEventListener("click", () => {
       client.cancel();
@@ -249,14 +363,21 @@ const Harness = (function () {
     });
     const params = new URLSearchParams(location.search);
     const t = params.get("test");
-    if (t === "all") {
-      (async () => {
-        for (const name of Object.keys(TESTS)) await runTest(name);
-      })();
-    } else if (t) {
-      runTest(t);
+    client
+      .warm()
+      .then(() => log("wasm instance warm"))
+      .catch((e) => log("warm failed: " + e.message));
+    if (t) {
+      client.warm().then(() => {
+        if (t === "all") {
+          (async () => {
+            for (const name of Object.keys(TESTS)) await runTest(name);
+          })();
+        } else {
+          runTest(t);
+        }
+      });
     }
-    client.warm().then(() => log("wasm instance warm")).catch((e) => log("warm failed: " + e.message));
   }
 
   return { init, runTest, log };
