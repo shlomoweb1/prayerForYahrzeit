@@ -3,7 +3,7 @@
 Branch: `feat/i18n-and-share` · Worktree: `.claude/worktrees/feat-i18n-and-share` · Depends on: P3 (builder), P1-04 (i18n skeleton)
 
 ## P6-01 Complete UI dictionaries (en, es, fr)
-Status: pending | Owner: — | Started: — | Deps: P1-04
+Status: in-progress | Owner: Agent E | Started: 2026-08-03 | Deps: P1-04
 Details: all wizard/labels/errors/statement strings; he default + en + es + fr complete; Spanish = UI-only (no Spanish Tanakh — psalm text stays Hebrew).
 - [ ] dictionaries 100% coverage (lint rule for missing keys)
 - [ ] locale persistence + picker (respect `dir` per locale)
