@@ -93,8 +93,25 @@ export const he = {
       nikud: 'ניקוד',
       deco: 'קישוטים',
       acrostic: 'אקרוסטיכון',
+      blessing: 'ברכת שלושים יום (אשר יצר אתכם בדין)',
       sections: 'חלקי הדף',
+      settings: 'הגדרות',
       dialog: 'חלון',
+    },
+    sections: {
+      psalms: 'מזמורים קבועים (לג טז יז עב צא קד קל)',
+      neshama: 'אותיות השם + מזמור קי״ט',
+      kaddish: 'קדיש יתום',
+      mishnayot: 'משניות של השם',
+      hashkava: 'קדיש דרבנן + השכבה',
+      closing: 'סיום התפילה',
+    },
+    actions: {
+      print: 'הדפסה',
+      download: 'הורדת PDF',
+      downloading: 'מרנדר…',
+      share: 'שיתוף',
+      save: 'שמירה לחשבון',
     },
     placeholders: {
       name: 'לדוגמה: משה בן אברהם',
@@ -124,6 +141,9 @@ export const he = {
         parent: 'שם האב בלבד',
         none: 'ללא אקרוסטיכון',
       },
+    },
+    errors: {
+      render: 'PDF render failed: {{message}}',
     },
     dialog: {
       share: 'שיתוף',

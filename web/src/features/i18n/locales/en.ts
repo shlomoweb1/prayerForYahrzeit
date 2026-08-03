@@ -95,8 +95,25 @@ export const en = {
       nikud: 'Vowel points',
       deco: 'Decorations',
       acrostic: 'Acrostic',
+      blessing: '30-day blessing (אשר יצר אתכם בדין)',
       sections: 'Sheet sections',
+      settings: 'Settings',
       dialog: 'Dialog',
+    },
+    sections: {
+      psalms: 'Fixed psalms (לג טז יז עב צא קד קל)',
+      neshama: 'Letters of the name + psalm 119',
+      kaddish: 'Kaddish Yatom',
+      mishnayot: 'Mishnayot of the name',
+      hashkava: 'Kaddish Derabanan + Hashkava',
+      closing: 'Closing prayers',
+    },
+    actions: {
+      print: 'Print',
+      download: 'Download PDF',
+      downloading: 'Rendering…',
+      share: 'Share',
+      save: 'Save to account',
     },
     placeholders: {
       name: 'e.g. Moshe ben Avraham',
@@ -126,6 +143,9 @@ export const en = {
         parent: 'Parent name only',
         none: 'No acrostic',
       },
+    },
+    errors: {
+      render: 'PDF render failed: {{message}}',
     },
     dialog: {
       share: 'Share',
