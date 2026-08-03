@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const STEP_MIN = 1
-export const STEP_MAX = 6
+export const STEP_MAX = 5
 
 export const SECTIONS = [
   'psalms',

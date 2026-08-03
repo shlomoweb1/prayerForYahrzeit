@@ -1,11 +1,11 @@
 import type { ComponentType } from 'react'
 
-import { Step1Target } from '@/features/wizard/steps/step-1-target'
-import { Step2Gender } from '@/features/wizard/steps/step-2-gender'
-import { Step3Nusach } from '@/features/wizard/steps/step-3-nusach'
-import { Step4Names } from '@/features/wizard/steps/step-4-names'
-import { Step5Split } from '@/features/wizard/steps/step-5-split'
-import { Step6Review } from '@/features/wizard/steps/step-6-review'
+import { Step1Gender } from '@/features/wizard/steps/step-1-gender'
+import { Step2Nusach } from '@/features/wizard/steps/step-2-nusach'
+import { Step3Names } from '@/features/wizard/steps/step-3-names'
+import { Step4Target } from '@/features/wizard/steps/step-4-target'
+import { Step5Review } from './steps/step-5-review'
+// import { Step5Split } from '@/features/wizard/steps/step-5-split'
 import { STEP_MAX, STEP_MIN, type WizardQuery } from '@/features/wizard/wizard-query'
 
 import type { StepTitleKey } from '@/features/wizard/steps/step-shell'
@@ -19,15 +19,16 @@ export interface StepDefinition {
   number: number
   titleKey: StepTitleKey
   component: ComponentType<StepProps>
+  /** Final step needs the full viewport width for the editor/preview tabs. */
+  fullWidth?: boolean
 }
 
 export const stepRegistry: StepDefinition[] = [
-  { number: 1, titleKey: 'wizard.steps.1.title', component: Step1Target },
-  { number: 2, titleKey: 'wizard.steps.2.title', component: Step2Gender },
-  { number: 3, titleKey: 'wizard.steps.3.title', component: Step3Nusach },
-  { number: 4, titleKey: 'wizard.steps.4.title', component: Step4Names },
-  { number: 5, titleKey: 'wizard.steps.5.title', component: Step5Split },
-  { number: 6, titleKey: 'wizard.steps.6.title', component: Step6Review },
+  { number: 1, titleKey: 'wizard.steps.1.title', component: Step1Gender },
+  { number: 2, titleKey: 'wizard.steps.2.title', component: Step2Nusach },
+  { number: 3, titleKey: 'wizard.steps.3.title', component: Step3Names },
+  { number: 4, titleKey: 'wizard.steps.4.title', component: Step4Target },
+  { number: 5, titleKey: 'wizard.steps.5.title', component: Step5Review, fullWidth: true },
 ]
 
 export function getStep(step: number): StepDefinition {

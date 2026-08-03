@@ -26,15 +26,15 @@ const LINEAGE_ICONS: Record<WizardQuery['lineage'], string> = {
   none: 'icons/lineage/yisrael.svg',
 }
 
-export function Step4Names({ search, setSearch }: StepProps) {
+export function Step3Names({ search, setSearch }: StepProps) {
   const { t } = useTranslation()
   const preview = sheetHeaderLine(sheetSettingsFromQuery(search))
 
   return (
     <StepShell
-      stepNumber={4}
-      titleKey="wizard.steps.4.title"
-      descriptionKey="wizard.steps.4.description"
+      stepNumber={3}
+      titleKey="wizard.steps.3.title"
+      descriptionKey="wizard.steps.3.description"
     >
       <div className="bg-card rounded-xl border p-4 shadow-sm sm:p-6">
         <div
@@ -45,7 +45,7 @@ export function Step4Names({ search, setSearch }: StepProps) {
             <img
               src={GENDER_AVATARS[search.gender]}
               alt=""
-              className="size-8 shrink-0 rounded-full border-1 border-primary"
+              className="size-8 shrink-0 rounded-full border border-primary"
             />
             <Input
               id="wizard-name"
@@ -58,7 +58,7 @@ export function Step4Names({ search, setSearch }: StepProps) {
               placeholder={t('wizard.placeholders.name', { context: search.gender })}
             />
           </div>
-          <span className="text-muted-foreground shrink-0 text-sm font-medium">
+          <span className="text-center md:text-start text-muted-foreground shrink-0 text-sm font-medium">
             {filialWord(search.gender)}
           </span>
           <Input
@@ -100,7 +100,7 @@ export function Step4Names({ search, setSearch }: StepProps) {
       {search.name?.trim() ? (
         <div className="bg-muted/30 rounded-lg border px-4 py-3">
           <p className="text-muted-foreground text-xs">{t('wizard.labels.namePreview')}</p>
-          <p dir="rtl" lang="he" className="font-serif text-lg">
+          <p dir="rtl" lang="he" className="font-serif text-lg text-center">
             {preview}
           </p>
         </div>

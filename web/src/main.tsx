@@ -4,7 +4,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { initI18n } from '@/features/i18n'
-import './index.css'
+import './css/index.css'
 import { routeTree } from './routeTree.gen'
 
 const queryClient = new QueryClient()

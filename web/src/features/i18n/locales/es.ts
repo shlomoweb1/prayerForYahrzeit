@@ -56,30 +56,31 @@ export const es = {
     scaffoldNote: 'El editor de {{feature}} se construirá en la fase 3 del desarrollo.',
     steps: {
       '1': {
-        title: 'Finalidad de la hoja',
-        description: '¿La hoja es para imprimir, compartir o ambos?',
-      },
-      '2': {
         title: 'Género',
         description: 'Elija el género del difunto: masculino o femenino.',
       },
-      '3': {
+      '2': {
         title: 'Nusaj',
         description: 'Elija el rito de oración: askenazí o sefardí (mizrají).',
       },
-      '4': {
+      '3': {
         title: 'Nombre',
         description:
           'Introduzca el nombre hebreo y el nombre del padre, tal como aparecerán en la parte superior de la hoja.',
       },
+      '4': {
+        title: 'Finalidad de la hoja',
+        description: '¿La hoja es para imprimir, compartir o ambos?',
+      },
       '5': {
-        title: 'Editor de distribución',
-        description: 'Elija qué secciones aparecen y cómo se distribuyen entre las páginas.',
+        title: 'Editar y descargar',
+        description:
+          'Elija qué secciones aparecen y cómo se distribuyen entre las páginas, luego previsualice, imprima, descargue o comparta.',
       },
-      '6': {
-        title: 'Revisión y descarga',
-        description: 'Revise la vista previa y luego imprima, descargue o comparta.',
-      },
+    },
+    tabs: {
+      editor: 'Editor',
+      preview: 'Vista previa',
     },
     labels: {
       target: 'Propósito de la hoja',

@@ -1,4 +1,14 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+/** Tabs from the currently focused element until the "next step" button gets focus. */
+async function tabToNextButton(page: Page): Promise<void> {
+  const next = page.getByRole('button', { name: 'הבא' })
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    await page.keyboard.press('Tab')
+    if (await next.evaluate((el) => el === document.activeElement)) return
+  }
+  throw new Error('Could not reach the next-step button via Tab')
+}
 
 test.describe('landing page', () => {
   test('renders Hebrew RTL shell with a11y widget', async ({ page }) => {
@@ -29,21 +39,17 @@ test.describe('wizard', () => {
   test('walks steps 1-3 with the keyboard, URL state follows', async ({ page }) => {
     await page.goto('/wizard')
     await expect(page).toHaveURL(/step=1/)
-    await expect(page.getByRole('heading', { name: 'מטרת הדף' })).toBeFocused()
-
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Enter')
-    await expect(page).toHaveURL(/step=2/)
     await expect(page.getByRole('heading', { name: 'מגדר' })).toBeFocused()
 
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
+    await tabToNextButton(page)
+    await page.keyboard.press('Enter')
+    await expect(page).toHaveURL(/step=2/)
+    await expect(page.getByRole('heading', { name: 'נוסח' })).toBeFocused()
+
+    await tabToNextButton(page)
     await page.keyboard.press('Enter')
     await expect(page).toHaveURL(/step=3/)
-    await expect(page.getByRole('heading', { name: 'נוסח' })).toBeFocused()
+    await expect(page.getByRole('heading', { name: 'שם' })).toBeFocused()
   })
 
   test('clamps an out-of-range step in the URL', async ({ page }) => {

@@ -43,14 +43,14 @@ function PaperPreview({ aspectRatio }: { aspectRatio: number }) {
   )
 }
 
-export function Step1Target({ search, setSearch }: StepProps) {
+export function Step4Target({ search, setSearch }: StepProps) {
   const { t } = useTranslation()
 
   return (
     <StepShell
-      stepNumber={1}
-      titleKey="wizard.steps.1.title"
-      descriptionKey="wizard.steps.1.description"
+      stepNumber={4}
+      titleKey="wizard.steps.4.title"
+      descriptionKey="wizard.steps.4.description"
     >
       <RadioGroup
         value={search.target}

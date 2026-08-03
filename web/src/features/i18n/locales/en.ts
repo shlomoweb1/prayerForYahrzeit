@@ -56,30 +56,31 @@ export const en = {
     scaffoldNote: 'The {{feature}} editor will be built in phase 3 of development.',
     steps: {
       '1': {
-        title: 'Sheet purpose',
-        description: 'Is the sheet for printing, sharing, or both?',
-      },
-      '2': {
         title: 'Gender',
         description: "Choose the deceased's gender: male or female.",
       },
-      '3': {
+      '2': {
         title: 'Nusach',
         description: 'Choose the prayer rite: Ashkenaz or Sephardic (Mizrahi).',
       },
-      '4': {
+      '3': {
         title: 'Name',
         description:
           'Enter the Hebrew name and the father\'s name, as they will appear at the top of the sheet.',
       },
+      '4': {
+        title: 'Sheet purpose',
+        description: 'Is the sheet for printing, sharing, or both?',
+      },
       '5': {
-        title: 'Split editor',
-        description: 'Choose which sections appear and how they are distributed across pages.',
+        title: 'Edit and download',
+        description:
+          'Choose which sections appear and how they are distributed across pages, then preview, print, download or share.',
       },
-      '6': {
-        title: 'Review and download',
-        description: 'Review the preview, then print, download or share.',
-      },
+    },
+    tabs: {
+      editor: 'Editor',
+      preview: 'Preview',
     },
     labels: {
       target: 'Sheet purpose',

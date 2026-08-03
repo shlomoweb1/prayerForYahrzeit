@@ -1,23 +1,14 @@
 /**
- * P3-05 Live settings panel for the split editor (step 6).
+ * P3-05 Live settings panel for the split editor.
  *
  * Renders the sheet settings (font, nikud, deco, acrostic, blessing, paper,
  * section toggles) bound to the wizard URL query, so every change is
  * immediately reflected in the live preview and survives a reload.
- *
- * The same controls render inside an accordion on mobile (above the preview)
- * and as a static panel on desktop (beside the preview).
  */
 
 import { useTranslation } from 'react-i18next'
 import { useId } from 'react'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -149,31 +140,11 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
 }
 
 export function SheetSettingsPanel({ search, setSearch, className }: SheetSettingsPanelProps) {
-  const { t } = useTranslation()
-  const mobileId = useId()
-  const desktopId = useId()
+  const idPrefix = useId()
 
   return (
     <div className={className}>
-      <Accordion type="single" collapsible className="lg:hidden">
-        <AccordionItem value="settings">
-          <AccordionTrigger>{t('wizard.labels.settings')}</AccordionTrigger>
-          <AccordionContent>
-            <SheetSettingsControls
-              search={search}
-              setSearch={setSearch}
-              idPrefix={`${mobileId}-m`}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-      <div className="hidden lg:block">
-        <SheetSettingsControls
-          search={search}
-          setSearch={setSearch}
-          idPrefix={`${desktopId}-d`}
-        />
-      </div>
+      <SheetSettingsControls search={search} setSearch={setSearch} idPrefix={idPrefix} />
     </div>
   )
 }

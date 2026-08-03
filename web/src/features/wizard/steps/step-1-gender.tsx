@@ -16,14 +16,14 @@ const GENDER_ICONS: Record<WizardQuery['gender'], React.ReactNode> = {
   female: <img src="icons/avatars/12363769451582967218.svg" className="size-24" />,
 }
 
-export function Step2Gender({ search, setSearch }: StepProps) {
+export function Step1Gender({ search, setSearch }: StepProps) {
   const { t, i18n } = useTranslation()
 
   return (
     <StepShell
-      stepNumber={2}
-      titleKey="wizard.steps.2.title"
-      descriptionKey="wizard.steps.2.description"
+      stepNumber={1}
+      titleKey="wizard.steps.1.title"
+      descriptionKey="wizard.steps.1.description"
     >
       <RadioGroup
         value={search.gender}

@@ -56,30 +56,31 @@ export const fr = {
     scaffoldNote: 'L’éditeur de {{feature}} sera construit à la phase 3 du développement.',
     steps: {
       '1': {
-        title: 'But de la feuille',
-        description: 'La feuille est-elle destinée à l’impression, au partage, ou aux deux ?',
-      },
-      '2': {
         title: 'Genre',
         description: 'Choisissez le genre du défunt : masculin ou féminin.',
       },
-      '3': {
+      '2': {
         title: 'Noussah',
         description: 'Choisissez le rite de prière : ashkénaze ou séfarade (Mizrahi).',
       },
-      '4': {
+      '3': {
         title: 'Nom',
         description:
           'Saisissez le nom hébreu et le nom du père, tels qu’ils apparaîtront en haut de la feuille.',
       },
+      '4': {
+        title: 'But de la feuille',
+        description: 'La feuille est-elle destinée à l’impression, au partage, ou aux deux ?',
+      },
       '5': {
-        title: 'Éditeur de répartition',
-        description: 'Choisissez les sections à afficher et leur répartition entre les pages.',
+        title: 'Modifier et télécharger',
+        description:
+          'Choisissez les sections à afficher et leur répartition entre les pages, puis prévisualisez, imprimez, téléchargez ou partagez.',
       },
-      '6': {
-        title: 'Vérification et téléchargement',
-        description: 'Consultez l’aperçu, puis imprimez, téléchargez ou partagez.',
-      },
+    },
+    tabs: {
+      editor: 'Éditeur',
+      preview: 'Aperçu',
     },
     labels: {
       target: 'Usage de la feuille',

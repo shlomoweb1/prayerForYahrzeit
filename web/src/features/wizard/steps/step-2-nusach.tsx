@@ -16,14 +16,14 @@ const NUSACH_ICONS: Record<WizardQuery['nusach'], React.ReactNode> = {
   sefard: <img src="icons/torah/edot-mizrach.svg" className="size-48" />,
 }
 
-export function Step3Nusach({ search, setSearch }: StepProps) {
+export function Step2Nusach({ search, setSearch }: StepProps) {
   const { t, i18n } = useTranslation()
 
   return (
     <StepShell
-      stepNumber={3}
-      titleKey="wizard.steps.3.title"
-      descriptionKey="wizard.steps.3.description"
+      stepNumber={2}
+      titleKey="wizard.steps.2.title"
+      descriptionKey="wizard.steps.2.description"
     >
       <RadioGroup
         value={search.nusach}

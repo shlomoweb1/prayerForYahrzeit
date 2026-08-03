@@ -13,6 +13,7 @@ import {
 import { ShareActions } from '@/features/wizard/share-actions'
 import { getStep } from '@/features/wizard/step-registry'
 import { STEP_MAX, STEP_MIN, WizardQuery } from '@/features/wizard/wizard-query'
+import { cn } from '@/lib/utils'
 
 const routeApi = getRouteApi('/wizard/')
 
@@ -41,8 +42,15 @@ export default function WizardPage() {
   const dialogOpen = search.dialog !== undefined
 
   return (
-    <div className="flex flex-col gap-6 bg-card/70 rounded-lg p-6 md:min-w-3xl">
-      <h1 className="text-2xl font-semibold">{t('wizard.title')}</h1>
+    <div
+      className={cn(
+        'flex flex-col gap-6 rounded-lg p-6',
+        step.fullWidth ? 'bg-card/90 w-full h-full' : 'bg-card/70 md:min-w-3xl',
+      )}
+    >
+      {step.number !== 5 && (
+        <h1 className="text-2xl font-semibold">{t('wizard.title')}</h1>
+      )}
       <StepComponent search={search} setSearch={setSearch} />
       <div className="flex items-center justify-between gap-4">
         <Button
@@ -52,12 +60,14 @@ export default function WizardPage() {
         >
           {t('common.previous')}
         </Button>
+        {search.step !== STEP_MAX && (
         <Button
           disabled={search.step >= STEP_MAX}
           onClick={() => goToStep(search.step + 1)}
         >
           {t('common.next')}
         </Button>
+        )}
       </div>
       <Dialog
         open={dialogOpen}
