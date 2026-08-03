@@ -13,22 +13,25 @@ Details: header (תפילות ולימוד לע"נ … ז"ל), blessing (אשר 
 - [x] each section renders from data (letters resolved from name)
 
 ## P3-03 A4Page flow + pagination
-Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P3-02
+Status: done | Owner: agent-d | Started: 2026-08-03 | Deps: P3-02
 Details: explicit 297×210mm page divs; flow content into pages; page-break-before:always between pages; page-level overflow handling (move block to next page).
 - [x] multi-page sheet flows correctly for long names
 - [x] content model (10 sections) + sequential page packing (unit-tested)
+- [x] measurement-based page renderer (SheetDocument: hidden measure stack → pack → pages; convergence pass fixes boundary-margin overflow)
 
 ## P3-04 SheetPreview + PreviewScaleWrapper
 Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P3-01
 Details: mm-accurate scaled A4 preview (ExamPreview pattern); previews BOTH targets (A4 vs phone-format preview for share).
-- [x] preview matches PDF output 1:1
+- [x] preview matches PDF output 1:1 (SheetPreview + PreviewScaleWrapper; onMeasure reports full stack height; share 1080×1920 preview via same component)
+- [ ] share/phone preview wired into step 6 target toggle
 
 ## P3-05 Step 6 split editor + step 7 review
 Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P3-04, P1-02
 Details: desktop = settings panel + live preview; mobile-first = accordion settings above preview + sticky bottom action bar; step 7 = review with actions (הדפסה/הורדה/שיתוף/שמירה wired to the render pipeline; firebase save can remain a stub marked TODO-for-phase-5); settings live-editable in step 6 (font, nikud, deco, acrostic, sections toggles); steps round-trip through URL query per WizardQuery.
 - [x] step 6/7 UI complete (375px + desktop)
+- [ ] step 6/7 wired to live sheet data (WizardQuery → buildSheetContent + SheetPreview)
 
 ## P3-06 Word decoration (big letter above word)
 Status: in-progress | Owner: agent-d | Started: 2026-08-03 | Deps: P2-04 findings, P3-02
 Details: decorative large first-letter-above-word for psalms/headings (settings: deco on/off, scale). Consistent between preview and wasm render.
-- [x] decorations render in preview + PDF
+- [x] decorations render in preview + PDF (WordDecoLine: flex-row/flex-column per spike P2-04; word spacing preserved; used for header, psalm titles, verses)
