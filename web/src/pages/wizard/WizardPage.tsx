@@ -45,14 +45,11 @@ export default function WizardPage() {
     <div
       className={cn(
         'flex flex-col gap-6 rounded-lg p-6',
-        step.fullWidth ? 'bg-card/90 w-full h-full' : 'bg-card/70 md:min-w-3xl',
+        step.fullWidth ? 'bg-card/90 w-full h-full' : ' md:min-w-3xl',
       )}
     >
-      {step.number !== 5 && (
-        <h1 className="text-2xl font-semibold">{t('wizard.title')}</h1>
-      )}
       <StepComponent search={search} setSearch={setSearch} />
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 mt-4 bg-card/80 mb-4 rounded-lg p-4 shadow-2xl shadow-amber-400/90">
         <Button
           variant="outline"
           disabled={search.step <= STEP_MIN}
@@ -60,6 +57,9 @@ export default function WizardPage() {
         >
           {t('common.previous')}
         </Button>
+        {step.number !== STEP_MAX && (
+          <h2 className="text-base font-semibold">{t(step.titleKey)}</h2>
+        )}
         {search.step !== STEP_MAX && (
         <Button
           disabled={search.step >= STEP_MAX}

@@ -43,6 +43,22 @@ export function paginate<T extends PageableItem>(items: T[], options: PaginateOp
   }
   openPage()
 
+  // Height of items[startIndex] plus every item chained to it by
+  // consecutive keepWithNext flags — a heading must never be separated from
+  // what it introduces, even through a run of nested headings (section
+  // title -> sub-heading -> body).
+  const groupHeight = (startIndex: number): number => {
+    let total = 0
+    let i = startIndex
+    while (i < items.length) {
+      const current = items[i]!
+      total += heightOf(current)
+      if (current.keepWithNext !== true) break
+      i += 1
+    }
+    return total
+  }
+
   for (let i = 0; i < items.length; i += 1) {
     const item = items[i]!
     const height = heightOf(item)
@@ -53,12 +69,9 @@ export function paginate<T extends PageableItem>(items: T[], options: PaginateOp
       continue
     }
 
-    if (used + height <= maxHeight) {
-      const next = items[i + 1]
-      const headingWouldDangle = item.keepWithNext === true && next !== undefined
-      if (headingWouldDangle && used + height + heightOf(next) > maxHeight) {
-        openPage()
-      }
+    const requiredHeight = item.keepWithNext === true ? groupHeight(i) : height
+
+    if (used + requiredHeight <= maxHeight) {
       page.push(item)
       used += height
       continue

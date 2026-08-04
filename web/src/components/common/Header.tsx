@@ -7,7 +7,7 @@ import { LocalePicker } from '@/features/i18n/locale-picker'
 export default function Header() {
   const { t } = useTranslation()
   return (
-    <header className="border-b bg-background/95 sticky top-0 z-40 backdrop-blur">
+    <header className="border-b bg-background/50 sticky top-0 z-40 backdrop-blur">
       <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
         <Link to="/" className="font-semibold">
           {t('common.brand')}

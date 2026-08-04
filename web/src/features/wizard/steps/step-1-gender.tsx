@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { OptionCard } from '@/components/ui/option-card'
@@ -11,9 +10,9 @@ interface StepProps {
   setSearch: (patch: Partial<WizardQuery>) => void
 }
 
-const GENDER_ICONS: Record<WizardQuery['gender'], React.ReactNode> = {
-  male: <img src="icons/avatars/20215969031702585014.svg" className="size-24" />,
-  female: <img src="icons/avatars/12363769451582967218.svg" className="size-24" />,
+const GENDER_IMAGES: Record<WizardQuery['gender'], string> = {
+  male: '/images/male.png',
+  female: '/images/female.png',
 }
 
 export function Step1Gender({ search, setSearch }: StepProps) {
@@ -36,7 +35,7 @@ export function Step1Gender({ search, setSearch }: StepProps) {
           <OptionCard
             key={gender}
             value={gender}
-            icon={GENDER_ICONS[gender]}
+            image={GENDER_IMAGES[gender]}
             title={t(`wizard.options.gender.${gender}`)}
             hint={t(`wizard.hints.gender.${gender}`)}
           />

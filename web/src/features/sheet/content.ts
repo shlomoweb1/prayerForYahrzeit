@@ -17,7 +17,7 @@ import {
   NESHAMA_LETTERS,
   splitBlocks,
 } from '@/lib/liturgy'
-import { mishnahFor, psalm119Stanza, resolveNameLetters } from '@/lib/letters'
+import { mishnahFor, psalm119Stanza, resolveNameLetters, type NameLetter } from '@/lib/letters'
 import { psalmChapterLabel, psalmVerseTextsByIds, psalmVerseTexts } from '@/lib/tehillim'
 import { FIXED_PSALMS } from '@/lib/liturgy'
 
@@ -33,6 +33,10 @@ export interface StanzaBlock {
   letter: string
   label: string
   verses: string[]
+  /** Global verse numbers within Psalm 119 (e.g. א׳ is verses 1-8, ב׳ is
+   * 9-16, ...) — a stanza never starts counting over at 1, so this is the
+   * true pasuk numbering, not the stanza's own local verse index. */
+  verseIds: number[]
 }
 
 export interface MishnahItemBlock {
@@ -50,7 +54,7 @@ export type SheetBlock =
   | { kind: 'mishnayot'; items: MishnahItemBlock[] }
   | { kind: 'prayer'; title: string; html: string }
 
-export const HEADER_PREFIX = 'תפילות ולימוד לע״נ'
+export const HEADER_PREFIX = 'לע״נ'
 
 /** "בן" for male, "בת" for female — the word linking a name to its parent's. */
 export function filialWord(gender: SheetSettings['gender']): 'בן' | 'בת' {
@@ -81,12 +85,17 @@ export function sheetHeaderLine(settings: SheetSettings): string {
   return normalizePunctuation(parts.join(' '))
 }
 
+/** Letters that are already in regular form (e.g. נשמה) — display === lookup. */
+function identityLetters(letters: readonly string[]): NameLetter[] {
+  return letters.map((letter) => ({ display: letter, lookup: letter }))
+}
+
 /** Acrostic letters for the given acrostic mode (name / parent / both). */
-function acrosticLettersFor(settings: SheetSettings): { title: string; letters: string[] }[] {
+function acrosticLettersFor(settings: SheetSettings): { title: string; letters: NameLetter[] }[] {
   if (settings.acrostic === 'none') return []
   const name = settings.name?.trim() ? resolveNameLetters(settings.name) : []
   const parent = settings.parent?.trim() ? resolveNameLetters(settings.parent) : []
-  const groups: { title: string; letters: string[] }[] = []
+  const groups: { title: string; letters: NameLetter[] }[] = []
   if (settings.acrostic === 'name' || settings.acrostic === 'both') {
     if (name.length > 0) groups.push({ title: 'אותיות השם', letters: name })
   }
@@ -96,15 +105,18 @@ function acrosticLettersFor(settings: SheetSettings): { title: string; letters: 
   return groups
 }
 
-function buildLettersBlock(title: string, letters: string[], nikud: boolean): SheetBlock {
+/** letters: display/lookup pairs — display (final forms kept) drives the
+ * label, lookup (regular form) finds the psalm-119 stanza. */
+function buildLettersBlock(title: string, letters: NameLetter[], nikud: boolean): SheetBlock {
   const stanzas: StanzaBlock[] = []
-  for (const letter of letters) {
-    const stanza = psalm119Stanza(letter)
+  for (const { display, lookup } of letters) {
+    const stanza = psalm119Stanza(lookup)
     if (!stanza) continue
     stanzas.push({
-      letter,
-      label: `אות ${letter}׳`,
+      letter: display,
+      label: `אות ${display}׳`,
       verses: psalmVerseTextsByIds(stanza.chapter, stanza.verseIds, { nikud }),
+      verseIds: stanza.verseIds,
     })
   }
   return { kind: 'letters', title, stanzas }
@@ -240,7 +252,7 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
   }
 
   if (settings.sections.includes('neshama') && settings.acrostic !== 'none') {
-    blocks.push(buildLettersBlock('אותיות נשמה', [...NESHAMA_LETTERS], nikud))
+    blocks.push(buildLettersBlock('אותיות נשמה', identityLetters(NESHAMA_LETTERS), nikud))
   }
 
   if (settings.sections.includes('kaddish')) {
@@ -251,16 +263,15 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
   }
 
   if (settings.sections.includes('mishnayot')) {
-    const letters = resolveNameLetters(settings.name ?? '').length > 0
-      ? resolveNameLetters(settings.name ?? '')
-      : [...NESHAMA_LETTERS]
+    const nameLetters = resolveNameLetters(settings.name ?? '')
+    const letters = nameLetters.length > 0 ? nameLetters : identityLetters(NESHAMA_LETTERS)
     const items: MishnahItemBlock[] = []
-    for (const letter of letters) {
-      const mishnah = mishnahFor(letter)
+    for (const { display, lookup } of letters) {
+      const mishnah = mishnahFor(lookup)
       if (!mishnah) continue
       items.push({
-        letter,
-        label: `אות ${letter}׳`,
+        letter: display,
+        label: `אות ${display}׳`,
         source: mishnah.source,
         text: liturgyBlockHtml(mishnah.text, { nikud }),
       })

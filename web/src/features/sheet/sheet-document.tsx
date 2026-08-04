@@ -16,7 +16,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 
-import { fontFaceCss } from '@/features/sheet/fonts'
+import { ALL_FONT_FACES_CSS } from '@/features/sheet/fonts'
 import { buildPageItems, type PageItem } from '@/features/sheet/content'
 import type { SheetBlock } from '@/features/sheet/content'
 import type { SheetLayout, SheetSettings } from '@/features/sheet/layout'
@@ -225,7 +225,7 @@ export function SheetDocument({ content, layout, settings, onMeasure }: SheetDoc
 
   return (
     <div className="izkor-sheet" dir="rtl" lang="he" style={sheetStyle}>
-      <style data-izkor-sheet="">{fontFaceCss(layout.fontId)}\n{sheetCss()}</style>
+      <style data-izkor-sheet="">{`${ALL_FONT_FACES_CSS}\n${sheetCss()}`}</style>
       <div
         aria-hidden="true"
         ref={measureRef}

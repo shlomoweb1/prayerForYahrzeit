@@ -72,6 +72,21 @@ describe('paginate', () => {
     ])
   })
 
+  it('keeps a chain of nested headings with their body instead of dangling', () => {
+    // section-title -> sub-heading -> body, e.g. "משניות" -> mishnah title -> text.
+    const items = [
+      item('a', 500),
+      item('section', 80, true),
+      item('sub-heading', 60, true),
+      item('body', 300),
+    ]
+    const pages = paginate(items, { heightOf, maxHeight: 900 })
+    expect(pages.map((page) => page.map((it) => it.id))).toEqual([
+      ['a'],
+      ['section', 'sub-heading', 'body'],
+    ])
+  })
+
   it('places an oversized item on its own page without stalling the flow', () => {
     const items = [item('huge', 5000), item('small', 100)]
     const pages = paginate(items, { heightOf, maxHeight: 1000 })

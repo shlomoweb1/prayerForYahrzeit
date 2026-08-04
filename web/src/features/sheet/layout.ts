@@ -8,6 +8,10 @@
  * All pixel values are CSS px at 96 dpi (1 mm = 96 / 25.4 px).
  */
 
+import type { SheetFontId } from '@/features/sheet/fonts'
+
+export type { SheetFontId }
+
 export const SHEET_SECTIONS = [
   'psalms',
   'neshama',
@@ -25,13 +29,6 @@ export type SheetNusach = 'ashkenaz' | 'sefard'
 export type SheetGender = 'male' | 'female'
 export type SheetLineage = 'none' | 'kohen' | 'levi'
 export type AcrosticMode = 'both' | 'name' | 'parent' | 'none'
-export type SheetFontId =
-  | 'noto-serif'
-  | 'noto-sans'
-  | 'rashi'
-  | 'frank-ruhl'
-  | 'taamey'
-  | 'keter'
 
 /** Settings consumed by the layout/content model (subset of WizardQuery). */
 export interface SheetSettings {

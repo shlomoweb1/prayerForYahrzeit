@@ -51,6 +51,7 @@ export function Step4Target({ search, setSearch }: StepProps) {
       stepNumber={4}
       titleKey="wizard.steps.4.title"
       descriptionKey="wizard.steps.4.description"
+      wrapperClassName="bg-card/40"
     >
       <RadioGroup
         value={search.target}

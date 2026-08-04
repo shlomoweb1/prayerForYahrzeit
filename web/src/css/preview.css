@@ -1,12 +1,90 @@
+/* Off-screen measurement stack for sheet pagination — pushed right, not
+ * left, because this app is Hebrew/RTL only (see useSheetPagePlan.ts). */
+[data-sheet-measure] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(200vw);
+}
 
 div[data-page] {
-  background: white;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 0.5cm;
+  @apply flex flex-col bg-white m-auto mb-[0.5cm] shadow-lg p-[1cm];
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
   direction: rtl;
-  padding: 1cm;
+  overflow: hidden;
+  font-size: 16px;
+  [data-section="header"]{
+    @apply flex flex-row relative;
+    [data-content="bsd"]{
+      @apply absolute right-0 top-0 text-sm font-shofar;
+    }
+    [data-content="title"]{
+      @apply font-shofar;
+      @apply text-center block w-full;
+      h1{
+        @apply  text-2xl font-bold;
+      }
+      h2{
+        @apply text-sm font-bold;
+      }
+    }
+  }
+  [data-section="content"]{
+    @apply grow;
+    min-height: 0;
+    overflow: hidden;
+    [data-content="section-title"]{
+      @apply text-center text-lg font-bold mb-2;
+    }
+    [data-content="chapter-flow"]{
+      @apply text-right leading-relaxed font-shlomo-stam mb-2;
+      [data-type="psalm"]{
+        @apply inline;
+      }
+      [data-content="chapter-badge"]{
+        @apply inline-flex flex-col items-center justify-center bg-black text-white align-middle rounded-xs;
+        height: 1.625em;
+        padding: 0 0.35em;
+        margin-inline-end: 0.4em;
+        [data-content="chapter-caption"]{
+          @apply text-[0.4em] leading-none;
+        }
+        [data-content="chapter-num"]{
+          @apply text-[0.6em] font-bold leading-none;
+        }
+      }
+    }
+    [data-content="mishnah-title"]{
+      @apply text-center mb-1;
+      h4{
+        @apply font-bold;
+      }
+      [data-content="source"]{
+        @apply text-xs opacity-70;
+      }
+    }
+    [data-content="mishnah-text"]{
+      @apply text-justify leading-relaxed mb-3;
+      text-align-last: center;
+    }
+    [data-content="block"]{
+      @apply text-center mb-2;
+      b{
+        @apply font-bold;
+      }
+    }
+  }
+  [data-section="footer"]{
+    @apply font-shofar flex flex-row;
+    [data-content="footer-text"]{
+      @apply grow text-sm;
+    }
+    [data-content="footer-paganation"]{
+      @apply text-sm;
+    }
+  }
 }
 
 div[data-page="a4"] {

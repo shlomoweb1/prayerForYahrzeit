@@ -1,0 +1,356 @@
+{
+  "noto-serif": {
+    "id": "noto-serif",
+    "cssFamily": "Noto Serif Hebrew",
+    "files": [
+      {
+        "dir": "NotoSerifHebrew",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "NotoSerifHebrew",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "noto-sans": {
+    "id": "noto-sans",
+    "cssFamily": "Noto Sans Hebrew",
+    "files": [
+      {
+        "dir": "NotoSansHebrew",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "NotoSansHebrew",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "rashi": {
+    "id": "rashi",
+    "cssFamily": "Noto Rashi Hebrew",
+    "files": [
+      {
+        "dir": "NotoRashiHebrew",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "NotoRashiHebrew",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "frank-ruhl": {
+    "id": "frank-ruhl",
+    "cssFamily": "Frank Ruhl Libre",
+    "files": [
+      {
+        "dir": "FrankRuhlLibre",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "FrankRuhlLibre",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "taamey": {
+    "id": "taamey",
+    "cssFamily": "Taamey Frank CLM",
+    "files": [
+      {
+        "dir": "TaameyFrankCLM",
+        "file": "medium-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "TaameyFrankCLM",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "keter": {
+    "id": "keter",
+    "cssFamily": "Keter YG",
+    "files": [
+      {
+        "dir": "KeterYG",
+        "file": "medium-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "KeterYG",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "keter-aram-sova": {
+    "id": "keter-aram-sova",
+    "cssFamily": "Keter Aram Sova",
+    "files": [
+      {
+        "dir": "KeterAramTsova",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "shofar": {
+    "id": "shofar",
+    "cssFamily": "Shofar",
+    "files": [
+      {
+        "dir": "Shofar",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "taamey-ashkenaz": {
+    "id": "taamey-ashkenaz",
+    "cssFamily": "Taamey Ashkenaz",
+    "files": [
+      {
+        "dir": "TaameyAshkenaz",
+        "file": "medium-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "TaameyAshkenaz",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "taamey-david": {
+    "id": "taamey-david",
+    "cssFamily": "Taamey David CLM",
+    "files": [
+      {
+        "dir": "TaameyDavidCLM",
+        "file": "medium-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "TaameyDavidCLM",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "frank-ruehl-clm": {
+    "id": "frank-ruehl-clm",
+    "cssFamily": "Frank Ruehl CLM",
+    "files": [
+      {
+        "dir": "FrankRuehlCLM",
+        "file": "medium-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "FrankRuehlCLM",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "miriam-mono": {
+    "id": "miriam-mono",
+    "cssFamily": "Miriam Mono CLM",
+    "files": [
+      {
+        "dir": "MiriamMonoCLM",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "MiriamMonoCLM",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "nachlieli": {
+    "id": "nachlieli",
+    "cssFamily": "Nachlieli CLM",
+    "files": [
+      {
+        "dir": "NachlieliCLM",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "NachlieliCLM",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "cardo": {
+    "id": "cardo",
+    "cssFamily": "Cardo",
+    "files": [
+      {
+        "dir": "Cardo",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "Cardo",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "firago": {
+    "id": "firago",
+    "cssFamily": "FiraGO",
+    "files": [
+      {
+        "dir": "FiraGO",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "FiraGO",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "ezra-sil-sr": {
+    "id": "ezra-sil-sr",
+    "cssFamily": "Ezra SIL SR",
+    "files": [
+      {
+        "dir": "EzraSILSR",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "open-sans-hebrew": {
+    "id": "open-sans-hebrew",
+    "cssFamily": "Open Sans Hebrew",
+    "files": [
+      {
+        "dir": "OpenSansHebrew",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "OpenSansHebrew",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  },
+  "dyslexia-hebrew": {
+    "id": "dyslexia-hebrew",
+    "cssFamily": "DyslexiaHebrew",
+    "files": [
+      {
+        "dir": "DyslexiaHebrew",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "shlomo": {
+    "id": "shlomo",
+    "cssFamily": "Shlomo",
+    "files": [
+      {
+        "dir": "Shlomo",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "shlomo-stam": {
+    "id": "shlomo-stam",
+    "cssFamily": "Shlomo Stam",
+    "files": [
+      {
+        "dir": "ShlomoStam",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "shlomo-semistam": {
+    "id": "shlomo-semistam",
+    "cssFamily": "Shlomo SemiStam",
+    "files": [
+      {
+        "dir": "ShlomoSemiStam",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      }
+    ]
+  },
+  "noto-sans-latin": {
+    "id": "noto-sans-latin",
+    "cssFamily": "Noto Sans",
+    "files": [
+      {
+        "dir": "NotoSans",
+        "file": "regular-full.ttf",
+        "weight": 400,
+        "style": "normal"
+      },
+      {
+        "dir": "NotoSans",
+        "file": "bold-full.ttf",
+        "weight": 700,
+        "style": "normal"
+      }
+    ]
+  }
+}

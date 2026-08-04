@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import './generated/sheet-fonts.css';
+@import './preview.css';
 
 @theme {
   --font-sans:
@@ -7,6 +9,8 @@
     sans-serif;
   --font-readable: 'Frank Ruhl Libre', Georgia, 'Times New Roman', serif;
   --color-link: oklch(0.51 0.19 258);
+  --color-success: oklch(0.6401 0.1751 146.74);
+  --color-light: oklch(0.91 0.19 106.56)
 }
 
 @theme inline {

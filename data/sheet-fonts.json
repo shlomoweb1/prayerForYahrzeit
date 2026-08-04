@@ -1,0 +1,27 @@
+{
+  "_readme": "Curation list for izkor sheet fonts. To add a font: (1) add its family under web/public/fonts/<Family>/ and regenerate data/fonts-manifest.json via scripts/copy-fonts.mjs (license + provenance); (2) add one entry below with id (short kebab-case id used across the app), cssFamily (the @font-face / font-family display name) and family (must match a \"family\" entry in fonts-manifest.json). web/vite-plugins/sheet-fonts.ts generates the @font-face rules, the Tailwind font-<id> utilities and the runtime registry from this file + fonts-manifest.json on every dev/build run.",
+  "fonts": [
+    { "id": "noto-serif", "cssFamily": "Noto Serif Hebrew", "family": "NotoSerifHebrew" },
+    { "id": "noto-sans", "cssFamily": "Noto Sans Hebrew", "family": "NotoSansHebrew" },
+    { "id": "rashi", "cssFamily": "Noto Rashi Hebrew", "family": "NotoRashiHebrew" },
+    { "id": "frank-ruhl", "cssFamily": "Frank Ruhl Libre", "family": "FrankRuhlLibre" },
+    { "id": "taamey", "cssFamily": "Taamey Frank CLM", "family": "TaameyFrankCLM" },
+    { "id": "keter", "cssFamily": "Keter YG", "family": "KeterYG" },
+    { "id": "keter-aram-sova", "cssFamily": "Keter Aram Sova", "family": "KeterAramTsova" },
+    { "id": "shofar", "cssFamily": "Shofar", "family": "Shofar" },
+    { "id": "taamey-ashkenaz", "cssFamily": "Taamey Ashkenaz", "family": "TaameyAshkenaz" },
+    { "id": "taamey-david", "cssFamily": "Taamey David CLM", "family": "TaameyDavidCLM" },
+    { "id": "frank-ruehl-clm", "cssFamily": "Frank Ruehl CLM", "family": "FrankRuehlCLM" },
+    { "id": "miriam-mono", "cssFamily": "Miriam Mono CLM", "family": "MiriamMonoCLM" },
+    { "id": "nachlieli", "cssFamily": "Nachlieli CLM", "family": "NachlieliCLM" },
+    { "id": "cardo", "cssFamily": "Cardo", "family": "Cardo" },
+    { "id": "firago", "cssFamily": "FiraGO", "family": "FiraGO" },
+    { "id": "ezra-sil-sr", "cssFamily": "Ezra SIL SR", "family": "EzraSILSR" },
+    { "id": "open-sans-hebrew", "cssFamily": "Open Sans Hebrew", "family": "OpenSansHebrew" },
+    { "id": "dyslexia-hebrew", "cssFamily": "DyslexiaHebrew", "family": "DyslexiaHebrew" },
+    { "id": "shlomo", "cssFamily": "Shlomo", "family": "Shlomo" },
+    { "id": "shlomo-stam", "cssFamily": "Shlomo Stam", "family": "ShlomoStam" },
+    { "id": "shlomo-semistam", "cssFamily": "Shlomo SemiStam", "family": "ShlomoSemiStam" },
+    { "id": "noto-sans-latin", "cssFamily": "Noto Sans", "family": "NotoSans" }
+  ]
+}

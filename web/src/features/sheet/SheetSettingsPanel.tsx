@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { SHEET_FONTS } from '@/features/sheet/fonts'
+import { SHEET_FONT_CLASS } from '@/features/sheet/generated/sheet-font-ids'
 import { SHEET_SECTIONS } from '@/features/sheet/layout'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
 
@@ -44,7 +45,7 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
           </SelectTrigger>
           <SelectContent>
             {Object.values(SHEET_FONTS).map((def) => (
-              <SelectItem key={def.id} value={def.id}>
+              <SelectItem key={def.id} value={def.id} className={SHEET_FONT_CLASS[def.id]}>
                 {def.cssFamily}
               </SelectItem>
             ))}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { SHEET_FONTS, fontDef, fontFaceCss } from '@/features/sheet/fonts'
+import { ALL_FONT_FACES_CSS, SHEET_FONTS, fontDef } from '@/features/sheet/fonts'
 import {
   a4PageSpec,
   buildLayout,
@@ -79,27 +79,19 @@ describe('layout defaults', () => {
 })
 
 describe('font registry', () => {
-  it('covers every font id with regular and bold files', () => {
+  it('covers every font id with a cssFamily and at least one file', () => {
     const ids = Object.keys(SHEET_FONTS)
-    expect(ids).toEqual([
-      'noto-serif',
-      'noto-sans',
-      'rashi',
-      'frank-ruhl',
-      'taamey',
-      'keter',
-    ])
+    expect(ids).toEqual(expect.arrayContaining(['noto-serif', 'noto-sans', 'rashi', 'frank-ruhl', 'taamey', 'keter']))
     for (const def of Object.values(SHEET_FONTS)) {
       expect(def.cssFamily.length).toBeGreaterThan(0)
-      expect(def.files.length).toBeGreaterThanOrEqual(2)
+      expect(def.files.length).toBeGreaterThanOrEqual(1)
     }
   })
 
-  it('fontFaceCss emits absolute /fonts/ sources with weights', () => {
-    const css = fontFaceCss('noto-serif')
-    expect(css).toContain("font-family:'Noto Serif Hebrew'")
-    expect(css).toContain("url('/fonts/NotoSerifHebrew/regular-full.ttf')")
-    expect(css).toContain('font-weight:700')
+  it('ALL_FONT_FACES_CSS emits absolute /fonts/ sources with weights for every family', () => {
+    expect(ALL_FONT_FACES_CSS).toContain("font-family:'Noto Serif Hebrew'")
+    expect(ALL_FONT_FACES_CSS).toContain("url('/fonts/NotoSerifHebrew/regular-full.ttf')")
+    expect(ALL_FONT_FACES_CSS).toContain('font-weight:700')
     expect(fontDef('taamey').files[0]?.file).toBe('medium-full.ttf')
   })
 })

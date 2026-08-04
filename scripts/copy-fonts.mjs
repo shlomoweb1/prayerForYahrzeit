@@ -20,12 +20,19 @@ const PROVENANCE = "/home/shlomo-framowitz/Developments/tziyun-berega/verify-leg
 const OUT_DIR = resolve(ROOT, "web/public/fonts");
 const MANIFEST = resolve(ROOT, "data/fonts-manifest.json");
 
-const ALLOWED_LICENSES = new Set(["OFL", "GPL", "GPL+FE"]);
-const COVERAGE_TAGS = ["nikud", "cantillation", "letters-only"];
+const ALLOWED_LICENSES = new Set(["OFL", "GPL", "GPL+FE", "Apache"]);
+const COVERAGE_TAGS = ["nikud", "cantillation", "letters-only", "latin"];
 
 // family -> weights + sources (paths verified against the fork)
 const CT = "Hebrew Letters with Vowels and Cantillation";
 const NV = "Hebrew Letters with Vowels (no cantillation)";
+const CULMUS = `${CT}/Culmus Project (GPL+FE)`;
+const TC = `${CULMUS}/Yoram Gnat (GPL+FE)/Taamey-Culmus`;
+const MI = `${CULMUS}/Maxim Iorsh (GPL)`;
+// Shared GPL-2.0 text: several Taamey-Culmus families' own LICENSE files point
+// to "GPL-2.0.txt"/"GNU-GPL" without shipping their own copy — TaameyAshkenaz
+// is the one family in the fork that actually has it, so it's the shared source.
+const GPL2_TEXT = `${TC}/TaameyAshkenaz/GPL-2.0.txt`;
 const FAMILIES = {
   NotoSerifHebrew: {
     category: "cantillation",
@@ -81,6 +88,140 @@ const FAMILIES = {
     weights: [
       { weight: "medium", file: "KeterYG-Medium.ttf", source: `${CT}/Culmus Project (GPL+FE)/Yoram Gnat (GPL+FE)/Taamey-Culmus/KeterYG/KeterYG-Medium.ttf` },
       { weight: "bold", file: "KeterYG-Bold.ttf", source: `${CT}/Culmus Project (GPL+FE)/Yoram Gnat (GPL+FE)/Taamey-Culmus/KeterYG/KeterYG-Bold.ttf` },
+    ],
+  },
+  KeterAramTsova: {
+    category: "cantillation",
+    licenseFile: "LICENSE.txt",
+    licenseSource: `${TC}/KeterAramTsova/LICENSE.txt`,
+    gplText: GPL2_TEXT,
+    weights: [{ weight: "regular", file: "KeterAramTsova.ttf", source: `${TC}/KeterAramTsova/KeterAramTsova.ttf` }],
+  },
+  Shofar: {
+    category: "cantillation",
+    licenseFile: "LICENSE",
+    licenseSource: `${TC}/Shofar/LICENSE`,
+    gplText: GPL2_TEXT,
+    weights: [{ weight: "regular", file: "ShofarRegular.ttf", source: `${TC}/Shofar/ShofarRegular.ttf` }],
+  },
+  TaameyAshkenaz: {
+    category: "cantillation",
+    licenseFile: "LICENSE",
+    licenseSource: `${TC}/TaameyAshkenaz/LICENSE`,
+    gplText: GPL2_TEXT,
+    weights: [
+      { weight: "medium", file: "TaameyAshkenaz-Medium.ttf", source: `${TC}/TaameyAshkenaz/TTF/TaameyAshkenaz-Medium.ttf` },
+      { weight: "bold", file: "TaameyAshkenaz-Bold.ttf", source: `${TC}/TaameyAshkenaz/TTF/TaameyAshkenaz-Bold.ttf` },
+    ],
+  },
+  TaameyDavidCLM: {
+    category: "cantillation",
+    licenseFile: "LICENSE.txt",
+    licenseSource: `${TC}/TaameyDavid/LICENSE.txt`,
+    gplText: GPL2_TEXT,
+    weights: [
+      { weight: "medium", file: "TaameyDavidCLM-Medium.ttf", source: `${TC}/TaameyDavid/TaameyDavidCLM-Medium.ttf` },
+      { weight: "bold", file: "TaameyDavidCLM-Bold.ttf", source: `${TC}/TaameyDavid/TaameyDavidCLM-Bold.ttf` },
+    ],
+  },
+  FrankRuehlCLM: {
+    category: "cantillation",
+    licenseFile: "GPL-2.0.txt",
+    licenseSource: GPL2_TEXT,
+    weights: [
+      { weight: "medium", file: "FrankRuehlCLM-Medium.otf", source: `${MI}/FrankRuehl/FrankRuehlCLM-Medium.otf` },
+      { weight: "bold", file: "FrankRuehlCLM-Bold.otf", source: `${MI}/FrankRuehl/FrankRuehlCLM-Bold.otf` },
+    ],
+  },
+  MiriamMonoCLM: {
+    category: "cantillation",
+    licenseFile: "GPL-2.0.txt",
+    licenseSource: GPL2_TEXT,
+    weights: [
+      { weight: "regular", file: "MiriamMonoCLM-Book.ttf", source: `${MI}/MiriamMono/MiriamMonoCLM-Book.ttf` },
+      { weight: "bold", file: "MiriamMonoCLM-Bold.ttf", source: `${MI}/MiriamMono/MiriamMonoCLM-Bold.ttf` },
+    ],
+  },
+  NachlieliCLM: {
+    category: "cantillation",
+    licenseFile: "GPL-2.0.txt",
+    licenseSource: GPL2_TEXT,
+    weights: [
+      { weight: "regular", file: "NachlieliCLM-Light.otf", source: `${MI}/Nachlieli/NachlieliCLM-Light.otf` },
+      { weight: "bold", file: "NachlieliCLM-Bold.otf", source: `${MI}/Nachlieli/NachlieliCLM-Bold.otf` },
+    ],
+  },
+  Cardo: {
+    category: "cantillation",
+    licenseFile: "readme.txt",
+    licenseSource: `${CT}/Fonts for scholars (OFL)/Cardo/readme.txt`,
+    weights: [
+      { weight: "regular", file: "Cardo-regular_104s.ttf", source: `${CT}/Fonts for scholars (OFL)/Cardo/Cardo-regular_104s.ttf` },
+      { weight: "bold", file: "Cardo-bold_101.ttf", source: `${CT}/Fonts for scholars (OFL)/Cardo/Cardo-bold_101.ttf` },
+    ],
+  },
+  FiraGO: {
+    category: "cantillation",
+    licenseFile: "OFL.txt",
+    licenseSource: `${CT}/FiraGO (OFL)/OFL.txt`,
+    weights: [
+      { weight: "regular", file: "FiraGO-Regular.otf", source: `${CT}/FiraGO (OFL)/FiraGO_OTF_1001/Roman/FiraGO-Regular.otf` },
+      { weight: "bold", file: "FiraGO-Bold.otf", source: `${CT}/FiraGO (OFL)/FiraGO_OTF_1001/Roman/FiraGO-Bold.otf` },
+    ],
+  },
+  EzraSILSR: {
+    category: "cantillation",
+    licenseFile: "Ezra SIL Hebrew Unicode Fonts license.htm",
+    licenseSource: `${CT}/SIL (OFL)/Ezra SIL/Ezra SIL Hebrew Unicode Fonts license.htm`,
+    weights: [{ weight: "regular", file: "SILEOTSR.ttf", source: `${CT}/SIL (OFL)/Ezra SIL/SILEOTSR.ttf` }],
+  },
+  OpenSansHebrew: {
+    category: "nikud",
+    licenseFile: "LICENSE.txt",
+    licenseSource: `${NV}/Yanek Iontef (Apache)/Open Sans Hebrew/LICENSE.txt`,
+    weights: [
+      { weight: "regular", file: "OpenSansHebrew-Regular.ttf", source: `${NV}/Yanek Iontef (Apache)/Open Sans Hebrew/OpenSansHebrew-Regular.ttf` },
+      { weight: "bold", file: "OpenSansHebrew-Bold.ttf", source: `${NV}/Yanek Iontef (Apache)/Open Sans Hebrew/OpenSansHebrew-Bold.ttf` },
+    ],
+  },
+  DyslexiaHebrew: {
+    category: "nikud",
+    licenseFile: "OFL-license.txt",
+    licenseSource: `${NV}/Shoag, Jake (OFL)/OFL-license.txt`,
+    weights: [{ weight: "regular", file: "DyslexiaHebrew-Regular.otf", source: `${NV}/Shoag, Jake (OFL)/DyslexiaHebrew-Regular.otf` }],
+  },
+  // Shlomo/ShlomoStam/ShlomoSemiStam: derivatives of SIL's Ezra font (OFL,
+  // Reserved Font Names "SIL"/"Ezra" per the font's own embedded metadata).
+  // The files also carry a FontCreator trial-version "non-commercial only"
+  // watermark in one platform's name records (a known FontCreator-trial
+  // artifact, not a deliberate re-license) alongside the legitimate OFL text
+  // in the other platform's records — OFL-license.txt here is built from the
+  // clean (Macintosh-platform) records only.
+  Shlomo: {
+    category: "cantillation",
+    licenseFile: "OFL-license.txt",
+    licenseSource: `${CT}/Shlomo Orbach (OFL)/OFL-license.txt`,
+    weights: [{ weight: "regular", file: "Shlomo.ttf", source: `${CT}/Shlomo Orbach (OFL)/Shlomo.ttf` }],
+  },
+  ShlomoStam: {
+    category: "cantillation",
+    licenseFile: "OFL-license.txt",
+    licenseSource: `${CT}/Shlomo Orbach (OFL)/OFL-license.txt`,
+    weights: [{ weight: "regular", file: "ShlomoStam.ttf", source: `${CT}/Shlomo Orbach (OFL)/ShlomoStam.ttf` }],
+  },
+  ShlomoSemiStam: {
+    category: "cantillation",
+    licenseFile: "OFL-license.txt",
+    licenseSource: `${CT}/Shlomo Orbach (OFL)/OFL-license.txt`,
+    weights: [{ weight: "regular", file: "ShlomoSemiStam.ttf", source: `${CT}/Shlomo Orbach (OFL)/ShlomoSemiStam.ttf` }],
+  },
+  NotoSans: {
+    category: "latin",
+    licenseFile: "OFL.txt",
+    licenseSource: `Non-Hebrew Scripts/Noto/NotoSans (OFL)/OFL.txt`,
+    weights: [
+      { weight: "regular", file: "NotoSans-Regular.ttf", source: `Non-Hebrew Scripts/Noto/NotoSans (OFL)/NotoSans-Regular.ttf` },
+      { weight: "bold", file: "NotoSans-Bold.ttf", source: `Non-Hebrew Scripts/Noto/NotoSans (OFL)/NotoSans-Bold.ttf` },
     ],
   },
 };

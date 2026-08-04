@@ -33,7 +33,7 @@ export const WizardQuery = z.object({
   font: z.string().min(1).default('noto-serif').catch('noto-serif'),
   nikud: z.coerce.number().int().min(0).max(1).catch(1).default(1),
   deco: z.coerce.number().int().min(0).max(1).catch(1).default(1),
-  acrostic: z.enum(['both', 'name', 'parent', 'none']).default('both').catch('both'),
+  acrostic: z.enum(['both', 'name', 'parent', 'none']).default('name').catch('name'),
   blessing: z.coerce.number().int().min(0).max(1).catch(0).default(0),
   sections: z
     .union([

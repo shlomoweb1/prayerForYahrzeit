@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { OptionCard } from '@/components/ui/option-card'
@@ -11,9 +10,9 @@ interface StepProps {
   setSearch: (patch: Partial<WizardQuery>) => void
 }
 
-const NUSACH_ICONS: Record<WizardQuery['nusach'], React.ReactNode> = {
-  ashkenaz: <img src="icons/torah/ashkenaz.svg" className="size-48" />,
-  sefard: <img src="icons/torah/edot-mizrach.svg" className="size-48" />,
+const NUSACH_IMAGES: Record<WizardQuery['nusach'], string> = {
+  ashkenaz: '/images/Ashkenaz-torah.png',
+  sefard: '/images/separadi-torah.png',
 }
 
 export function Step2Nusach({ search, setSearch }: StepProps) {
@@ -36,7 +35,7 @@ export function Step2Nusach({ search, setSearch }: StepProps) {
           <OptionCard
             key={nusach}
             value={nusach}
-            icon={NUSACH_ICONS[nusach]}
+            image={NUSACH_IMAGES[nusach]}
             title={t(`wizard.options.nusach.${nusach}`)}
             hint={t(`wizard.hints.nusach.${nusach}`)}
           />

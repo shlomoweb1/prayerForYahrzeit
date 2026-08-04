@@ -1,13 +1,22 @@
 /**
- * Font registry for yahrzeit sheets (driven by data/fonts-manifest.json).
+ * Font registry for yahrzeit sheets.
  *
- * Every family file lives in web/public/fonts/<family>/ and is committed with
- * its license. The @font-face rules below are appended to index.css; the
- * render worker rewrites their url(/fonts/…) sources to data URIs at PDF
- * render time (see features/folio/font-embedder).
+ * The data (family/files/weights) is generated at dev/build time by
+ * web/vite-plugins/sheet-fonts.ts from data/sheet-fonts.json (curation) and
+ * data/fonts-manifest.json (provenance) — see that plugin to add a font. The
+ * same data also produces src/css/generated/sheet-fonts.css (@font-face rules
+ * + Tailwind font-<id> theme vars), imported by the print preview stylesheet.
+ *
+ * `ALL_FONT_FACES_CSS` below is built from this registry rather than reading
+ * that generated CSS file, because the off-screen capture used for PDF
+ * rendering is a standalone document with no access to the app's linked
+ * stylesheets (see sheet-document.tsx) — it needs the @font-face text as a JS
+ * string it can inline directly.
  */
+import { SHEET_FONT_IDS } from '@/features/sheet/generated/sheet-font-ids'
+import fontsData from '@/features/sheet/generated/sheet-fonts.json'
 
-import type { SheetFontId } from '@/features/sheet/layout'
+export type SheetFontId = (typeof SHEET_FONT_IDS)[number]
 
 export interface SheetFontDef {
   id: SheetFontId
@@ -17,70 +26,20 @@ export interface SheetFontDef {
   files: { dir: string; file: string; weight: number; style: string }[]
 }
 
-export const SHEET_FONTS: Record<SheetFontId, SheetFontDef> = {
-  'noto-serif': {
-    id: 'noto-serif',
-    cssFamily: 'Noto Serif Hebrew',
-    files: [
-      { dir: 'NotoSerifHebrew', file: 'regular-full.ttf', weight: 400, style: 'normal' },
-      { dir: 'NotoSerifHebrew', file: 'bold-full.ttf', weight: 700, style: 'normal' },
-    ],
-  },
-  'noto-sans': {
-    id: 'noto-sans',
-    cssFamily: 'Noto Sans Hebrew',
-    files: [
-      { dir: 'NotoSansHebrew', file: 'regular-full.ttf', weight: 400, style: 'normal' },
-      { dir: 'NotoSansHebrew', file: 'bold-full.ttf', weight: 700, style: 'normal' },
-    ],
-  },
-  rashi: {
-    id: 'rashi',
-    cssFamily: 'Noto Rashi Hebrew',
-    files: [
-      { dir: 'NotoRashiHebrew', file: 'regular-full.ttf', weight: 400, style: 'normal' },
-      { dir: 'NotoRashiHebrew', file: 'bold-full.ttf', weight: 700, style: 'normal' },
-    ],
-  },
-  'frank-ruhl': {
-    id: 'frank-ruhl',
-    cssFamily: 'Frank Ruhl Libre',
-    files: [
-      { dir: 'FrankRuhlLibre', file: 'regular-full.ttf', weight: 400, style: 'normal' },
-      { dir: 'FrankRuhlLibre', file: 'bold-full.ttf', weight: 700, style: 'normal' },
-    ],
-  },
-  taamey: {
-    id: 'taamey',
-    cssFamily: 'Taamey Frank CLM',
-    files: [
-      { dir: 'TaameyFrankCLM', file: 'medium-full.ttf', weight: 400, style: 'normal' },
-      { dir: 'TaameyFrankCLM', file: 'bold-full.ttf', weight: 700, style: 'normal' },
-    ],
-  },
-  keter: {
-    id: 'keter',
-    cssFamily: 'Keter YG',
-    files: [
-      { dir: 'KeterYG', file: 'medium-full.ttf', weight: 400, style: 'normal' },
-      { dir: 'KeterYG', file: 'bold-full.ttf', weight: 700, style: 'normal' },
-    ],
-  },
-}
+export const SHEET_FONTS = fontsData as Record<SheetFontId, SheetFontDef>
 
 export function fontDef(fontId: SheetFontId): SheetFontDef {
   return SHEET_FONTS[fontId]
 }
 
-/** @font-face CSS block for a family (used in the app stylesheet). */
-export function fontFaceCss(fontId: SheetFontId): string {
-  const def = fontDef(fontId)
-  return def.files
-    .map(
+/** @font-face rules for every sheet font, for standalone (capture) documents. */
+export const ALL_FONT_FACES_CSS: string = Object.values(SHEET_FONTS)
+  .flatMap((def) =>
+    def.files.map(
       (f) =>
         `@font-face{font-family:'${def.cssFamily}';font-style:${f.style};` +
         `font-weight:${f.weight};font-display:swap;` +
         `src:url('/fonts/${f.dir}/${f.file}') format('truetype');}`,
-    )
-    .join('\n')
-}
+    ),
+  )
+  .join('\n')

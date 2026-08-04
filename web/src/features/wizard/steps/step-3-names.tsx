@@ -13,17 +13,12 @@ interface StepProps {
   setSearch: (patch: Partial<WizardQuery>) => void
 }
 
-const GENDER_AVATARS: Record<WizardQuery['gender'], string> = {
-  male: 'icons/avatars/20215969031702585014.svg',
-  female: 'icons/avatars/12363769451582967218.svg',
-}
-
 const LINEAGE_OPTIONS = ['kohen', 'levi', 'none'] as const
 
-const LINEAGE_ICONS: Record<WizardQuery['lineage'], string> = {
-  kohen: 'icons/lineage/choen.svg',
-  levi: 'icons/lineage/levi.svg',
-  none: 'icons/lineage/yisrael.svg',
+const LINEAGE_IMAGES: Record<WizardQuery['lineage'], string> = {
+  kohen: '/images/koen.png',
+  levi: '/images/levi.png',
+  none: '/images/yisrael.png',
 }
 
 export function Step3Names({ search, setSearch }: StepProps) {
@@ -36,46 +31,48 @@ export function Step3Names({ search, setSearch }: StepProps) {
       titleKey="wizard.steps.3.title"
       descriptionKey="wizard.steps.3.description"
     >
-      <div className="bg-card rounded-xl border p-4 shadow-sm sm:p-6">
-        <div
-          className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center"
-          dir="rtl"
-        >
-          <div className="flex flex-1 items-center gap-2">
-            <img
-              src={GENDER_AVATARS[search.gender]}
-              alt=""
-              className="size-8 shrink-0 rounded-full border border-primary"
-            />
+      <div
+        className="relative flex min-h-40 flex-col justify-center overflow-hidden rounded-xl border bg-cover bg-bottom p-4 shadow-sm sm:min-h-48 sm:p-6"
+        style={{ backgroundImage: 'url(/images/hero.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/25" />
+        <div className="relative">
+          <div
+            className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center"
+            dir="rtl"
+          >
+            <div className="flex flex-1 items-center gap-2">
+              <Input
+                id="wizard-name"
+                dir="rtl"
+                lang="he"
+                autoComplete="off"
+                className="bg-white/95 backdrop-blur-sm"
+                aria-label={t('wizard.labels.name', { context: search.gender })}
+                value={search.name ?? ''}
+                onChange={(event) => setSearch({ name: event.target.value })}
+                placeholder={t('wizard.placeholders.name', { context: search.gender })}
+              />
+            </div>
+            <span className="text-center md:text-start text-white shrink-0 rounded-md bg-black/30 px-2 py-1 text-sm font-medium backdrop-blur-sm">
+              {filialWord(search.gender)}
+            </span>
             <Input
-              id="wizard-name"
+              id="wizard-parent"
               dir="rtl"
               lang="he"
               autoComplete="off"
-              aria-label={t('wizard.labels.name', { context: search.gender })}
-              value={search.name ?? ''}
-              onChange={(event) => setSearch({ name: event.target.value })}
-              placeholder={t('wizard.placeholders.name', { context: search.gender })}
+              aria-label={t('wizard.labels.parent')}
+              className="flex-1 bg-white/95 backdrop-blur-sm"
+              value={search.parent ?? ''}
+              onChange={(event) => setSearch({ parent: event.target.value })}
+              placeholder={t('wizard.placeholders.parent')}
             />
           </div>
-          <span className="text-center md:text-start text-muted-foreground shrink-0 text-sm font-medium">
-            {filialWord(search.gender)}
-          </span>
-          <Input
-            id="wizard-parent"
-            dir="rtl"
-            lang="he"
-            autoComplete="off"
-            aria-label={t('wizard.labels.parent')}
-            className="flex-1"
-            value={search.parent ?? ''}
-            onChange={(event) => setSearch({ parent: event.target.value })}
-            placeholder={t('wizard.placeholders.parent')}
-          />
+          <p className="text-white/90 mt-2 w-fit rounded-md bg-black/30 px-2 py-1 text-xs backdrop-blur-sm">
+            {t('wizard.hints.name', { context: search.gender })}
+          </p>
         </div>
-        <p className="text-muted-foreground mt-2 text-xs">
-          {t('wizard.hints.name', { context: search.gender })}
-        </p>
       </div>
       <div className="grid gap-2">
         <span className="text-muted-foreground text-sm">{t('wizard.labels.lineage')}</span>
@@ -90,9 +87,10 @@ export function Step3Names({ search, setSearch }: StepProps) {
             <OptionCard
               key={lineage}
               value={lineage}
-              icon={<img src={LINEAGE_ICONS[lineage]} alt="" data-lineage={lineage} className="size-16 data-[lineage=kohen]:w-32 data-[lineage=levi]:w-12 data-[lineage=levi]:-rotate-45" />}
+              image={LINEAGE_IMAGES[lineage]}
               title={t(`wizard.options.lineage.${lineage}`)}
               hint={t(`wizard.hints.lineage.${lineage}`)}
+              className="aspect-[4/3]"
             />
           ))}
         </RadioGroup>

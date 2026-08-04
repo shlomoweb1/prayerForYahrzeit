@@ -11,13 +11,13 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col gap-10">
-      <section className="flex flex-col items-center gap-4 py-8 text-center bg-card/50 rounded-lg">
+      <section className="flex flex-col items-center gap-4 py-8 text-center bg-background/65 backdrop-blur-sm rounded-lg shadow-2xl">
         <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance">
           {t('landing.title')}
         </h1>
         <p className="text-muted-foreground max-w-xl text-lg">{t('landing.subtitle')}</p>
       </section>
-      <Card>
+      <Card className="bg-background/65 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold text-center">
             {t('landing.howItWorksTitle')}
@@ -26,12 +26,12 @@ export default function LandingPage() {
         <CardContent>
           <ul className="grid gap-3">
             {FEATURE_ITEM_KEYS.map((key) => (
-              <li key={key} className="text-muted-foreground text-sm">
+              <li key={key} className="text-muted-foreground font-extrabold text-sm">
                 {t(`landing.featureItems.${key}`)}
               </li>
             ))}
           </ul>
-          <Button asChild size="lg" className="mt-6 w-full">
+          <Button asChild size="lg" className="mt-6 w-full no-underline hover:font-semibold transition-all duration-75 text-yellow-900" variant="secondary">
             <Link to="/wizard">{t('landing.ctaStart')}</Link>
           </Button>
         </CardContent>

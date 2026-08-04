@@ -49,19 +49,28 @@ const SOFIT_MAP: Record<string, string> = {
   ...mishnayotData.sofitMap,
 }
 
+export interface NameLetter {
+  /** Letter as it actually appears in the name — final forms kept as-is. */
+  display: string
+  /** Regular-form letter to look up psalm-119 stanzas / mishnayot by — the
+   * data is only keyed by the 22 regular letters, never final forms. */
+  lookup: string
+}
+
 /**
- * Letters of a Hebrew name: nikud stripped, final letters mapped to their
- * regular form (ן->נ, ף->פ, ...), duplicates removed keeping first order.
+ * Letters of a Hebrew name: nikud stripped, duplicates removed keeping first
+ * order (deduped by the regular-form letter, so a name with both a final and
+ * regular form of the same letter only gets one stanza).
  */
-export function resolveNameLetters(name: string): string[] {
+export function resolveNameLetters(name: string): NameLetter[] {
   const seen = new Set<string>()
-  const letters: string[] = []
+  const letters: NameLetter[] = []
   for (const ch of stripNikud(name)) {
-    const regular = SOFIT_MAP[ch] ?? ch
-    if (!isHebrewLetter(regular)) continue
-    if (seen.has(regular)) continue
-    seen.add(regular)
-    letters.push(regular)
+    const lookup = SOFIT_MAP[ch] ?? ch
+    if (!isHebrewLetter(lookup)) continue
+    if (seen.has(lookup)) continue
+    seen.add(lookup)
+    letters.push({ display: ch, lookup })
   }
   return letters
 }
