@@ -58,18 +58,16 @@ export interface NameLetter {
 }
 
 /**
- * Letters of a Hebrew name: nikud stripped, duplicates removed keeping first
- * order (deduped by the regular-form letter, so a name with both a final and
- * regular form of the same letter only gets one stanza).
+ * Letters of a Hebrew name: nikud and non-Hebrew characters (spaces between
+ * given names, etc.) stripped. Every letter position is kept in order,
+ * repeats included — the traditional custom recites a Psalm-119 verse-set
+ * per letter of the full name, not per distinct letter.
  */
 export function resolveNameLetters(name: string): NameLetter[] {
-  const seen = new Set<string>()
   const letters: NameLetter[] = []
   for (const ch of stripNikud(name)) {
     const lookup = SOFIT_MAP[ch] ?? ch
     if (!isHebrewLetter(lookup)) continue
-    if (seen.has(lookup)) continue
-    seen.add(lookup)
     letters.push({ display: ch, lookup })
   }
   return letters

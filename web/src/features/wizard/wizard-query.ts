@@ -35,6 +35,20 @@ export const WizardQuery = z.object({
   deco: z.coerce.number().int().min(0).max(1).catch(1).default(1),
   acrostic: z.enum(['both', 'name', 'parent', 'none']).default('name').catch('name'),
   blessing: z.coerce.number().int().min(0).max(1).catch(0).default(0),
+  hashkavaVariant: z.enum(['elMaleh', 'traditional', 'both']).default('elMaleh').catch('elMaleh'),
+  editorMode: z.enum(['simple', 'advanced']).default('simple').catch('simple'),
+  /**
+   * Hidden dev flag: forces the step-5 preview pane into the live HTML
+   * editor-preview instead of the default Folio-rendered PDF viewer. Not
+   * `editorMode` (simple/advanced settings density) — an unrelated concept
+   * that happens to share the word "editor". Deliberately has no UI
+   * affordance (no toggle, no label, no i18n key) — `?editor=1` only.
+   */
+  editor: z.coerce.number().int().min(0).max(1).catch(0).default(0),
+  lineDensity: z.enum(['tidy', 'normal', 'loose']).default('normal').catch('normal'),
+  fontTitle: z.string().min(1).optional().catch(undefined),
+  fontHeading: z.string().min(1).optional().catch(undefined),
+  fontBody: z.string().min(1).optional().catch(undefined),
   sections: z
     .union([
       sectionsArray,

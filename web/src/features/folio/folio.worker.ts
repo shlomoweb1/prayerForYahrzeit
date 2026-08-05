@@ -2,12 +2,14 @@
  * Folio WASM render worker — port of spikes/folio-wasm/render.worker.js.
  *
  * Loaded as an IIFE classic worker (`?worker`, Vite's default format) so
- * importScripts works. Bootstraps wasm_exec.js + folio.wasm, keeps the Go
- * instance warm between renders, and inlines @font-face sources to data URIs
- * (fonts must be embedded — the captured document has no URL resolution).
+ * importScripts works. Bootstraps wasm_exec.js + folio.wasm and keeps the Go
+ * instance warm between renders. The HTML it receives already has every
+ * @font-face source embedded as a base64 data URI (renderSheetHTML.tsx) — the
+ * captured document has no URL resolution, so fonts must arrive pre-embedded
+ * rather than being fetched here.
  *
  * main -> worker: {type:"render", id, html, settings}
- * worker -> main: {type:"ack", id} | {type:"progress", id, phase:"fonts"|"render"}
+ * worker -> main: {type:"ack", id} | {type:"progress", id, phase:"render"}
  *                  | {type:"result", id, pdf, pages, size, width, height}
  *                  | {type:"error", id, message}
  *
@@ -15,8 +17,6 @@
  */
 
 /// <reference lib="webworker" />
-
-import { inlineFontFaces } from '@/features/folio/font-embedder'
 
 declare const self: DedicatedWorkerGlobalScope
 
@@ -89,11 +89,7 @@ self.onmessage = (event: MessageEvent) => {
   void (async () => {
     try {
       await ensureBooted()
-      let html = String(message.html ?? '')
-      if (html.includes('@font-face')) {
-        post({ type: 'progress', id: message.id, phase: 'fonts' })
-        html = await inlineFontFaces(html)
-      }
+      const html = String(message.html ?? '')
       post({ type: 'progress', id: message.id, phase: 'render' })
 
       const render = (self as unknown as Record<string, unknown>).folioRender

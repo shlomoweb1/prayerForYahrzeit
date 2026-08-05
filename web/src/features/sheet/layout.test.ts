@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ALL_FONT_FACES_CSS, SHEET_FONTS, fontDef } from '@/features/sheet/fonts'
+import { SHEET_FONTS, fontDef } from '@/features/sheet/fonts'
 import {
   a4PageSpec,
   buildLayout,
@@ -88,10 +88,7 @@ describe('font registry', () => {
     }
   })
 
-  it('ALL_FONT_FACES_CSS emits absolute /fonts/ sources with weights for every family', () => {
-    expect(ALL_FONT_FACES_CSS).toContain("font-family:'Noto Serif Hebrew'")
-    expect(ALL_FONT_FACES_CSS).toContain("url('/fonts/NotoSerifHebrew/regular-full.ttf')")
-    expect(ALL_FONT_FACES_CSS).toContain('font-weight:700')
+  it('fontDef resolves file names per weight', () => {
     expect(fontDef('taamey').files[0]?.file).toBe('medium-full.ttf')
   })
 })

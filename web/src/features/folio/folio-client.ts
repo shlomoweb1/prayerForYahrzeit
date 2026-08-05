@@ -26,7 +26,7 @@ export interface FolioRenderResult {
 }
 
 export interface FolioProgress {
-  phase: 'fonts' | 'render'
+  phase: 'render'
 }
 
 type Pending = {

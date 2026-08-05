@@ -10,11 +10,15 @@ const baseSettings = (overrides: Partial<SheetSettings> = {}): SheetSettings => 
   nusach: 'ashkenaz',
   name: 'יונתן יוסף',
   parent: 'צבי מרדכי',
+  lineage: 'none',
   font: 'noto-serif',
+  fontRoles: { title: 'noto-serif', heading: 'noto-serif', body: 'noto-serif' },
+  lineDensity: 'normal',
   nikud: 1,
   deco: 1,
   acrostic: 'both',
   blessing: 0,
+  hashkavaVariant: 'elMaleh',
   sections: ['psalms', 'neshama', 'kaddish', 'mishnayot', 'hashkava', 'closing'],
   ...overrides,
 })
@@ -48,7 +52,7 @@ describe('sheetHeaderLine', () => {
 })
 
 describe('buildSheetContent', () => {
-  it('builds the full 10-section sheet for default settings', () => {
+  it('builds the full sheet for default settings', () => {
     const content = buildSheetContent(baseSettings())
     expect(kinds(content)).toEqual([
       'header',
@@ -57,9 +61,8 @@ describe('buildSheetContent', () => {
       'letters', // אותיות האב
       'letters', // אותיות נשמה
       'prayer', // קדיש יתום
-      'prayer', // קדיש דרבנן
       'mishnayot',
-      'prayer', // השכבה
+      'prayer', // אל מלא רחמים
       'prayer', // תפילות ביציאה
     ])
     const psalms = content.find((block) => block.kind === 'psalms')
@@ -100,7 +103,29 @@ describe('buildSheetContent', () => {
 
   it('respects the section toggles', () => {
     const content = buildSheetContent(baseSettings({ sections: ['kaddish', 'hashkava'] }))
-    expect(kinds(content)).toEqual(['header', 'prayer', 'prayer', 'prayer'])
+    expect(kinds(content)).toEqual(['header', 'prayer', 'prayer'])
+  })
+
+  it('kaddish yatom flows as prose: mourners lines unlabeled, congregation lines as a small parenthesized aside, the joint line alone', () => {
+    const content = buildSheetContent(baseSettings({ sections: ['kaddish'], nikud: 0 }))
+    const kaddish = content.find(
+      (block): block is Extract<SheetBlock, { kind: 'prayer' }> => block.kind === 'prayer' && block.title === 'קדיש יתום',
+    )
+    expect(kaddish).toBeDefined()
+    const html = kaddish!.html
+    // The mourners' label never appears on its own — it would otherwise
+    // repeat before nearly every line. The only occurrence left is the one
+    // inside the joint line's own label ("הקהל והאבלים:").
+    expect((html.match(/האבלים:/g) ?? []).length).toBe(1)
+    // Congregation responses become a small parenthesized inline aside.
+    expect(html).toContain('<span class=izkor-rubric>(הקהל: אמן.)</span>')
+    // The harvest's bare "קהל:" (missing ה) is normalized before rendering.
+    expect(html).toContain('<span class=izkor-rubric>(הקהל: בריך הוא.)</span>')
+    expect(html).not.toContain('(קהל:')
+    // Only one <br><br> pair in the whole text — around the isolated line.
+    expect(html.match(/<br\s*\/?>\s*<br\s*\/?>/gi)?.length).toBe(2)
+    // The isolated joint line is present, wrapped for its own paragraph.
+    expect(html).toContain('<br><br><b>הקהל והאבלים: יהא שמה רבא מברך לעלם ולעלמי עלמיא.</b><br><br>')
   })
 
   it('strips nikud when the nikud setting is off', () => {

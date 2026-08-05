@@ -11,7 +11,9 @@
 
 import { normalizePunctuation } from '@/lib/hebrew'
 import {
-  kaddishDerabananCombined,
+  elMaleRachamimText,
+  hashkavaTraditionalText,
+  kaddishYatomText,
   liturgyBlockHtml,
   nusachTexts,
   NESHAMA_LETTERS,
@@ -82,6 +84,23 @@ export function sheetHeaderLine(settings: SheetSettings): string {
   const lineage = lineageWord(settings.lineage)
   if (lineage) parts.push(lineage)
   parts.push('ז״ל')
+  return normalizePunctuation(parts.join(' '))
+}
+
+/** Name phrase for the middle of a prayer (e.g. אל מלא רחמים, השכבה), e.g.
+ * "יונתן יוסף בן צבי מרדכי הלוי" — no לע״נ prefix or ז״ל suffix. */
+export function deceasedNamePhrase(settings: SheetSettings): string {
+  const genderWord = filialWord(settings.gender)
+  const name = settings.name?.trim() ?? ''
+  const parent = settings.parent?.trim() ?? ''
+  const parts: string[] = []
+  if (name) parts.push(name)
+  if (parent) {
+    if (name) parts.push(genderWord, parent)
+    else parts.push(parent)
+  }
+  const lineage = lineageWord(settings.lineage)
+  if (lineage) parts.push(lineage)
   return normalizePunctuation(parts.join(' '))
 }
 
@@ -255,11 +274,11 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
     blocks.push(buildLettersBlock('אותיות נשמה', identityLetters(NESHAMA_LETTERS), nikud))
   }
 
+  // Only קדיש יתום — the one recited at the graveside itself. קדיש דרבנן
+  // (after learning mishnayot) belongs to the shiva/mourning-house visit,
+  // not this sheet; a future "shiva" sheet edition can add it back.
   if (settings.sections.includes('kaddish')) {
-    blocks.push(buildPrayerBlock('קדיש יתום', liturgyBlockHtml(texts.kaddishYatom, { nikud })))
-    blocks.push(
-      buildPrayerBlock('קדיש דרבנן', liturgyBlockHtml(kaddishDerabananCombined(settings.nusach), { nikud })),
-    )
+    blocks.push(buildPrayerBlock('קדיש יתום', liturgyBlockHtml(kaddishYatomText(settings.nusach), { nikud })))
   }
 
   if (settings.sections.includes('mishnayot')) {
@@ -280,7 +299,20 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
   }
 
   if (settings.sections.includes('hashkava')) {
-    blocks.push(buildPrayerBlock('השכבה', liturgyBlockHtml(texts.hashkava, { nikud })))
+    const namePhrase = deceasedNamePhrase(settings)
+    if (settings.hashkavaVariant === 'elMaleh' || settings.hashkavaVariant === 'both') {
+      blocks.push(
+        buildPrayerBlock('אל מלא רחמים', liturgyBlockHtml(elMaleRachamimText(settings.gender, namePhrase), { nikud })),
+      )
+    }
+    if (settings.hashkavaVariant === 'traditional' || settings.hashkavaVariant === 'both') {
+      blocks.push(
+        buildPrayerBlock(
+          'השכבה',
+          liturgyBlockHtml(hashkavaTraditionalText(settings.nusach, settings.gender, namePhrase), { nikud }),
+        ),
+      )
+    }
   }
 
   if (settings.sections.includes('closing')) {

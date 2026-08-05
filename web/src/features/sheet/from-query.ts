@@ -9,7 +9,7 @@
 
 import { useMemo } from 'react'
 
-import { buildLayout, type SheetSettings } from '@/features/sheet/layout'
+import { buildLayout, type SheetFontRoles, type SheetSettings } from '@/features/sheet/layout'
 import type { SheetFontId, SheetLayout, SheetNusach } from '@/features/sheet/layout'
 import { SHEET_FONTS } from '@/features/sheet/fonts'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
@@ -18,8 +18,27 @@ export function isSheetFontId(value: string): value is SheetFontId {
   return Object.prototype.hasOwnProperty.call(SHEET_FONTS, value)
 }
 
+function resolveFontId(value: string | undefined, fallback: SheetFontId): SheetFontId {
+  return value && isSheetFontId(value) ? value : fallback
+}
+
+/** Per-role fonts: in simple mode (or when a role override isn't set) every
+ * role falls back to the single global `font` — advanced mode is the only
+ * place role overrides can diverge from it. */
+function fontRolesFromQuery(search: WizardQuery, font: SheetFontId): SheetFontRoles {
+  if (search.editorMode !== 'advanced') {
+    return { title: font, heading: font, body: font }
+  }
+  return {
+    title: resolveFontId(search.fontTitle, font),
+    heading: resolveFontId(search.fontHeading, font),
+    body: resolveFontId(search.fontBody, font),
+  }
+}
+
 /** Build the sheet settings for a wizard query (in-memory every call). */
 export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
+  const font = isSheetFontId(search.font) ? search.font : 'noto-serif'
   return {
     paper: search.paper,
     gender: search.gender,
@@ -27,11 +46,14 @@ export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
     name: search.name || undefined,
     parent: search.parent || undefined,
     lineage: search.lineage,
-    font: isSheetFontId(search.font) ? search.font : 'noto-serif',
+    font,
+    fontRoles: fontRolesFromQuery(search, font),
+    lineDensity: search.lineDensity,
     nikud: search.nikud,
     deco: search.deco,
     acrostic: search.acrostic,
     blessing: search.blessing,
+    hashkavaVariant: search.hashkavaVariant,
     sections: [...search.sections],
   }
 }
@@ -40,7 +62,7 @@ export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
 export function sheetLayoutFromQuery(search: WizardQuery): SheetLayout {
   const font = isSheetFontId(search.font) ? search.font : 'noto-serif'
   const target = search.target === 'share' ? 'share' : 'print'
-  return buildLayout(target, search.paper, font)
+  return buildLayout(target, search.paper, font, { lineDensity: search.lineDensity })
 }
 
 /** Settings + layout for a step's render, stable while the query is stable. */

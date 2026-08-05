@@ -6,12 +6,6 @@
  * data/fonts-manifest.json (provenance) — see that plugin to add a font. The
  * same data also produces src/css/generated/sheet-fonts.css (@font-face rules
  * + Tailwind font-<id> theme vars), imported by the print preview stylesheet.
- *
- * `ALL_FONT_FACES_CSS` below is built from this registry rather than reading
- * that generated CSS file, because the off-screen capture used for PDF
- * rendering is a standalone document with no access to the app's linked
- * stylesheets (see sheet-document.tsx) — it needs the @font-face text as a JS
- * string it can inline directly.
  */
 import { SHEET_FONT_IDS } from '@/features/sheet/generated/sheet-font-ids'
 import fontsData from '@/features/sheet/generated/sheet-fonts.json'
@@ -32,14 +26,24 @@ export function fontDef(fontId: SheetFontId): SheetFontDef {
   return SHEET_FONTS[fontId]
 }
 
-/** @font-face rules for every sheet font, for standalone (capture) documents. */
-export const ALL_FONT_FACES_CSS: string = Object.values(SHEET_FONTS)
-  .flatMap((def) =>
-    def.files.map(
-      (f) =>
-        `@font-face{font-family:'${def.cssFamily}';font-style:${f.style};` +
-        `font-weight:${f.weight};font-display:swap;` +
-        `src:url('/fonts/${f.dir}/${f.file}') format('truetype');}`,
-    ),
-  )
-  .join('\n')
+/**
+ * Lazy, per-font base64 data URIs (`{ file: dataUri }`), precomputed at
+ * build time by sheet-fonts.ts from the same /fonts/<dir>/<file> bytes the
+ * browser @font-face rules point at (see generated/font-data/<id>.ts). Only
+ * the fonts a render actually asks for are ever fetched — `import.meta.glob`
+ * code-splits each id into its own chunk, cached by the browser after first
+ * use.
+ *
+ * The Folio PDF capture needs these as data URIs (not `url(/fonts/...)`)
+ * because the wasm worker can't resolve a relative URL itself — see
+ * renderSheetHTML.tsx.
+ */
+const fontDataModules = import.meta.glob<{ default: Record<string, string> }>(
+  './generated/font-data/*.ts',
+)
+
+export async function loadFontFaceData(fontId: SheetFontId): Promise<Record<string, string>> {
+  const load = fontDataModules[`./generated/font-data/${fontId}.ts`]
+  if (!load) throw new Error(`no font data module for "${fontId}"`)
+  return (await load()).default
+}

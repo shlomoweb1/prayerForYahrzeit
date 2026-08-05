@@ -9,25 +9,60 @@
   transform: translateX(200vw);
 }
 
+/* Small parenthesized inline aside for a קדיש congregational response
+ * ("(הקהל: אמן)") folded inline into the mourners' flowing text — same class
+ * name/em convention as sheet-css.ts's .izkor-rubric (Folio pipeline). */
+.izkor-rubric {
+  font-size: 0.72em;
+}
+
+/*
+ * Layout-driven sizing/spacing lives on CSS custom properties set inline by
+ * step-5-review.tsx from the live SheetLayout (baseFontPx, lineHeight,
+ * marginX/Y, titleFontPx, headingFontPx) and the resolved per-role fonts
+ * (SheetSettings.fontRoles) — this file only maps those vars onto the
+ * data-content selectors, it never hardcodes a font family or px size that
+ * should track a setting. Fallbacks match the print defaults so the block
+ * still renders sanely if a var is ever missing.
+ *
+ * Compact/legible print pass: body copy (chapter-flow / mishnah-text / block)
+ * gets a touch of letter/word-spacing for contrast at arm's length outdoors,
+ * while heading/section margins were trimmed — vertical air that doesn't aid
+ * reading is what got cut, not the text itself.
+ */
+
+ @media not print{
+  div[data-page] {
+   @apply m-auto mb-[0.5cm] shadow-lg;
+   box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+   direction: rtl;
+   overflow: hidden;
+  }
+}
+
 div[data-page] {
-  @apply flex flex-col bg-white m-auto mb-[0.5cm] shadow-lg p-[1cm];
-  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-  direction: rtl;
-  overflow: hidden;
-  font-size: 16px;
+  @apply flex flex-col bg-white;
+  padding: var(--izkor-margin-y, 1cm) var(--izkor-margin-x, 1cm);
+  font-size: var(--izkor-base-font-size, 14.7px);
+  line-height: var(--izkor-line-height, 1.45);
+  font-family: var(--izkor-font-body, inherit);
   [data-section="header"]{
     @apply flex flex-row relative;
+    margin-bottom: 0.6em;
+    font-family: var(--izkor-font-title, inherit);
     [data-content="bsd"]{
-      @apply absolute right-0 top-0 text-sm font-shofar;
+      @apply absolute right-0 top-0 text-sm;
     }
     [data-content="title"]{
-      @apply font-shofar;
       @apply text-center block w-full;
       h1{
-        @apply  text-2xl font-bold;
+        @apply font-bold;
+        font-size: var(--izkor-title-font-size, 23px);
+        margin: 0 0 0.15em;
       }
       h2{
         @apply text-sm font-bold;
+        margin: 0;
       }
     }
   }
@@ -36,15 +71,23 @@ div[data-page] {
     min-height: 0;
     overflow: hidden;
     [data-content="section-title"]{
-      @apply text-center text-lg font-bold mb-2;
+      @apply text-center font-bold;
+      font-family: var(--izkor-font-heading, inherit);
+      font-size: var(--izkor-heading-font-size, 15px);
+      margin: 0.5em 0 0.35em;
     }
     [data-content="chapter-flow"]{
-      @apply text-right leading-relaxed font-shlomo-stam mb-2;
+      @apply text-right;
+      font-family: var(--izkor-font-body, inherit);
+      letter-spacing: 0.012em;
+      word-spacing: 0.06em;
+      margin-bottom: 0.55em;
       [data-type="psalm"]{
         @apply inline;
       }
       [data-content="chapter-badge"]{
         @apply inline-flex flex-col items-center justify-center bg-black text-white align-middle rounded-xs;
+        font-family: var(--izkor-font-heading, inherit);
         height: 1.625em;
         padding: 0 0.35em;
         margin-inline-end: 0.4em;
@@ -58,6 +101,7 @@ div[data-page] {
     }
     [data-content="mishnah-title"]{
       @apply text-center mb-1;
+      font-family: var(--izkor-font-heading, inherit);
       h4{
         @apply font-bold;
       }
@@ -66,18 +110,25 @@ div[data-page] {
       }
     }
     [data-content="mishnah-text"]{
-      @apply text-justify leading-relaxed mb-3;
+      @apply text-justify;
+      font-family: var(--izkor-font-body, inherit);
+      letter-spacing: 0.012em;
+      word-spacing: 0.06em;
+      margin-bottom: 0.65em;
       text-align-last: center;
     }
     [data-content="block"]{
-      @apply text-center mb-2;
+      @apply text-center;
+      font-family: var(--izkor-font-body, inherit);
+      margin-bottom: 0.5em;
       b{
         @apply font-bold;
       }
     }
   }
   [data-section="footer"]{
-    @apply font-shofar flex flex-row;
+    @apply flex flex-row;
+    font-family: var(--izkor-font-title, inherit);
     [data-content="footer-text"]{
       @apply grow text-sm;
     }

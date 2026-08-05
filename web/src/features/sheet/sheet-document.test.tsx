@@ -12,30 +12,35 @@ const settings = (overrides: Partial<SheetSettings> = {}): SheetSettings => ({
   nusach: 'ashkenaz',
   name: 'יונתן יוסף',
   parent: 'צבי מרדכי',
+  lineage: 'none',
   font: 'noto-serif',
+  fontRoles: { title: 'noto-serif', heading: 'noto-serif', body: 'noto-serif' },
+  lineDensity: 'normal',
   nikud: 1,
   deco: 1,
   acrostic: 'both',
   blessing: 0,
+  hashkavaVariant: 'elMaleh',
   sections: ['psalms', 'neshama', 'kaddish', 'mishnayot', 'hashkava', 'closing'],
   ...overrides,
 })
 
+// jsdom doesn't do real layout (clientHeight/offsetTop are always 0), so
+// useSheetPagePlan's measure-and-pack never runs and every item lands on one
+// page — these are smoke tests for markup shape, not real pagination
+// (pagination.test.ts and the useSheetPagePlan machinery cover that).
+
 describe('SheetDocument', () => {
-  it('renders the header and a psalm heading', () => {
+  it('renders the header line', () => {
     const layout = printLayoutDefaults('a4')
     const { container } = render(
-      <SheetDocument
-        content={buildSheetContent(settings())}
-        layout={layout}
-        settings={settings()}
-      />,
+      <SheetDocument content={buildSheetContent(settings())} layout={layout} settings={settings()} />,
     )
-    const header = container.querySelector('.izkor-header')
-    expect(header?.textContent).toBe('תפילות ולימוד לע״נ יונתן יוסף בן צבי מרדכי ז״ל')
+    const title = container.querySelector('[data-content="title"] h2')
+    expect(title?.textContent).toContain('לע״נ יונתן יוסף בן צבי מרדכי ז״ל')
   })
 
-  it('renders every page item kind without crashing', () => {
+  it('renders at least one page with the בס"ד/title/footer chrome', () => {
     const layout = printLayoutDefaults('a4')
     const { container } = render(
       <SheetDocument
@@ -44,31 +49,20 @@ describe('SheetDocument', () => {
         settings={settings({ blessing: 1 })}
       />,
     )
-    expect(container.querySelectorAll('.izkor-page').length).toBeGreaterThan(0)
-    expect(container.querySelectorAll('.izkor-ddeco').length).toBeGreaterThan(0)
+    // Real output pages only — excludes the hidden measure-stack templates,
+    // which also carry [data-page] (see renderSheetHTML.tsx for why).
+    const pages = Array.from(container.querySelectorAll('[data-page]')).filter(
+      (page) => !page.closest('[data-sheet-measure]'),
+    )
+    expect(pages.length).toBeGreaterThan(0)
+    expect(pages[0]?.querySelector('[data-content="bsd"]')).not.toBeNull()
+    expect(pages[0]?.querySelector('[data-content="footer-paganation"]')).not.toBeNull()
   })
 
-  it('renders plain (non-decorated) verses when deco is off', () => {
+  it('renders every page item kind without crashing', () => {
     const layout = printLayoutDefaults('a4')
-    const { container } = render(
-      <SheetDocument
-        content={buildSheetContent(settings({ deco: 0 }))}
-        layout={layout}
-        settings={settings({ deco: 0 })}
-      />,
-    )
-    expect(container.querySelectorAll('.izkor-ddeco').length).toBe(0)
-    expect(container.querySelectorAll('.izkor-verse').length).toBeGreaterThan(0)
-  })
-
-  it('injects the sheet stylesheet with the font-face', () => {
-    const layout = printLayoutDefaults('a4')
-    const { container } = render(
-      <SheetDocument content={buildSheetContent(settings())} layout={layout} settings={settings()} />,
-    )
-    const style = container.querySelector('style[data-izkor-sheet]')
-    expect(style).not.toBeNull()
-    expect(style?.textContent).toContain("@font-face{font-family:'Noto Serif Hebrew'")
-    expect(style?.textContent).toContain('.izkor-dline')
+    expect(() =>
+      render(<SheetDocument content={buildSheetContent(settings())} layout={layout} settings={settings()} />),
+    ).not.toThrow()
   })
 })

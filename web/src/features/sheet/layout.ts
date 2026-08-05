@@ -29,6 +29,26 @@ export type SheetNusach = 'ashkenaz' | 'sefard'
 export type SheetGender = 'male' | 'female'
 export type SheetLineage = 'none' | 'kohen' | 'levi'
 export type AcrosticMode = 'both' | 'name' | 'parent' | 'none'
+export type HashkavaVariant = 'elMaleh' | 'traditional' | 'both'
+export type EditorMode = 'simple' | 'advanced'
+
+/** Line-height density presets — advanced-mode control over vertical rhythm.
+ * `normal` is the tuned print default from the compact-layout pass. */
+export type LineDensity = 'tidy' | 'normal' | 'loose'
+
+export const LINE_DENSITY_MULTIPLIER: Record<LineDensity, number> = {
+  tidy: 0.87,
+  normal: 1,
+  loose: 1.15,
+}
+
+/** The three visual roles a font can be assigned to independently in advanced
+ * mode: the sheet title/בס"ד, section/chapter headings, and the running body
+ * text (psalm verses, prayer blocks, mishnah text). Simple mode collapses all
+ * three to `SheetSettings.font`. */
+export type SheetFontRole = 'title' | 'heading' | 'body'
+
+export type SheetFontRoles = Record<SheetFontRole, SheetFontId>
 
 /** Settings consumed by the layout/content model (subset of WizardQuery). */
 export interface SheetSettings {
@@ -39,10 +59,15 @@ export interface SheetSettings {
   parent?: string
   lineage: SheetLineage
   font: SheetFontId
+  /** Resolved per-role fonts: equal to `font` for all roles in simple mode,
+   * independently selectable per role in advanced mode. */
+  fontRoles: SheetFontRoles
+  lineDensity: LineDensity
   nikud: number
   deco: number
   acrostic: AcrosticMode
   blessing: number
+  hashkavaVariant: HashkavaVariant
   sections: SheetSectionToggle[]
 }
 
@@ -113,20 +138,30 @@ export function paperPageSpec(paper: SheetPaper): SheetPageSpec {
   return paper === 'a4' ? a4PageSpec() : letterPageSpec()
 }
 
-/** Print defaults: base ≈ 10.5–11 pt (14–14.7 px), margins 12–15 mm. */
+/**
+ * Print defaults: base ≈ 10.5–11 pt (14–14.7 px), margins 12–15 mm.
+ *
+ * Compact/legible pass: `lineHeight` was tightened from 1.7 to 1.45 (less
+ * page-burning air between lines that doesn't help reading) while
+ * `baseFontPx` was nudged to the top of the allowed pt range and a touch of
+ * letter/word-spacing was added in sheet CSS for contrast at arm's length in
+ * bright sun — the two changes roughly cancel out on line count but improve
+ * legibility. `lineHeight` here is the `normal` density; `tidy`/`loose` scale
+ * it via `LINE_DENSITY_MULTIPLIER`.
+ */
 export function printLayoutDefaults(paper: SheetPaper): SheetLayout {
   const page = paperPageSpec(paper)
   return {
     target: 'print',
     paper,
     page,
-    baseFontPx: 14,
-    lineHeight: 1.7,
-    marginX: Math.round(13 * MM_TO_PX),
-    marginY: Math.round(13 * MM_TO_PX),
+    baseFontPx: 14.7,
+    lineHeight: 1.45,
+    marginX: Math.round(12 * MM_TO_PX),
+    marginY: Math.round(12 * MM_TO_PX),
     decoScale: 1.9,
-    titleFontPx: 24,
-    headingFontPx: 16,
+    titleFontPx: 23,
+    headingFontPx: 15,
     fontFamily: 'Noto Serif Hebrew',
     fontId: 'noto-serif',
   }
@@ -150,13 +185,20 @@ export function shareLayoutDefaults(): SheetLayout {
   }
 }
 
+export interface BuildLayoutOptions {
+  lineDensity?: LineDensity
+}
+
 export function buildLayout(
   target: 'print' | 'share',
   paper: SheetPaper,
   fontId: SheetFontId,
+  options: BuildLayoutOptions = {},
 ): SheetLayout {
   const base = target === 'print' ? printLayoutDefaults(paper) : shareLayoutDefaults()
-  return { ...base, fontId }
+  const density = options.lineDensity ?? 'normal'
+  const lineHeight = base.lineHeight * LINE_DENSITY_MULTIPLIER[density]
+  return { ...base, fontId, lineHeight }
 }
 
 /** Horizontal content width available for text (page minus margins). */

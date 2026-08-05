@@ -9,6 +9,11 @@
  *   web/src/css/generated/sheet-fonts.css       @font-face rules + Tailwind @theme font-<id> vars
  *   web/src/features/sheet/generated/sheet-fonts.json    per-id { cssFamily, files }
  *   web/src/features/sheet/generated/sheet-font-ids.ts   the id union, as a const array
+ *   web/src/features/sheet/generated/font-data/<id>.ts   per-id { file: base64 data URI },
+ *     gitignored — precomputes what the Folio PDF capture needs to embed
+ *     every font it uses as a data URI (the wasm worker can't resolve a
+ *     relative /fonts/... URL itself), so renderSheetHTML.tsx's font loader
+ *     never has to fetch+base64-encode a font at render time.
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -101,6 +106,27 @@ function buildCss(fonts: FontDef[]): string {
   ].join('\n')
 }
 
+function mimeFor(file: string): string {
+  const ext = file.split('.').pop()?.toLowerCase()
+  if (ext === 'woff2') return 'font/woff2'
+  if (ext === 'woff') return 'font/woff'
+  if (ext === 'otf') return 'font/otf'
+  return 'font/truetype'
+}
+
+/** `{ file: data URI }` for one font id — read from the same /fonts/<dir>/<file> the browser @font-face rules point at. */
+function buildFontDataModule(def: FontDef, publicDir: string): string {
+  const entries = def.files.map((f) => {
+    const bytes = fs.readFileSync(path.join(publicDir, 'fonts', f.dir, f.file))
+    const dataUri = `data:${mimeFor(f.file)};base64,${bytes.toString('base64')}`
+    return `  '${f.file}': '${dataUri}',`
+  })
+  return (
+    GENERATED_HEADER +
+    `const data: Record<string, string> = {\n${entries.join('\n')}\n}\n\nexport default data\n`
+  )
+}
+
 function buildRegistryJson(fonts: FontDef[]): string {
   const byId = Object.fromEntries(fonts.map((f) => [f.id, { id: f.id, cssFamily: f.cssFamily, files: f.files }]))
   return JSON.stringify(byId, null, 2) + '\n'
@@ -126,24 +152,31 @@ function writeIfChanged(filePath: string, content: string): void {
 
 export function sheetFonts(): Plugin {
   let repoRoot: string
+  let publicDir: string
   let cssOut: string
   let jsonOut: string
   let idsOut: string
+  let fontDataDir: string
 
   const generate = () => {
     const fonts = readFonts(repoRoot)
     writeIfChanged(cssOut, buildCss(fonts))
     writeIfChanged(jsonOut, buildRegistryJson(fonts))
     writeIfChanged(idsOut, buildIdsTs(fonts))
+    for (const def of fonts) {
+      writeIfChanged(path.join(fontDataDir, `${def.id}.ts`), buildFontDataModule(def, publicDir))
+    }
   }
 
   return {
     name: 'izkor:sheet-fonts',
     configResolved(config) {
       repoRoot = path.resolve(config.root, '..')
+      publicDir = path.join(config.root, 'public')
       cssOut = path.join(config.root, 'src/css/generated/sheet-fonts.css')
       jsonOut = path.join(config.root, 'src/features/sheet/generated/sheet-fonts.json')
       idsOut = path.join(config.root, 'src/features/sheet/generated/sheet-font-ids.ts')
+      fontDataDir = path.join(config.root, 'src/features/sheet/generated/font-data')
     },
     buildStart() {
       generate()
