@@ -18,6 +18,8 @@
 
 /// <reference lib="webworker" />
 
+import { WASM_VERSION } from './generated/wasm-version'
+
 declare const self: DedicatedWorkerGlobalScope
 
 interface GoRuntime {
@@ -38,16 +40,17 @@ interface RenderResult {
 }
 
 async function loadWasmExec(): Promise<void> {
+  const url = `/wasm/wasm_exec.js?v=${WASM_VERSION['wasm_exec.js']}`
   const scope = self as unknown as { importScripts?: (...urls: string[]) => void }
   if (typeof scope.importScripts === 'function') {
     try {
-      scope.importScripts('/wasm/wasm_exec.js')
+      scope.importScripts(url)
       return
     } catch {
       // Module workers throw from importScripts; fall through to fetch + eval.
     }
   }
-  const resp = await fetch('/wasm/wasm_exec.js')
+  const resp = await fetch(url)
   if (!resp.ok) throw new Error(`fetch wasm_exec.js failed: ${resp.status}`)
   // eslint-disable-next-line no-eval
   ;(0, eval)(await resp.text())
@@ -58,7 +61,7 @@ let inFlight: number | null = null
 
 async function boot(): Promise<void> {
   await loadWasmExec()
-  const resp = await fetch('/wasm/folio.wasm')
+  const resp = await fetch(`/wasm/folio.wasm?v=${WASM_VERSION['folio.wasm']}`)
   if (!resp.ok) throw new Error(`fetch folio.wasm failed: ${resp.status}`)
   const Go = (self as unknown as Record<string, GoRuntime>).Go
   if (!Go) throw new Error('Go runtime not available after wasm_exec.js load')

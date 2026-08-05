@@ -7,6 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 import { pdfCss } from './vite-plugins/pdf-css.ts'
 import { sheetFonts } from './vite-plugins/sheet-fonts.ts'
+import { wasmVersion } from './vite-plugins/wasm-version.ts'
 
 export default defineConfig({
   plugins: [
@@ -18,6 +19,7 @@ export default defineConfig({
     tailwindcss(),
     sheetFonts(),
     pdfCss(),
+    wasmVersion(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons.svg'],

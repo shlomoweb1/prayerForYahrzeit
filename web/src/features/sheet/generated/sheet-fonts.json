@@ -7,13 +7,15 @@
         "dir": "NotoSerifHebrew",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "66ad7193b3"
       },
       {
         "dir": "NotoSerifHebrew",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "1713b9e261"
       }
     ]
   },
@@ -25,13 +27,15 @@
         "dir": "NotoSansHebrew",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "53e23a1875"
       },
       {
         "dir": "NotoSansHebrew",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "3b56eeb32d"
       }
     ]
   },
@@ -43,13 +47,15 @@
         "dir": "NotoRashiHebrew",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "858bde2e89"
       },
       {
         "dir": "NotoRashiHebrew",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "396481650f"
       }
     ]
   },
@@ -61,13 +67,15 @@
         "dir": "FrankRuhlLibre",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "7bcf96b3c2"
       },
       {
         "dir": "FrankRuhlLibre",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "13768656a4"
       }
     ]
   },
@@ -79,13 +87,15 @@
         "dir": "TaameyFrankCLM",
         "file": "medium-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "f558d3564d"
       },
       {
         "dir": "TaameyFrankCLM",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "e905066934"
       }
     ]
   },
@@ -97,13 +107,15 @@
         "dir": "KeterYG",
         "file": "medium-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "8932f09803"
       },
       {
         "dir": "KeterYG",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "c722d3b6ed"
       }
     ]
   },
@@ -115,7 +127,8 @@
         "dir": "KeterAramTsova",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "f662b1b1d3"
       }
     ]
   },
@@ -127,7 +140,8 @@
         "dir": "Shofar",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "7913fdd35f"
       }
     ]
   },
@@ -139,13 +153,15 @@
         "dir": "TaameyAshkenaz",
         "file": "medium-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "a182e84055"
       },
       {
         "dir": "TaameyAshkenaz",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "7f5e2cf673"
       }
     ]
   },
@@ -157,13 +173,15 @@
         "dir": "TaameyDavidCLM",
         "file": "medium-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "2f668ae127"
       },
       {
         "dir": "TaameyDavidCLM",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "c30b717e84"
       }
     ]
   },
@@ -175,13 +193,15 @@
         "dir": "FrankRuehlCLM",
         "file": "medium-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "6c0ab8bb2f"
       },
       {
         "dir": "FrankRuehlCLM",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "0f836360f6"
       }
     ]
   },
@@ -193,13 +213,15 @@
         "dir": "MiriamMonoCLM",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "8fc659fa1a"
       },
       {
         "dir": "MiriamMonoCLM",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "d7382ff624"
       }
     ]
   },
@@ -211,13 +233,15 @@
         "dir": "NachlieliCLM",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "41a9ea4e89"
       },
       {
         "dir": "NachlieliCLM",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "4b43572203"
       }
     ]
   },
@@ -229,13 +253,15 @@
         "dir": "Cardo",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "ae81068552"
       },
       {
         "dir": "Cardo",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "d226f66488"
       }
     ]
   },
@@ -247,13 +273,15 @@
         "dir": "FiraGO",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "defaf49a67"
       },
       {
         "dir": "FiraGO",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "daeb00d713"
       }
     ]
   },
@@ -265,7 +293,8 @@
         "dir": "EzraSILSR",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "9794bf85df"
       }
     ]
   },
@@ -277,13 +306,15 @@
         "dir": "OpenSansHebrew",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "2f8c1725ed"
       },
       {
         "dir": "OpenSansHebrew",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "07d8abfcdf"
       }
     ]
   },
@@ -295,7 +326,8 @@
         "dir": "DyslexiaHebrew",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "c2d491fce9"
       }
     ]
   },
@@ -307,7 +339,8 @@
         "dir": "Shlomo",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "f19f888cc9"
       }
     ]
   },
@@ -319,7 +352,8 @@
         "dir": "ShlomoStam",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "07cf495dba"
       }
     ]
   },
@@ -331,7 +365,8 @@
         "dir": "ShlomoSemiStam",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "3d1b662674"
       }
     ]
   },
@@ -343,13 +378,15 @@
         "dir": "NotoSans",
         "file": "regular-full.ttf",
         "weight": 400,
-        "style": "normal"
+        "style": "normal",
+        "version": "6d58f2bada"
       },
       {
         "dir": "NotoSans",
         "file": "bold-full.ttf",
         "weight": 700,
-        "style": "normal"
+        "style": "normal",
+        "version": "9103d124ae"
       }
     ]
   }

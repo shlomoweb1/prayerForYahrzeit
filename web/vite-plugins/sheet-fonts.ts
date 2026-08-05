@@ -24,6 +24,7 @@ const WEIGHT_MAP: Record<string, number> = { regular: 400, medium: 400, bold: 70
 interface ManifestFile {
   file: string
   weight: string
+  sha256: string
 }
 interface ManifestFamily {
   family: string
@@ -41,6 +42,7 @@ interface FontFile {
   file: string
   weight: number
   style: string
+  version: string
 }
 interface FontDef {
   id: string
@@ -76,18 +78,28 @@ function readFonts(repoRoot: string): FontDef[] {
         file: f.file,
         weight: WEIGHT_MAP[f.weight] ?? 400,
         style: 'normal',
+        // scripts/copy-fonts.mjs's sha256 — the sole source of truth for
+        // this file's version, so re-running the copy without byte changes
+        // never bumps it (see file-version.ts's mtime-vs-content note).
+        version: f.sha256.slice(0, 10),
       })),
     }
   })
 }
 
+/**
+ * `?v=<sha256>` on the url() busts the browser's HTTP cache when a font
+ * file's content changes under the same name. sheet-fonts.css itself is
+ * content-hashed by Vite's CSS bundling, so it's already safe; it's the raw
+ * /fonts/... file underneath (served verbatim from public/) that isn't.
+ */
 function buildCss(fonts: FontDef[]): string {
   const faces = fonts.flatMap((def) =>
     def.files.map(
       (f) =>
         `@font-face{font-family:'${def.cssFamily}';font-style:${f.style};` +
         `font-weight:${f.weight};font-display:swap;` +
-        `src:url('/fonts/${f.dir}/${f.file}') format('truetype');}`,
+        `src:url('/fonts/${f.dir}/${f.file}?v=${f.version}') format('truetype');}`,
     ),
   )
   const themeVars = fonts.map((def) => {
