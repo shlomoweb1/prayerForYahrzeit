@@ -64,6 +64,33 @@ export async function renderPdf(search: WizardQuery): Promise<{ blob: Blob; file
   return { blob, filename: sheetFilename(search) }
 }
 
+/**
+ * Dev-only debug export: the exact standalone HTML document handed to the
+ * Folio worker (same capture as `renderPdf`, minus the wasm render step) —
+ * open it directly in Node/a browser to debug pagination or CSS issues
+ * without going through wasm.
+ */
+export async function exportSheetHtml(search: WizardQuery): Promise<{ blob: Blob; filename: string }> {
+  const settings = sheetSettingsFromQuery(search)
+  const layout = sheetLayoutFromQuery(search)
+  const content = buildSheetContent(settings)
+  const pdfTitle = `יזכור ${search.name?.trim() ?? ''}`.trim()
+  const html = await renderSheetHTML({ content, layout, settings, pdfTitle })
+  const blob = new Blob([html], { type: 'text/html' })
+  const filename = sheetFilename(search).replace(/\.pdf$/, '.html')
+  return { blob, filename }
+}
+
+/** Plain `<a download>` — no need for the save-file-picker ceremony for a debug artifact. */
+export function downloadBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = filename
+  anchor.click()
+  URL.revokeObjectURL(url)
+}
+
 interface SaveFilePickerHandle {
   createWritable(): Promise<{ write(data: Blob): Promise<void>; close(): Promise<void> }>
 }

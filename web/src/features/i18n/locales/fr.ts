@@ -140,6 +140,7 @@ export const fr = {
     fallback: {
       shareUnsupported:
         'Le partage de fichiers n’est pas pris en charge par ce navigateur — le fichier a été téléchargé et un lien a été copié.',
+      pdfPreviewUnsupported: 'L’aperçu du PDF n’est pas pris en charge par ce navigateur, mais le fichier est prêt.',
     },
     placeholders: {
       name_male: 'ex. : Moshé David',

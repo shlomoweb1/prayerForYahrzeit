@@ -140,6 +140,7 @@ export const es = {
     fallback: {
       shareUnsupported:
         'Compartir archivos no es compatible con este navegador — el archivo se ha descargado y se ha copiado un enlace.',
+      pdfPreviewUnsupported: 'La vista previa de PDF no es compatible con este navegador, pero el archivo está listo.',
     },
     placeholders: {
       name_male: 'p. ej. Moshé David',

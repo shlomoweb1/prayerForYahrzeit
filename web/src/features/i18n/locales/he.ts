@@ -136,6 +136,7 @@ export const he = {
     fallback: {
       shareUnsupported:
         'שיתוף קבצים אינו נתמך בדפדפן זה — הקובץ הורד והקישור הועתק ללוח.',
+      pdfPreviewUnsupported: 'תצוגה מקדימה של PDF אינה נתמכת בדפדפן זה, אך הקובץ מוכן.',
     },
     placeholders: {
       name_male: 'לדוגמה: משה דוד',

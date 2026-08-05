@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Loader2, PanelRightClose, Settings2 } from 'lucide-react'
+import { ArrowLeft, DownloadIcon, Loader2, PanelRightClose, Settings2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { buildSheetContent } from '@/features/sheet/content'
 import { supportsWasm } from '@/features/folio/wasm-support'
 import { useSheetDraft } from '@/features/sheet/from-query'
+import { supportsPdfEmbed } from '@/features/sheet/pdf-support'
 import { PdfViewer } from '@/features/sheet/PdfViewer'
 import { ScaleA4Preview } from '@/features/sheet/ScaleA4Preview'
 import { deceasedWord, SheetDocument } from '@/features/sheet/sheet-document'
 import { SheetSettingsPanel } from '@/features/sheet/SheetSettingsPanel'
-import { renderPdf } from '@/features/wizard/sheet-actions'
+import { downloadPdf, renderPdf, sheetFilename } from '@/features/wizard/sheet-actions'
 import type { StepProps } from '@/features/wizard/step-registry'
 import { StepShell } from '@/features/wizard/steps/step-shell'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
@@ -97,6 +98,7 @@ const PDF_RENDER_DEBOUNCE_MS = 650
  */
 function usePdfPreview(search: WizardQuery, enabled: boolean) {
   const [url, setUrl] = useState<string | null>(null)
+  const [blob, setBlob] = useState<Blob | null>(null)
   const [failed, setFailed] = useState(false)
   // The searchKey that `url` was actually rendered from — `loading` is
   // derived by comparing this against the current searchKey below, instead
@@ -144,6 +146,7 @@ function usePdfPreview(search: WizardQuery, enabled: boolean) {
             if (prev) URL.revokeObjectURL(prev)
             return next
           })
+          setBlob(blob)
           setCommittedKey(renderedKey)
         })
         .catch(() => {
@@ -159,7 +162,45 @@ function usePdfPreview(search: WizardQuery, enabled: boolean) {
 
   const loading = enabled && !failed && committedKey !== searchKey
 
-  return { url, loading, failed }
+  return { url, blob, loading, failed }
+}
+
+/**
+ * Non-blocking overlay for the case where the PDF itself rendered fine but
+ * this browser can't display it inline (see pdf-support.ts) — the editor
+ * preview fills the pane underneath so the user isn't left staring at a
+ * blank/broken embed, and this floats a compact banner over its bottom edge
+ * with a `<Download>` button for whatever the latest render produced.
+ * Deliberately not a toast: a toast would auto-dismiss and needs to be
+ * re-triggered on every re-render (settings change → new PDF) to stay
+ * useful; this just stays put and the button always points at the current
+ * `blob`.
+ */
+function PdfPreviewUnavailableBanner({ blob, filename }: { blob: Blob | null; filename: string }) {
+  const { t } = useTranslation()
+  const [downloading, setDownloading] = useState(false)
+
+  const handleDownload = async () => {
+    if (!blob) return
+    setDownloading(true)
+    try {
+      await downloadPdf(blob, filename)
+    } finally {
+      setDownloading(false)
+    }
+  }
+
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-4 z-30 flex justify-center px-4 print:hidden">
+      <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/95 px-4 py-2.5 shadow-lg backdrop-blur">
+        <p className="text-sm text-muted-foreground">{t('wizard.fallback.pdfPreviewUnsupported')}</p>
+        <Button size="sm" onClick={() => void handleDownload()} disabled={!blob || downloading}>
+          <DownloadIcon className="size-4" />
+          {downloading ? t('wizard.actions.downloading') : t('wizard.actions.download')}
+        </Button>
+      </div>
+    </div>
+  )
 }
 
 export function Step5Review({ search, setSearch }: StepProps) {
@@ -190,16 +231,43 @@ export function Step5Review({ search, setSearch }: StepProps) {
   const sheetData = useSheetDraft(search)
   const content = buildSheetContent(sheetData.settings)
 
-  // Environment check runs once — WASM support doesn't change mid-session.
+  // WASM support doesn't change mid-session — checked once, synchronously.
   const [wasmSupported] = useState(() => supportsWasm())
+  // PDF-viewer support needs an async probe (see pdf-support.ts) — optimistic
+  // `true` default so the common case (a real working viewer) never flashes
+  // the editor preview first; flips to false if the probe comes back
+  // negative, at which point `pdfModeRequested` below drops out and the
+  // editor preview takes over.
+  const [pdfViewerSupported, setPdfViewerSupported] = useState(true)
+  useEffect(() => {
+    let cancelled = false
+    void supportsPdfEmbed().then((supported) => {
+      if (!cancelled) setPdfViewerSupported(supported)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
   // `?editor=1` is a hidden dev flag (no UI affordance) forcing the old live
-  // HTML preview; devices without real WASM support fall back the same way
-  // regardless of the query param.
-  const pdfModeRequested = search.editor !== 1 && wasmSupported
-  const { url: pdfUrl, loading: pdfLoading, failed: pdfFailed } = usePdfPreview(search, pdfModeRequested)
+  // HTML preview; devices without real WASM support skip rendering
+  // entirely — there's nothing to show or download either way. Rendering
+  // itself, though, only depends on WASM: it still runs even when
+  // `pdfViewerSupported` is false, since that PDF is exactly what the
+  // download banner below offers on browsers that can't display it inline.
+  const renderEnabled = search.editor !== 1 && wasmSupported
+  const pdfModeRequested = renderEnabled && pdfViewerSupported
+  const {
+    url: pdfUrl,
+    blob: pdfBlob,
+    loading: pdfLoading,
+    failed: pdfFailed,
+  } = usePdfPreview(search, renderEnabled)
   // A Folio render failure (after committing to PDF mode) falls back to the
   // live editor-preview rather than leaving a blank/broken pane.
   const showEditor = !pdfModeRequested || pdfFailed
+  // Only when the PDF itself is fine and this browser just can't display it
+  // inline — a render failure means there's nothing to download either.
+  const showPreviewUnavailableBanner = renderEnabled && !pdfViewerSupported && !pdfFailed
 
   return (
     <StepShell stepNumber={5} titleKey="wizard.steps.5.title" descriptionKey="wizard.steps.5.description">
@@ -218,10 +286,15 @@ export function Step5Review({ search, setSearch }: StepProps) {
           </div>
         ) : null}
         {showEditor ? (
-        <div className="grow min-w-0 bg-gray-200 overflow-y-auto p-6">
-          <ScaleA4Preview>
-            <SheetDocument content={content} layout={sheetData.layout} settings={sheetData.settings} />
-          </ScaleA4Preview>
+        <div className="relative grow min-w-0 overflow-hidden">
+          <div className="h-full w-full overflow-y-auto bg-gray-200 p-6">
+            <ScaleA4Preview>
+              <SheetDocument content={content} layout={sheetData.layout} settings={sheetData.settings} />
+            </ScaleA4Preview>
+          </div>
+          {showPreviewUnavailableBanner ? (
+            <PdfPreviewUnavailableBanner blob={pdfBlob} filename={sheetFilename(search)} />
+          ) : null}
         </div>
         ) : (
         <div className="relative grow min-w-0 bg-gray-200">

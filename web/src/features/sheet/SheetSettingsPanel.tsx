@@ -13,10 +13,12 @@
  * visual chunks and because this panel keeps growing.
  */
 
+import { DownloadIcon, FileCode2Icon, FileTextIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import type { ReactNode } from 'react'
 
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -27,6 +29,7 @@ import { SHEET_FONT_CLASS } from '@/features/sheet/generated/sheet-font-ids'
 import { SHEET_SECTIONS } from '@/features/sheet/layout'
 import type { SheetFontId } from '@/features/sheet/layout'
 import { cn } from '@/lib/utils'
+import { downloadBlob, exportSheetHtml } from '@/features/wizard/sheet-actions'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
 
 export interface SheetSettingsPanelProps {
@@ -280,12 +283,55 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
   )
 }
 
+/**
+ * Dev-only debug tools: a toggle for the hidden `?editor=1` preview flag
+ * (step-5-review.tsx — forces the live HTML editor-preview instead of the
+ * Folio-rendered PDF viewer) and a button that downloads the exact
+ * standalone HTML document (compiled CSS, embedded fonts, paginated pages)
+ * `renderPdf` hands to the Folio wasm worker — the same source
+ * `renderSheetHTML` already stashes on `window.__lastSheetHtml`, but as a
+ * real file so it can be opened directly or diffed/debugged with Node
+ * instead of pasted out of devtools.
+ */
+function DevTools({ search, setSearch }: SheetSettingsPanelProps) {
+  const [busy, setBusy] = useState(false)
+  const editorMode = search.editor === 1
+
+  const handleExport = async () => {
+    setBusy(true)
+    try {
+      const { blob, filename } = await exportSheetHtml(search)
+      downloadBlob(blob, filename)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <SettingsGroup title="Debug">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setSearch({ editor: editorMode ? 0 : 1 })}
+      >
+        {editorMode ? <FileCode2Icon className="size-4" /> : <FileTextIcon className="size-4" />}
+        {editorMode ? 'Switch to PDF preview' : 'Switch to editor preview'}
+      </Button>
+      <Button variant="outline" size="sm" onClick={() => void handleExport()} disabled={busy}>
+        <DownloadIcon className="size-4" />
+        {busy ? 'Exporting…' : 'Export PDF HTML'}
+      </Button>
+    </SettingsGroup>
+  )
+}
+
 export function SheetSettingsPanel({ search, setSearch, className }: SheetSettingsPanelProps) {
   const idPrefix = useId()
 
   return (
     <div className={className}>
       <SheetSettingsControls search={search} setSearch={setSearch} idPrefix={idPrefix} />
+      {import.meta.env.DEV ? <DevTools search={search} setSearch={setSearch} /> : null}
     </div>
   )
 }

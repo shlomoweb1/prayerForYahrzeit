@@ -140,6 +140,7 @@ export const en = {
     fallback: {
       shareUnsupported:
         'File sharing is not supported in this browser — the file was downloaded and a link was copied.',
+      pdfPreviewUnsupported: 'PDF preview isn’t supported in this browser, but the file is ready.',
     },
     placeholders: {
       name_male: 'e.g. Moshe David',
