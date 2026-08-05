@@ -18,6 +18,7 @@
  * features/render) — all of which can change what Tailwind emits.
  */
 import { execFileSync } from 'node:child_process'
+import fs from 'node:fs'
 import path from 'node:path'
 import type { Plugin } from 'vite'
 
@@ -28,6 +29,104 @@ const WATCH_PREFIXES = [
   'src/features/sheet',
   'src/features/render',
 ]
+
+/**
+ * Folio's CSS engine (html/properties.go `parseDisplay`) only recognizes
+ * these `display` values — anything else silently falls back to `block`.
+ * That's not a parse error, so a typo'd `inline-flex` doesn't fail loudly:
+ * it quietly turns a small inline badge into a full-width block, which then
+ * corrupts pagination (page-break math is driven by measured element
+ * heights). Caught this the hard way once already — this check exists so
+ * the next one fails the build instead of a printed PDF.
+ *
+ * `inline-flex`/`inline-grid` were added to Folio's own whitelist (and given
+ * real flex/grid inner layout, not just inline-participation) in the
+ * go-html-to-pdf fork's `dev` branch — keep this list in sync with
+ * `html/properties.go`'s `parseDisplay` if that ever changes again.
+ */
+const FOLIO_DISPLAY_VALUES = new Set([
+  'block',
+  'inline',
+  'flex',
+  'inline-flex',
+  'grid',
+  'inline-grid',
+  'none',
+  'table',
+  'table-row',
+  'table-cell',
+  'inline-block',
+  'list-item',
+])
+
+/**
+ * Drops `@layer <name> { ... }` blocks (brace-depth aware, no nested-rule
+ * support needed since pdf.css is already flattened). Folio discards `@`
+ * rules other than `@font-face`/`@page`/`@supports`/`@media print` wholesale
+ * (html/css.go), and virtually all of Tailwind's own reset/utility output
+ * lives inside `@layer` — without stripping it first, this check would flag
+ * dozens of display values in CSS Folio never actually sees.
+ */
+function stripLayerBlocks(css: string): string {
+  let out = ''
+  let i = 0
+  while (i < css.length) {
+    const at = css.indexOf('@layer', i)
+    if (at < 0) {
+      out += css.slice(i)
+      break
+    }
+    out += css.slice(i, at)
+    const open = css.indexOf('{', at)
+    const semi = css.indexOf(';', at)
+    if (open < 0) {
+      out += css.slice(at)
+      break
+    }
+    if (semi >= 0 && semi < open) {
+      // bare `@layer components;` statement, no block to skip.
+      i = semi + 1
+      continue
+    }
+    let depth = 1
+    let j = open + 1
+    while (j < css.length && depth > 0) {
+      if (css[j] === '{') depth++
+      else if (css[j] === '}') depth--
+      j++
+    }
+    i = j
+  }
+  return out
+}
+
+/**
+ * Heuristic, not a full CSS parser: matches `selector { ...no-nested-braces... }`
+ * pairs, which is safe here because pdf.css is post-flatten (no nesting) and
+ * `@layer` — the one wrapper that would confuse a brace-naive scan — was
+ * already stripped above. Throws with every offending selector at once
+ * rather than one-at-a-time, since these tend to come in batches.
+ */
+function assertFolioCompatibleDisplay(css: string, filePath: string): void {
+  const scoped = stripLayerBlocks(css)
+  const ruleRe = /([^{}]+)\{([^{}]*)\}/g
+  const violations: string[] = []
+  let match: RegExpExecArray | null
+  while ((match = ruleRe.exec(scoped))) {
+    const selector = match[1].trim()
+    const displayMatch = match[2].match(/(?:^|;)\s*display\s*:\s*([a-z-]+)/i)
+    if (displayMatch && !FOLIO_DISPLAY_VALUES.has(displayMatch[1].toLowerCase())) {
+      violations.push(`  ${selector} { display: ${displayMatch[1]} }`)
+    }
+  }
+  if (violations.length > 0) {
+    throw new Error(
+      `${filePath}: display value(s) not supported by Folio's CSS engine — ` +
+        `Folio only understands ${[...FOLIO_DISPLAY_VALUES].join(', ')}; anything ` +
+        `else silently becomes "block" and corrupts pagination. Fix:\n${violations.join('\n')}`,
+    )
+  }
+}
 
 export function pdfCss(): Plugin {
   let root: string
@@ -49,6 +148,7 @@ export function pdfCss(): Plugin {
       execFileSync(lightningcssBin, ['--targets', 'chrome 100', out, '-o', out], {
         stdio: 'inherit',
       })
+      assertFolioCompatibleDisplay(fs.readFileSync(out, 'utf-8'), path.relative(root, out))
     } finally {
       generating = false
       if (pendingRerun) {

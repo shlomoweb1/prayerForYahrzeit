@@ -25,7 +25,9 @@
  * the data URIs themselves come from `loadFontFaceData` (fonts.ts), which
  * lazy-loads a per-font module precomputed at build time by
  * vite-plugins/sheet-fonts.ts, rather than fetching + base64-encoding the
- * font bytes on every render.
+ * font bytes on every render. pdf.css's own `@font-face` rules (pointing at
+ * `/fonts/...`, correct for the live preview) are stripped for the same
+ * reason and superseded entirely by the embedded ones.
  */
 
 import { createRoot } from 'react-dom/client'
@@ -33,7 +35,7 @@ import { createRoot } from 'react-dom/client'
 import { A11Y_CLASS_PREFIX } from '@/features/a11y/preferences'
 import { fontDef, loadFontFaceData } from '@/features/sheet/fonts'
 import { SheetDocument } from '@/features/sheet/sheet-document'
-import pdfCss from '@/css/_pdf.css?inline'
+import pdfCss from '@/css/pdf.css?inline'
 import type { SheetBlock } from '@/features/sheet/content'
 import type { SheetFontId, SheetLayout, SheetSettings } from '@/features/sheet/layout'
 
@@ -97,6 +99,20 @@ async function withA11yClassesSuppressed<T>(fn: () => Promise<T>): Promise<T> {
 /** Screen-only "floating page" shadow on `div[data-page]` — meaningless for a printed page and a confirmed Folio corruption source. */
 function stripBoxShadow(css: string): string {
   return css.replace(/box-shadow\s*:[^;]+;/gi, '')
+}
+
+/**
+ * `pdf.css` (the flattened Tailwind output) still carries the sheet-fonts.ts
+ * `@font-face` rules pointing at `url('/fonts/...')` — correct for the live
+ * preview, useless here since the Folio worker has no origin to resolve a
+ * relative URL against and no `fetchURL` hook is wired up. Those rules are
+ * fully superseded by `fontFacesFor`'s base64-embedded ones, which are
+ * prepended to the final stylesheet, so the relative-URL originals are only
+ * dead weight (best case) or a conflicting duplicate declaration Folio
+ * resolves unpredictably (worst case) — strip them outright.
+ */
+function stripRelativeUrlFontFaces(css: string): string {
+  return css.replace(/@font-face\s*\{[^}]*\}/gi, (rule) => (/url\(['"]?\/fonts\//i.test(rule) ? '' : rule))
 }
 
 const CSS_VAR_USAGE = /var\((--[a-z0-9-]+)\s*(?:,\s*([^()]*(?:\([^()]*\)[^()]*)*))?\)/gi
@@ -204,6 +220,7 @@ export async function renderSheetHTML(options: RenderSheetOptions): Promise<stri
       const titleFamily = fontDef(settings.fontRoles.title).cssFamily
 
       let compiledCss = stripBoxShadow(pdfCss)
+      compiledCss = stripRelativeUrlFontFaces(compiledCss)
       compiledCss = resolveCssVars(compiledCss, pages[0] ?? host)
 
       const embeddedFontFaces = await fontFacesFor(familiesInUse)
