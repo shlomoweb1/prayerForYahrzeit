@@ -16,4 +16,8 @@
 @source '../features/render';
 
 @import './generated/sheet-fonts.css';
+
+@page { size: A4; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
 @import './preview.css';

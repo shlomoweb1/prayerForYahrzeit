@@ -39,7 +39,7 @@ const MINIMAL_PDF = [
   'trailer<</Root 1 0 R>>',
 ].join('\n')
 
-const PROBE_TIMEOUT_MS = 1500
+// const PROBE_TIMEOUT_MS = 1500
 
 function claimsPdfSupport(): boolean {
   if (typeof navigator === 'undefined') return false
@@ -48,52 +48,53 @@ function claimsPdfSupport(): boolean {
 }
 
 /** iOS mandates WebKit for every browser, so this also covers Chrome/Firefox on iOS — all of them get Safari's native (extension-less) PDF rendering. */
-function isNativeWebKitPdfPlatform(): boolean {
-  const ua = navigator.userAgent
-  if (/iPad|iPhone|iPod/.test(ua)) return true
-  return /^((?!chrome|android).)*safari/i.test(ua)
-}
+// function isNativeWebKitPdfPlatform(): boolean {
+//   const ua = navigator.userAgent
+//   if (/iPad|iPhone|iPod/.test(ua)) return true
+//   return /^((?!chrome|android).)*safari/i.test(ua)
+// }
 
 /** Resolves true only once a PDF viewer has provably taken over the frame (origin changed), not merely once the frame has loaded. */
-function probeViewerIntercepts(): Promise<boolean> {
-  return new Promise((resolve) => {
-    const blob = new Blob([MINIMAL_PDF], { type: 'application/pdf' })
-    const url = URL.createObjectURL(blob)
-    const iframe = document.createElement('iframe')
-    iframe.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;top:-9999px;left:-9999px;'
+// function probeViewerIntercepts(): Promise<boolean> {
+//   return new Promise((resolve) => {
+//     const blob = new Blob([MINIMAL_PDF], { type: 'application/pdf' })
+//     const url = URL.createObjectURL(blob)
+//     const iframe = document.createElement('iframe')
+//     iframe.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;top:-9999px;left:-9999px;'
 
-    let settled = false
-    const finish = (result: boolean) => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(timer)
-      iframe.remove()
-      URL.revokeObjectURL(url)
-      resolve(result)
-    }
+//     let settled = false
+//     const finish = (result: boolean) => {
+//       if (settled) return
+//       settled = true
+//       window.clearTimeout(timer)
+//       iframe.remove()
+//       URL.revokeObjectURL(url)
+//       resolve(result)
+//     }
 
-    const timer = window.setTimeout(() => finish(false), PROBE_TIMEOUT_MS)
+//     const timer = window.setTimeout(() => finish(false), PROBE_TIMEOUT_MS)
 
-    iframe.onload = () => {
-      try {
-        // Reachable only if the frame is still same-origin — i.e. no PDF
-        // viewer document ever took over the navigation.
-        void iframe.contentWindow?.location.href
-        finish(false)
-      } catch {
-        // Threw: the frame navigated to a different-origin viewer document.
-        finish(true)
-      }
-    }
+//     iframe.onload = () => {
+//       try {
+//         // Reachable only if the frame is still same-origin — i.e. no PDF
+//         // viewer document ever took over the navigation.
+//         void iframe.contentWindow?.location.href
+//         finish(false)
+//       } catch {
+//         // Threw: the frame navigated to a different-origin viewer document.
+//         finish(true)
+//       }
+//     }
 
-    document.body.appendChild(iframe)
-    iframe.src = url
-  })
-}
+//     document.body.appendChild(iframe)
+//     iframe.src = url
+//   })
+// }
 
 /** Full check: whether the browser will actually render the PdfViewer `<embed>`, not just whether it claims to support the MIME type. */
 export async function supportsPdfEmbed(): Promise<boolean> {
   if (!claimsPdfSupport()) return false
-  if (isNativeWebKitPdfPlatform()) return true
-  return probeViewerIntercepts()
+  // if (isNativeWebKitPdfPlatform()) return true
+  // return probeViewerIntercepts()
+  return true;
 }
