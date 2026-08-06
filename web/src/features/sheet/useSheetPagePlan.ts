@@ -34,6 +34,21 @@ import { paginate, type PageableItem } from '@/features/sheet/pagination'
 
 const MAX_SPLIT_PASSES = 3
 
+// Folio (the PDF engine) and the browser agree on per-line text metrics
+// almost exactly, but a page's flex-column budget for its flex-grow content
+// box can still land a point or two short of what the browser computes for
+// the same CSS (see go-html-to-pdf's ADR-001 "Consequences": a confirmed,
+// documented, small residual gap between the two engines' page-content
+// budgets, left as an explicit out-of-scope policy question there). The
+// browser's own `overflow: hidden` silently clips a sub-pixel sliver of
+// content when a page is packed flush against its exact measured budget —
+// invisible in the live preview — but Folio can't silently drop content, so
+// that same sliver forces a whole extra near-blank page (and can visually
+// drop the last-fitting item's own inline content, like a chapter badge,
+// depending on exactly where the cut lands). Packing pages a few px under
+// budget keeps every page genuinely inside both engines' agreement zone.
+const PAGINATION_SAFETY_MARGIN_PX = 8
+
 export interface SheetPagePlan<T> {
   plan: T[][]
   /** The item list actually measured/packed — differs from the input once an oversized item has been split. */
@@ -66,10 +81,11 @@ export function useSheetPagePlan<T extends PageableItem>(
     if (!emptyContent || !host) return
 
     const measureAndPack = () => {
-      const maxHeight = emptyContent.clientHeight
+      const maxHeight = emptyContent.clientHeight - PAGINATION_SAFETY_MARGIN_PX
       if (maxHeight <= 0) return
 
       const heightsById = new Map<string, number>()
+      const marginBottomsById = new Map<string, number>()
       const elsById = new Map<string, HTMLElement>()
       let lastBottom = 0
       for (const child of Array.from(host.children)) {
@@ -79,6 +95,14 @@ export function useSheetPagePlan<T extends PageableItem>(
         if (id) {
           heightsById.set(id, Math.max(0, bottom - lastBottom))
           elsById.set(id, el)
+          // The wrapper div itself never carries CSS margin — renderPageItem
+          // puts it on the actual rendered element (the <p>/<h2>/<div>
+          // inside). Needed by paginate()'s marginBottomOf: see its doc
+          // comment for why the item that ends up last on a page needs its
+          // own trailing margin measured directly, not derived from the
+          // gap to a following item.
+          const inner = el.firstElementChild as HTMLElement | null
+          marginBottomsById.set(id, inner ? parseFloat(getComputedStyle(inner).marginBottom) || 0 : 0)
         }
         lastBottom = bottom
       }
@@ -104,7 +128,13 @@ export function useSheetPagePlan<T extends PageableItem>(
         }
       }
 
-      setPlan(paginate(effectiveItems, { heightOf: (item) => heightsById.get(item.id) ?? 0, maxHeight }))
+      setPlan(
+        paginate(effectiveItems, {
+          heightOf: (item) => heightsById.get(item.id) ?? 0,
+          marginBottomOf: (item) => marginBottomsById.get(item.id) ?? 0,
+          maxHeight,
+        }),
+      )
     }
 
     measureAndPack()

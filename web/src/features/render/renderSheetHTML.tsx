@@ -178,16 +178,6 @@ function escapeHtml(value: string): string {
     .replaceAll('"', '&quot;')
 }
 
-/** Running page-number footer, repeated on every page Folio creates (`layout.page.pageCss` already sets `size`/`margin:0` — the page's own padding handles margins). */
-function pageChromeCss(layout: SheetLayout, titleFamily: string): string {
-  return (
-    (layout.page.pageCss ?? '') +
-    '\n@page {\n' +
-    `  @bottom-right { content: counter(page) "/" counter(pages); font-family: '${titleFamily}'; font-size: 11px; }\n` +
-    '}\n'
-  )
-}
-
 const PAGE_BREAK = '<div style="page-break-before:always"></div>'
 
 /**
@@ -217,14 +207,14 @@ export async function renderSheetHTML(options: RenderSheetOptions): Promise<stri
       const pdfBody = pages.map((page) => page.outerHTML).join(PAGE_BREAK)
 
       const familiesInUse = [settings.fontRoles.title, settings.fontRoles.heading, settings.fontRoles.body]
-      const titleFamily = fontDef(settings.fontRoles.title).cssFamily
 
       let compiledCss = stripBoxShadow(pdfCss)
       compiledCss = stripRelativeUrlFontFaces(compiledCss)
       compiledCss = resolveCssVars(compiledCss, pages[0] ?? host)
 
       const embeddedFontFaces = await fontFacesFor(familiesInUse)
-      let finalCss = embeddedFontFaces + '\n' + pageChromeCss(layout, titleFamily) + '\n' + compiledCss
+      let finalCss = embeddedFontFaces + '\n' + (layout.page.pageCss ?? '') + '\n' + compiledCss
+
       let pdfBodyHtml = pdfBody
       for (const fontId of new Set(familiesInUse)) {
         const family = fontDef(fontId).cssFamily

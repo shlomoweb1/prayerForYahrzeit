@@ -22,6 +22,31 @@ export type PagePlan<T> = T[][]
 export interface PaginateOptions<T> {
   /** Measured height of each item in px. */
   heightOf: (item: T) => number
+  /**
+   * Trailing margin-bottom of the item's own rendered element, in px.
+   * Optional — defaults to 0 for callers with no margin concept (existing
+   * tests included).
+   *
+   * Whichever item ends up last on a page has this margin trapped inside
+   * that page's own `overflow: hidden` content box: CSS overflow:hidden
+   * creates a new block formatting context, so a last child's margin
+   * can't collapse through and escape the container the way it would in
+   * normal flow — it becomes real, occupied space instead, extending the
+   * box's actual rendered height. `heightOf` alone can't see this: it's
+   * normally measured as the gap *before* an item (revealed by whatever
+   * item follows it in a shared measurement column), so the item that
+   * ends up last on a page never gets credited with the margin that
+   * comes after it — that gap belongs to whatever item was measured next
+   * in sequence, which lives on a *different* page and never reveals it.
+   * Confirmed against a real captured page: summing items via heightOf
+   * landed 8px short of the content box's true scrollHeight — exactly
+   * one item's own margin-bottom, missing because it was the page's last
+   * item. Without this, a page can be packed with more content than its
+   * real occupied height allows, and a renderer that (correctly, unlike
+   * a browser) can't silently clip the overflow ends up needing an extra
+   * page for content the preview appears to fit.
+   */
+  marginBottomOf?: (item: T) => number
   /** Available content height per page in px (page minus vertical margins). */
   maxHeight: number
 }
@@ -32,6 +57,7 @@ export interface PaginateOptions<T> {
  */
 export function paginate<T extends PageableItem>(items: T[], options: PaginateOptions<T>): PagePlan<T> {
   const { heightOf, maxHeight } = options
+  const marginBottomOf = options.marginBottomOf ?? ((): number => 0)
   const pages: T[][] = []
   let page: T[] = []
   let used = 0
@@ -77,9 +103,36 @@ export function paginate<T extends PageableItem>(items: T[], options: PaginateOp
       continue
     }
 
+    // `item` doesn't fit — the page is closing with whatever's already on
+    // it. Its current last item becomes that page's real last child; per
+    // marginBottomOf's doc comment, verify its own trailing margin still
+    // fits (heightOf never counted it, since it was measured as the gap
+    // *before* whatever item came next — which isn't on this page). If it
+    // doesn't fit, that item doesn't actually belong on this page: move it
+    // to a fresh page and retry `item` from scratch against that new state.
+    const closingItem = page[page.length - 1]!
+    if (page.length > 1 && used + marginBottomOf(closingItem) > maxHeight) {
+      page.pop()
+      openPage()
+      page.push(closingItem)
+      used = heightOf(closingItem)
+      i -= 1
+      continue
+    }
+
     openPage()
     page.push(item)
     used = height
+  }
+
+  // The last page never goes through the loop's own closing check above —
+  // there's no "next item" to trigger it. Verify its last item the same way.
+  if (page.length > 1) {
+    const closingItem = page[page.length - 1]!
+    if (used + marginBottomOf(closingItem) > maxHeight) {
+      page.pop()
+      pages.push([closingItem])
+    }
   }
 
   if (pages.length === 0 || pages[pages.length - 1]!.length === 0) {

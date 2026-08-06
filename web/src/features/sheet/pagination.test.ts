@@ -95,4 +95,59 @@ describe('paginate', () => {
       ['small'],
     ])
   })
+
+  it('demotes the last item on a page when its own trailing margin (trapped by overflow:hidden) would overflow', () => {
+    // Reproduces a real captured page: heightOf's delta-based measurement
+    // (gap-before-item) landed the packed total 8px short of the content
+    // box's true scrollHeight — exactly the last item's own margin-bottom,
+    // which only shows up via the gap to a *following* item that isn't on
+    // this page. Numbers are the real measured values (px) from that page.
+    interface MarginItem extends PageableItem {
+      h: number
+      mb: number
+    }
+    const mi = (id: string, h: number, mb: number): MarginItem => ({ id, h, mb })
+    // heightOf is delta-based in the real app (each item's own box plus the
+    // collapsed gap *before* it, revealed by the previous item's own
+    // trailing margin) — not a bare box height. Values below fold that in,
+    // matching how useSheetPagePlan actually measures items.
+    const items = [
+      mi('long-psalm', 322.25, 8.085), // first item: no gap-before to fold in
+      mi('short-1', 66.5 + 8.085, 8.085), // gap-before = long-psalm's own mb
+      mi('section-title', 21.75 + 8.085, 5.25), // max(short-1 mb 8.085, own mt 7.5)
+      mi('short-2', 66.5 + 5.25, 8.085), // max(section-title mb 5.25, own mt 0)
+      mi('short-3', 66.5 + 8.085, 8.085),
+      mi('short-4', 66.5 + 8.085, 8.085),
+      mi('short-5', 66.5 + 8.085, 8.085),
+      mi('short-6', 66.5 + 8.085, 8.085),
+      mi('short-7', 66.5 + 8.085, 8.085),
+      mi('short-8', 66.5 + 8.085, 8.085),
+    ]
+    const pages = paginate(items, {
+      heightOf: (it: MarginItem) => it.h,
+      marginBottomOf: (it: MarginItem) => it.mb,
+      maxHeight: 946.921875,
+    })
+    // Without the fix, all 10 items pack onto one page (heightOf sums to
+    // 946, under maxHeight) even though the true rendered total (946 +
+    // short-8's own trapped 8.085px margin) is 954.085 — over budget.
+    expect(pages[0]!.map((it) => it.id)).not.toContain('short-8')
+    expect(pages.flatMap((p) => p.map((it) => it.id))).toEqual(items.map((it) => it.id))
+  })
+
+  it('does not demote when the last item fits with its own margin included', () => {
+    interface MarginItem extends PageableItem {
+      h: number
+      mb: number
+    }
+    const mi = (id: string, h: number, mb: number): MarginItem => ({ id, h, mb })
+    const items = [mi('a', 100, 10), mi('b', 200, 10)]
+    const pages = paginate(items, {
+      heightOf: (it: MarginItem) => it.h,
+      marginBottomOf: (it: MarginItem) => it.mb,
+      maxHeight: 320,
+    })
+    expect(pages).toHaveLength(1)
+    expect(pages[0]!.map((it) => it.id)).toEqual(['a', 'b'])
+  })
 })

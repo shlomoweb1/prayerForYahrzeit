@@ -109,8 +109,22 @@ export interface SheetLayout {
 
 export function a4PageSpec(): SheetPageSpec {
   return {
-    widthPx: Math.round(210 * MM_TO_PX),
-    heightPx: Math.round(297 * MM_TO_PX),
+    // Not rounded to a whole pixel: this value is also what the exported
+    // HTML declares as `[data-page]`'s inline `height`, which Folio (the
+    // PDF renderer) lays out content into and then places onto an actual
+    // A4 page of exactly 841.89pt (297mm precisely, no px round-trip —
+    // see document.PageSizeA4 in go-html-to-pdf). Rounding 297mm to a
+    // whole CSS px first (1123px = 842.25pt) makes the declared page
+    // *taller* than the real page it lands on by ~0.36pt — invisible
+    // for most content, but on a page whose content fills the budget to
+    // within a fraction of a point (this app tunes its layout right up
+    // to the edge), that 0.36pt is enough to push it onto an extra page
+    // in Folio's own output even though the live preview shows it
+    // fitting fine. Kept unrounded so pagination decisions (useSheetPagePlan
+    // measures against this same value) target Folio's true page size
+    // from the start, per this file's "single source of truth" contract.
+    widthPx: 210 * MM_TO_PX,
+    heightPx: 297 * MM_TO_PX,
     pageCss: '@page{size:210mm 297mm;margin:0;}',
     label: 'a4',
   }

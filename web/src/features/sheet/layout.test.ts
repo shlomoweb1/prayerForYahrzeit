@@ -13,10 +13,16 @@ import {
 } from '@/features/sheet/layout'
 
 describe('page specs', () => {
-  it('a4 is 210x297mm (794x1123 px @96dpi) with an @page override', () => {
+  it('a4 is 210x297mm @96dpi, unrounded (precision matters for Folio parity — see a4PageSpec doc comment)', () => {
     const spec = a4PageSpec()
-    expect(spec.widthPx).toBe(794)
-    expect(spec.heightPx).toBe(1123)
+    const MM_TO_PX = 96 / 25.4
+    expect(spec.widthPx).toBeCloseTo(210 * MM_TO_PX, 10)
+    expect(spec.heightPx).toBeCloseTo(297 * MM_TO_PX, 10)
+    // Sanity check against the whole-pixel figure a human would expect —
+    // must be close (rendering is indistinguishable) but not equal
+    // (equal would mean the rounding regressed).
+    expect(spec.widthPx).toBeCloseTo(794, 0)
+    expect(spec.heightPx).toBeCloseTo(1123, 0)
     expect(spec.pageCss).toContain('size:210mm 297mm')
     expect(spec.pageCss).toContain('margin:0')
   })
