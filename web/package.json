@@ -16,7 +16,10 @@
     "typecheck": "tsc -b",
     "generate:routes": "tsr generate",
     "test:e2e": "playwright test",
-    "audit:lighthouse": "node scripts/audit-lighthouse.mjs"
+    "audit:lighthouse": "node scripts/audit-lighthouse.mjs",
+    "audit:css-coverage": "node scripts/css-coverage/report-css-coverage.mjs",
+    "audit:css-matrix": "node scripts/css-coverage/css-support-matrix.mjs",
+    "audit:css-selectors": "node scripts/css-coverage/selectors-atrules-functions-matrix.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",
@@ -69,6 +72,7 @@
     "jsdom": "^30.0.1",
     "lighthouse": "^13.4.1",
     "lightningcss-cli": "^1.33.0",
+    "mdn-data": "^2.31.0",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "~6.0.2",
