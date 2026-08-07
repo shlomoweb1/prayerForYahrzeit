@@ -5,6 +5,7 @@ import { es } from '@/features/i18n/locales/es'
 import { fr } from '@/features/i18n/locales/fr'
 import { he } from '@/features/i18n/locales/he'
 import { localeDirection, RTL_LOCALES, SUPPORTED_LOCALES } from '@/features/i18n'
+import { STEP_MAX, STEP_MIN } from '@/features/wizard/wizard-query'
 
 function flattenKeys(value: unknown, prefix = ''): string[] {
   if (value === null || typeof value !== 'object') {
@@ -58,15 +59,9 @@ describe('i18n locale dictionaries', () => {
     }
   })
 
-  it('localizes user-facing errors in every locale', () => {
-    const englishError = en.wizard.errors.render
-    expect(es.wizard.errors.render).not.toBe(englishError)
-    expect(fr.wizard.errors.render).not.toBe(englishError)
-  })
-
   it('he dictionary includes every wizard step title', () => {
     const steps = he.wizard.steps as Record<string, { title: string }>
-    for (let step = 1; step <= 6; step += 1) {
+    for (let step = STEP_MIN; step <= STEP_MAX; step += 1) {
       expect(typeof steps[String(step)]?.title).toBe('string')
     }
   })

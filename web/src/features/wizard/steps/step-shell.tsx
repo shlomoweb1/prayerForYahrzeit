@@ -28,7 +28,7 @@ export function StepShell({
 }: StepShellProps) {
   const { t } = useTranslation()
 
-  if (stepNumber === 5) {
+  if (stepNumber === STEP_MAX) {
     return children
   }
 

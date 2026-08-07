@@ -307,13 +307,16 @@ export interface SheetDocumentProps {
 }
 
 /** בס"ד + title chrome repeated on every page. */
-function PageHeader({ headerText }: { headerText: string }) {
+function PageHeader({ headerText, deathDateText }: { headerText: string; deathDateText?: string }) {
   return (
     <div data-section="header">
       <div data-content="bsd">בס"ד</div>
       <div data-content="title">
         <h1>סדר עלייה לקבר</h1>
-        <h2>{headerText} - נפטר י' מנחם אב התשפ"ו</h2>
+        <h2>
+          {headerText}
+          {deathDateText ? ` - ${deathDateText}` : ''}
+        </h2>
       </div>
     </div>
   )
@@ -337,7 +340,9 @@ export function SheetDocument({ content, layout, settings }: SheetDocumentProps)
     () => buildDisplayItems(items, settings.gender, content),
     [items, settings.gender, content],
   )
-  const headerText = content.find((c) => c.kind === 'header')?.text ?? ''
+  const headerBlock = content.find((c) => c.kind === 'header')
+  const headerText = headerBlock?.text ?? ''
+  const deathDateText = headerBlock?.deathDateText
   const pageVars = useMemo(() => sheetPageVars(layout, settings.fontRoles), [layout, settings.fontRoles])
 
   const emptyContentRef = useRef<HTMLDivElement>(null)
@@ -348,7 +353,7 @@ export function SheetDocument({ content, layout, settings }: SheetDocumentProps)
     <>
       <div data-sheet-measure="true" aria-hidden="true">
         <div data-page={layout.paper} style={pageVars}>
-          <PageHeader headerText={headerText} />
+          <PageHeader headerText={headerText} deathDateText={deathDateText} />
           <div data-section="content" ref={emptyContentRef} />
           <PageFooter headerText={headerText} index={0} total={1} />
         </div>
@@ -364,7 +369,7 @@ export function SheetDocument({ content, layout, settings }: SheetDocumentProps)
       </div>
       {plan.map((pageItems, index) => (
         <div data-page={layout.paper} style={pageVars} key={`page-${index}`}>
-          <PageHeader headerText={headerText} />
+          <PageHeader headerText={headerText} deathDateText={deathDateText} />
           <div data-section="content">
             {pageItems.map((item) => (
               <div key={item.id}>{renderPageItem(item)}</div>

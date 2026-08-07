@@ -113,8 +113,9 @@ export const he = {
         description: 'הזינו את השם העברי ואת שם האב, כפי שיוצגו בראש הדף.',
       },
       '4': {
-        title: 'מטרת הדף',
-        description: 'האם הדף מיועד להדפסה, לשיתוף, או לשניהם?',
+        title: 'תאריך פטירה',
+        description:
+          'הזינו את התאריך העברי של הפטירה - או בחרו את התאריך הלועזי ואנו נחשב עבורכם את התאריך העברי.',
       },
       '5': {
         title: 'עריכה והורדה',
@@ -127,7 +128,6 @@ export const he = {
       preview: 'תצוגה מקדימה',
     },
     labels: {
-      target: 'מטרת הדף',
       paper: 'גודל נייר',
       gender: 'מגדר',
       nusach: 'נוסח',
@@ -168,21 +168,12 @@ export const he = {
       print: 'הדפסה',
       download: 'הורדת PDF',
       downloading: 'מרנדר…',
-      share: 'שיתוף',
       save: 'שמירה לחשבון',
-      copyLink: 'העתקת קישור',
-      whatsapp: 'וואטסאפ',
       settings: 'הגדרות',
       hideSettings: 'הסתרת הגדרות',
       showSettings: 'הצגת הגדרות',
     },
-    toasts: {
-      linkCopied: 'הקישור הועתק',
-      shareSuccess: 'דף היזכור שותף',
-      shareFailed: 'השיתוף נכשל',
-    },
     fallback: {
-      shareUnsupported: 'שיתוף קבצים אינו נתמך בדפדפן זה - הקובץ הורד והקישור הועתק ללוח.',
       pdfPreviewUnsupported: 'תצוגה מקדימה של PDF אינה נתמכת בדפדפן זה, אך הקובץ מוכן.',
     },
     placeholders: {
@@ -191,11 +182,6 @@ export const he = {
       parent: 'לדוגמה: אברהם',
     },
     options: {
-      target: {
-        print: 'הדפסה',
-        share: 'שיתוף',
-        both: 'הדפסה ושיתוף',
-      },
       paper: {
         a4: 'A4',
         letter: 'Letter',
@@ -237,11 +223,6 @@ export const he = {
     hints: {
       name_male: 'אפשר להוסיף גם שם פרטי נוסף, למשל: משה דוד.',
       name_female: 'אפשר להוסיף גם שם פרטי נוסף, למשל: שרה רבקה.',
-      target: {
-        print: 'קובץ PDF מוכן להדפסה, בפריסה למדפסת ביתית או לבית דפוס.',
-        share: 'קובץ לשיתוף, שנשלח בקישור, בוואטסאפ או במייל.',
-        both: 'גם קובץ מוכן להדפסה וגם גרסה לשיתוף.',
-      },
       paper: {
         a4: 'הגודל הסטנדרטי בישראל, באירופה ובמרבית העולם.',
         letter: 'הגודל הסטנדרטי בארה״ב ובקנדה.',
@@ -264,16 +245,32 @@ export const he = {
       a4: '210 × 297 מ״מ',
       letter: '215.9 × 279.4 מ״מ',
     },
-    errors: {
-      render: 'PDF render failed: {{message}}',
+    deathDate: {
+      instructions: 'הקישו על יום הפטירה בלוח השנה שלמטה - התאריך העברי מוצג בכל יום.',
+      gregorianSelected: 'בחרתם ב-{{date}}.',
+      sunsetQuestion: 'האם הפטירה אירעה לפני השקיעה או אחריה (בין השמשות)?',
+      before: 'לפני השקיעה',
+      beforeHint: 'התאריך העברי המוצג נכון כפי שהוא.',
+      after: 'אחרי השקיעה (בין השמשות)',
+      afterHint: 'היממה העברית מתחילה בשקיעה, ולכן התאריך העברי מתקדם ביום אחד.',
+      unsure: 'לא בטוח/ה',
+      unsureHint: 'נשתמש בתאריך העברי של אותו יום - תמיד אפשר לתקן זאת מאוחר יותר.',
+      confirmedLabel: 'תאריך פטירה עברי',
+      change: 'בחירת תאריך אחר',
+      skip: 'דילוג - עדיין אין לי את הפרט הזה',
+      editMonthYear: 'בחירת חודש או שנה אחרים',
+      chooseMonth: 'חודש',
+      chooseYear: 'שנה',
+      earlierYears: 'שנים מוקדמות יותר',
+      laterYears: 'שנים מאוחרות יותר',
+      switchToGregorian: 'לוח לועזי',
+      switchToHebrew: 'לוח עברי',
     },
     dialog: {
-      share: 'שיתוף',
       print: 'הדפסה',
       settings: 'הגדרות',
       scaffoldNote: 'חלון זה יושלם בשלב מאוחר יותר של הפיתוח.',
       saveNote: 'שמירה לחשבון תהיה זמינה בגרסה עתידית.',
-      shareDescription: 'שתפו את דף היזכור כקובץ PDF, או העתיקו קישור להגדרות הדף.',
       printDescription: 'ההדפסה מתבצעת דרך תיבת הדו־שיח של הדפדפן.',
     },
   },

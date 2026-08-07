@@ -8,8 +8,6 @@ import {
   contentWidth,
   letterPageSpec,
   printLayoutDefaults,
-  shareLayoutDefaults,
-  sharePageSpec,
 } from '@/features/sheet/layout'
 
 describe('page specs', () => {
@@ -32,13 +30,6 @@ describe('page specs', () => {
     expect(spec.widthPx).toBe(816)
     expect(spec.heightPx).toBe(1056)
   })
-
-  it('share is the phone format 1080x1920 px @96dpi', () => {
-    const spec = sharePageSpec()
-    expect(spec.widthPx).toBe(1080)
-    expect(spec.heightPx).toBe(1920)
-    expect(spec.pageCss).toContain('size:1080px 1920px')
-  })
 })
 
 describe('layout defaults', () => {
@@ -46,7 +37,6 @@ describe('layout defaults', () => {
     const layout = printLayoutDefaults('a4')
     expect(layout.baseFontPx).toBeGreaterThanOrEqual(14)
     expect(layout.baseFontPx).toBeLessThanOrEqual(14.7)
-    expect(layout.target).toBe('print')
     expect(layout.page).toEqual(a4PageSpec())
   })
 
@@ -58,23 +48,11 @@ describe('layout defaults', () => {
     }
   })
 
-  it('share base font is within 15-16pt (20-21.3px) with ~10mm margins', () => {
-    const layout = shareLayoutDefaults()
-    expect(layout.baseFontPx).toBeGreaterThanOrEqual(20)
-    expect(layout.baseFontPx).toBeLessThanOrEqual(21.3)
-    expect(layout.marginX).toBeLessThanOrEqual(Math.round(12 * (96 / 25.4)))
-    expect(layout.page).toEqual(sharePageSpec())
-    expect(layout.target).toBe('share')
-  })
-
   it('buildLayout applies the fontId without touching geometry', () => {
-    const layout = buildLayout('print', 'letter', 'rashi')
+    const layout = buildLayout('letter', 'rashi')
     expect(layout.fontId).toBe('rashi')
     expect(layout.page).toEqual(letterPageSpec())
     expect(layout.baseFontPx).toBe(printLayoutDefaults('letter').baseFontPx)
-    const share = buildLayout('share', 'a4', 'taamey')
-    expect(share.fontId).toBe('taamey')
-    expect(share.page).toEqual(sharePageSpec())
   })
 
   it('content box = page minus margins', () => {

@@ -7,12 +7,11 @@ const LOCALES = [
   { code: 'fr', dir: 'ltr' },
 ] as const
 
-const STEPS = [1, 2, 3, 4, 5, 6] as const
+const STEPS = [1, 2, 3, 4] as const
 
 function prefilledWizardUrl(step: number): string {
   const params = new URLSearchParams({
     step: String(step),
-    target: 'both',
     paper: 'a4',
     gender: 'male',
     nusach: 'ashkenaz',
@@ -35,7 +34,7 @@ async function setLocale(page: Page, code: string): Promise<void> {
   }, code)
 }
 
-/** Step 6 renders the sheet preview with embedded data-URI fonts — wait for them. */
+/** Step 4 renders the sheet preview with embedded data-URI fonts — wait for them. */
 async function waitForFonts(page: Page): Promise<void> {
   await page.evaluate(() => document.fonts.ready.then(() => true))
 }
@@ -97,10 +96,10 @@ for (const { code } of LOCALES) {
         await page.goto(prefilledWizardUrl(step))
         await expect(page).toHaveURL(/step=/)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        if (step === 6) await waitForFonts(page)
+        if (step === 4) await waitForFonts(page)
         await expect(page).toHaveScreenshot(`${code}-mobile-wizard-step-${step}.png`, {
           fullPage: true,
-          timeout: step === 6 ? 30_000 : 10_000,
+          timeout: step === 4 ? 30_000 : 10_000,
         })
       })
     }
@@ -129,10 +128,10 @@ for (const { code } of LOCALES) {
         await page.goto(prefilledWizardUrl(step))
         await expect(page).toHaveURL(/step=/)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        if (step === 6) await waitForFonts(page)
+        if (step === 4) await waitForFonts(page)
         await expect(page).toHaveScreenshot(`${code}-desktop-wizard-step-${step}.png`, {
           fullPage: true,
-          timeout: step === 6 ? 30_000 : 10_000,
+          timeout: step === 4 ? 30_000 : 10_000,
         })
       })
     }

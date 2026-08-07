@@ -23,7 +23,6 @@ export const SHEET_SECTIONS = [
 
 export type SheetSectionToggle = (typeof SHEET_SECTIONS)[number]
 
-export type SheetTarget = 'print' | 'share' | 'both'
 export type SheetPaper = 'a4' | 'letter'
 export type SheetNusach = 'ashkenaz' | 'sefard'
 export type SheetGender = 'male' | 'female'
@@ -57,6 +56,8 @@ export interface SheetSettings {
   nusach: SheetNusach
   name?: string
   parent?: string
+  /** Hebrew calendar absolute day (R.D.) of passing — see `WizardQuery.deathDate`. */
+  deathDate?: number
   lineage: SheetLineage
   font: SheetFontId
   /** Resolved per-role fonts: equal to `font` for all roles in simple mode,
@@ -80,19 +81,18 @@ export interface SheetPageSpec {
   heightPx: number
   /** Folio @page CSS (overrides the pageSize fallback). */
   pageCss: string
-  /** Machine label (a4 | letter | share). */
-  label: SheetPaper | 'share'
+  /** Machine label (a4 | letter). */
+  label: SheetPaper
 }
 
 export interface SheetLayout {
-  target: 'print' | 'share'
   paper: SheetPaper
   page: SheetPageSpec
-  /** Base body font size in px (print ≈ 10.5–11 pt, share ≈ 15–16 pt). */
+  /** Base body font size in px (print ≈ 10.5–11 pt). */
   baseFontPx: number
   /** Line-height multiplier for body text. */
   lineHeight: number
-  /** Horizontal margin in px (print 12–15 mm, share ≈ 10 mm). */
+  /** Horizontal margin in px (print 12–15 mm). */
   marginX: number
   /** Vertical margin in px. */
   marginY: number
@@ -139,15 +139,6 @@ export function letterPageSpec(): SheetPageSpec {
   }
 }
 
-export function sharePageSpec(): SheetPageSpec {
-  return {
-    widthPx: 1080,
-    heightPx: 1920,
-    pageCss: '@page{size:1080px 1920px;margin:0;}',
-    label: 'share',
-  }
-}
-
 export function paperPageSpec(paper: SheetPaper): SheetPageSpec {
   return paper === 'a4' ? a4PageSpec() : letterPageSpec()
 }
@@ -166,7 +157,6 @@ export function paperPageSpec(paper: SheetPaper): SheetPageSpec {
 export function printLayoutDefaults(paper: SheetPaper): SheetLayout {
   const page = paperPageSpec(paper)
   return {
-    target: 'print',
     paper,
     page,
     baseFontPx: 14.7,
@@ -181,35 +171,16 @@ export function printLayoutDefaults(paper: SheetPaper): SheetLayout {
   }
 }
 
-/** Share defaults: base ≈ 15–16 pt (20–21.3 px), margins ≈ 10 mm. */
-export function shareLayoutDefaults(): SheetLayout {
-  return {
-    target: 'share',
-    paper: 'a4',
-    page: sharePageSpec(),
-    baseFontPx: 20,
-    lineHeight: 1.75,
-    marginX: Math.round(11 * MM_TO_PX),
-    marginY: Math.round(13 * MM_TO_PX),
-    decoScale: 1.8,
-    titleFontPx: 34,
-    headingFontPx: 24,
-    fontFamily: 'Noto Serif Hebrew',
-    fontId: 'noto-serif',
-  }
-}
-
 export interface BuildLayoutOptions {
   lineDensity?: LineDensity
 }
 
 export function buildLayout(
-  target: 'print' | 'share',
   paper: SheetPaper,
   fontId: SheetFontId,
   options: BuildLayoutOptions = {},
 ): SheetLayout {
-  const base = target === 'print' ? printLayoutDefaults(paper) : shareLayoutDefaults()
+  const base = printLayoutDefaults(paper)
   const density = options.lineDensity ?? 'normal'
   const lineHeight = base.lineHeight * LINE_DENSITY_MULTIPLIER[density]
   return { ...base, fontId, lineHeight }

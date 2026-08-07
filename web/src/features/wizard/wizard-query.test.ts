@@ -5,8 +5,7 @@ import { SECTIONS, WizardQuery } from '@/features/wizard/wizard-query'
 describe('WizardQuery schema', () => {
   it('parses a full URL query from string params', () => {
     const parsed = WizardQuery.parse({
-      step: '6',
-      target: 'both',
+      step: '4',
       paper: 'letter',
       gender: 'female',
       nusach: 'sefard',
@@ -17,11 +16,10 @@ describe('WizardQuery schema', () => {
       deco: '1',
       acrostic: 'name',
       sections: 'psalms,neshama',
-      dialog: 'share',
+      dialog: 'print',
     })
     expect(parsed).toMatchObject({
-      step: 6,
-      target: 'both',
+      step: 4,
       paper: 'letter',
       gender: 'female',
       nusach: 'sefard',
@@ -32,7 +30,7 @@ describe('WizardQuery schema', () => {
       deco: 1,
       acrostic: 'name',
       sections: ['psalms', 'neshama'],
-      dialog: 'share',
+      dialog: 'print',
     })
   })
 
@@ -40,14 +38,13 @@ describe('WizardQuery schema', () => {
     const parsed = WizardQuery.parse({})
     expect(parsed).toMatchObject({
       step: 1,
-      target: 'print',
       paper: 'a4',
       gender: 'male',
       nusach: 'ashkenaz',
       font: 'noto-serif',
       nikud: 1,
       deco: 1,
-      acrostic: 'both',
+      acrostic: 'name',
       sections: [...SECTIONS],
     })
     expect(parsed.dialog).toBeUndefined()
@@ -61,14 +58,14 @@ describe('WizardQuery schema', () => {
   })
 
   it('clamps out-of-range step values instead of rejecting the URL', () => {
-    expect(WizardQuery.parse({ step: '99' }).step).toBe(6)
+    expect(WizardQuery.parse({ step: '99' }).step).toBe(5)
     expect(WizardQuery.parse({ step: '-2' }).step).toBe(1)
     expect(WizardQuery.parse({ step: 'abc' }).step).toBe(1)
   })
 
   it('falls back to safe values for invalid enums and numbers', () => {
-    const parsed = WizardQuery.parse({ target: 'banana', nikud: 'x' })
-    expect(parsed.target).toBe('print')
+    const parsed = WizardQuery.parse({ paper: 'banana', nikud: 'x' })
+    expect(parsed.paper).toBe('a4')
     expect(parsed.nikud).toBe(1)
   })
 

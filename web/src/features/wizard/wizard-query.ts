@@ -1,3 +1,4 @@
+import { HDate } from '@hebcal/core'
 import { z } from 'zod'
 
 export const STEP_MIN = 1
@@ -12,7 +13,7 @@ export const SECTIONS = [
   'closing',
 ] as const
 
-export const DIALOGS = ['share', 'print', 'settings'] as const
+export const DIALOGS = ['print', 'settings'] as const
 
 const sectionsArray = z.array(z.enum(SECTIONS))
 
@@ -23,13 +24,31 @@ export const WizardQuery = z.object({
     .transform((value) => Math.min(Math.max(value, STEP_MIN), STEP_MAX))
     .catch(STEP_MIN)
     .default(STEP_MIN),
-  target: z.enum(['print', 'share', 'both']).default('print').catch('print'),
   paper: z.enum(['a4', 'letter']).default('a4').catch('a4'),
   gender: z.enum(['male', 'female']).default('male').catch('male'),
   nusach: z.enum(['ashkenaz', 'sefard']).default('ashkenaz').catch('ashkenaz'),
   name: z.string().max(100).optional().catch(undefined),
   parent: z.string().max(100).optional().catch(undefined),
   lineage: z.enum(['none', 'kohen', 'levi']).default('none').catch('none'),
+  /**
+   * Hebrew date of passing, stored as the Hebrew calendar's absolute day
+   * count (R.D. — see `HDate.abs()`/`new HDate(rd)` in @hebcal/core), not
+   * as separate day/month/year fields: one integer round-trips losslessly
+   * through `HDate` (leap-year Adar I/II and all), and already bakes in
+   * the before/after-sunset adjustment made on step 4. Optional — the step
+   * is skippable like the rest of the wizard. Rejects (falls back to
+   * unset, not an error — same `.catch()` policy as every other field)
+   * any value in the future: a hand-edited URL can't be used to print a
+   * date of death that hasn't happened, matching the day/month/year
+   * pickers' own future-date guard on step 4.
+   */
+  deathDate: z.coerce
+    .number()
+    .int()
+    .positive()
+    .refine((value) => new HDate(value).greg().getTime() <= Date.now())
+    .optional()
+    .catch(undefined),
   font: z.string().min(1).default('noto-serif').catch('noto-serif'),
   nikud: z.coerce.number().int().min(0).max(1).catch(1).default(1),
   deco: z.coerce.number().int().min(0).max(1).catch(1).default(1),

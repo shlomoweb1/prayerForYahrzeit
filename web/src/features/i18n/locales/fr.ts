@@ -120,8 +120,9 @@ export const fr = {
           'Saisissez le nom hébreu et le nom du père, tels qu’ils apparaîtront en haut de la feuille.',
       },
       '4': {
-        title: 'But de la feuille',
-        description: 'La feuille est-elle destinée à l’impression, au partage, ou aux deux ?',
+        title: 'Date du décès',
+        description:
+          'Saisissez la date hébraïque du décès, ou choisissez la date grégorienne et nous calculerons la date hébraïque pour vous.',
       },
       '5': {
         title: 'Modifier et télécharger',
@@ -134,7 +135,6 @@ export const fr = {
       preview: 'Aperçu',
     },
     labels: {
-      target: 'Usage de la feuille',
       paper: 'Format du papier',
       gender: 'Genre',
       nusach: 'Nusach',
@@ -175,22 +175,12 @@ export const fr = {
       print: 'Imprimer',
       download: 'Télécharger le PDF',
       downloading: 'Rendu en cours…',
-      share: 'Partager',
       save: 'Enregistrer au compte',
-      copyLink: 'Copier le lien',
-      whatsapp: 'WhatsApp',
       settings: 'Paramètres',
       hideSettings: 'Masquer les paramètres',
       showSettings: 'Afficher les paramètres',
     },
-    toasts: {
-      linkCopied: 'Lien copié',
-      shareSuccess: 'Feuille commémorative partagée',
-      shareFailed: 'Échec du partage',
-    },
     fallback: {
-      shareUnsupported:
-        'Le partage de fichiers n’est pas pris en charge par ce navigateur — le fichier a été téléchargé et un lien a été copié.',
       pdfPreviewUnsupported:
         'L’aperçu du PDF n’est pas pris en charge par ce navigateur, mais le fichier est prêt.',
     },
@@ -200,11 +190,6 @@ export const fr = {
       parent: 'ex. : Avraham',
     },
     options: {
-      target: {
-        print: 'Imprimer',
-        share: 'Partager',
-        both: 'Imprimer et partager',
-      },
       paper: {
         a4: 'A4',
         letter: 'Lettre',
@@ -246,11 +231,6 @@ export const fr = {
     hints: {
       name_male: 'Vous pouvez aussi ajouter un second prénom, ex. : Moshé David.',
       name_female: 'Vous pouvez aussi ajouter un second prénom, ex. : Sarah Rivka.',
-      target: {
-        print: 'Un PDF prêt à imprimer, adapté à une imprimante personnelle ou professionnelle.',
-        share: 'Un fichier à partager par lien, WhatsApp ou e-mail.',
-        both: "Un fichier prêt à imprimer, ainsi qu'une version à partager.",
-      },
       paper: {
         a4: 'Le format standard en Israël, en Europe et dans la majorité du monde.',
         letter: 'Le format standard aux États-Unis et au Canada.',
@@ -273,18 +253,34 @@ export const fr = {
       a4: '210 × 297 mm',
       letter: '215,9 × 279,4 mm',
     },
-    errors: {
-      render: 'Échec du rendu PDF : {{message}}',
+    deathDate: {
+      instructions:
+        'Touchez le jour du décès sur le calendrier ci-dessous — la date hébraïque est indiquée chaque jour.',
+      gregorianSelected: 'Vous avez sélectionné le {{date}}.',
+      sunsetQuestion: 'Le décès a-t-il eu lieu avant ou après le coucher du soleil (la tombée de la nuit) ?',
+      before: 'Avant le coucher du soleil',
+      beforeHint: 'La date hébraïque affichée est correcte telle quelle.',
+      after: 'Après le coucher du soleil (tombée de la nuit)',
+      afterHint: 'Le jour juif commence à la tombée de la nuit, la date hébraïque avance donc d’un jour.',
+      unsure: 'Je ne suis pas sûr(e)',
+      unsureHint: 'Nous utiliserons la date hébraïque de ce jour — vous pourrez toujours la corriger plus tard.',
+      confirmedLabel: 'Date hébraïque du décès',
+      change: 'Choisir une autre date',
+      skip: 'Passer — je n’ai pas encore cette information',
+      editMonthYear: 'Choisir un autre mois ou une autre année',
+      chooseMonth: 'Mois',
+      chooseYear: 'Année',
+      earlierYears: 'Années précédentes',
+      laterYears: 'Années suivantes',
+      switchToGregorian: 'Calendrier grégorien',
+      switchToHebrew: 'Calendrier hébraïque',
     },
     dialog: {
-      share: 'Partager',
       print: 'Imprimer',
       settings: 'Paramètres',
       scaffoldNote:
         'Cette boîte de dialogue sera achevée dans une phase ultérieure du développement.',
       saveNote: 'L’enregistrement au compte sera disponible dans une version future.',
-      shareDescription:
-        'Partagez la feuille commémorative en PDF, ou copiez un lien vers les réglages de la feuille.',
       printDescription: 'L’impression passe par la boîte de dialogue d’impression du navigateur.',
     },
   },

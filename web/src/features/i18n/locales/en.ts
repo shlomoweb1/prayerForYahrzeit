@@ -116,8 +116,9 @@ export const en = {
           "Enter the Hebrew name and the father's name, as they will appear at the top of the sheet.",
       },
       '4': {
-        title: 'Sheet purpose',
-        description: 'Is the sheet for printing, sharing, or both?',
+        title: 'Date of death',
+        description:
+          "Enter the Hebrew date of passing — or pick the Gregorian date and we'll work out the Hebrew date for you.",
       },
       '5': {
         title: 'Edit and download',
@@ -130,7 +131,6 @@ export const en = {
       preview: 'Preview',
     },
     labels: {
-      target: 'Sheet purpose',
       paper: 'Paper size',
       gender: 'Gender',
       nusach: 'Nusach',
@@ -171,22 +171,12 @@ export const en = {
       print: 'Print',
       download: 'Download PDF',
       downloading: 'Rendering…',
-      share: 'Share',
       save: 'Save to account',
-      copyLink: 'Copy link',
-      whatsapp: 'WhatsApp',
       settings: 'Settings',
       hideSettings: 'Hide settings',
       showSettings: 'Show settings',
     },
-    toasts: {
-      linkCopied: 'Link copied',
-      shareSuccess: 'Memorial sheet shared',
-      shareFailed: 'Sharing failed',
-    },
     fallback: {
-      shareUnsupported:
-        'File sharing is not supported in this browser — the file was downloaded and a link was copied.',
       pdfPreviewUnsupported: 'PDF preview isn’t supported in this browser, but the file is ready.',
     },
     placeholders: {
@@ -195,11 +185,6 @@ export const en = {
       parent: 'e.g. Avraham',
     },
     options: {
-      target: {
-        print: 'Print',
-        share: 'Share',
-        both: 'Print and share',
-      },
       paper: {
         a4: 'A4',
         letter: 'Letter',
@@ -241,11 +226,6 @@ export const en = {
     hints: {
       name_male: 'You can add a second given name too, e.g. Moshe David.',
       name_female: 'You can add a second given name too, e.g. Sarah Rivka.',
-      target: {
-        print: 'A print-ready PDF, laid out for a home or shop printer.',
-        share: 'A shareable file, sent by link, WhatsApp or email.',
-        both: 'A print-ready file, plus a shareable version.',
-      },
       paper: {
         a4: 'The standard size across Israel, Europe and most of the world.',
         letter: 'The standard size in the US and Canada.',
@@ -268,17 +248,32 @@ export const en = {
       a4: '210 × 297 mm',
       letter: '215.9 × 279.4 mm',
     },
-    errors: {
-      render: 'PDF render failed: {{message}}',
+    deathDate: {
+      instructions: 'Tap the day of passing on the calendar below — Hebrew dates are shown on every day.',
+      gregorianSelected: 'You selected {{date}}.',
+      sunsetQuestion: 'Did the passing happen before or after sunset (nightfall)?',
+      before: 'Before sunset',
+      beforeHint: 'The Hebrew date shown is correct as is.',
+      after: 'After sunset (nightfall)',
+      afterHint: 'The Jewish day begins at nightfall, so the Hebrew date moves forward by one day.',
+      unsure: 'Not sure',
+      unsureHint: "We'll use the Hebrew date for that day — you can always correct this later.",
+      confirmedLabel: 'Hebrew date of passing',
+      change: 'Choose a different date',
+      skip: "Skip — I don't have this yet",
+      editMonthYear: 'Choose a different month or year',
+      chooseMonth: 'Month',
+      chooseYear: 'Year',
+      earlierYears: 'Earlier years',
+      laterYears: 'Later years',
+      switchToGregorian: 'Gregorian calendar',
+      switchToHebrew: 'Hebrew calendar',
     },
     dialog: {
-      share: 'Share',
       print: 'Print',
       settings: 'Settings',
       scaffoldNote: 'This dialog will be completed in a later phase of development.',
       saveNote: 'Saving to an account will be available in a future release.',
-      shareDescription:
-        'Share the memorial sheet as a PDF file, or copy a link to the sheet settings.',
       printDescription: 'Printing happens through the browser print dialog.',
     },
   },

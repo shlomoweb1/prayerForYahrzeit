@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { ShareActions } from '@/features/wizard/share-actions'
+import { detectPaperFromIp } from '@/features/wizard/paper-geo'
 import { getStep } from '@/features/wizard/step-registry'
 import { STEP_MAX, STEP_MIN, WizardQuery } from '@/features/wizard/wizard-query'
 import { cn } from '@/lib/utils'
@@ -38,6 +38,24 @@ export default function WizardPage() {
   useEffect(() => {
     document.querySelector<HTMLElement>('[data-step-heading]')?.focus()
   }, [search.step])
+
+  // One-time smart default: nobody explicitly asked for a paper size in the
+  // URL, so guess Letter for the handful of countries that use it — A4
+  // (zod's static default) is already showing and stays put unless the
+  // IP lookup positively identifies a Letter country.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has('paper')) return
+    let cancelled = false
+    void detectPaperFromIp().then((paper) => {
+      if (!cancelled && paper === 'letter') {
+        void navigate({ to: '/wizard', search: (prev) => ({ ...prev, paper }), replace: true })
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const dialogOpen = search.dialog !== undefined
 
@@ -67,7 +85,7 @@ export default function WizardPage() {
         )}
         {search.step !== STEP_MAX && (
         <Button
-          disabled={search.step >= STEP_MAX}
+          disabled={search.step >= STEP_MAX || (step.canAdvance ? !step.canAdvance(search) : false)}
           onClick={() => goToStep(search.step + 1)}
         >
           {t('common.next')}
@@ -83,21 +101,14 @@ export default function WizardPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {search.dialog === 'share'
-                ? t('wizard.dialog.share')
-                : search.dialog === 'print'
-                  ? t('wizard.dialog.print')
-                  : t('wizard.dialog.settings')}
+              {search.dialog === 'print' ? t('wizard.dialog.print') : t('wizard.dialog.settings')}
             </DialogTitle>
             <DialogDescription>
-              {search.dialog === 'share'
-                ? t('wizard.dialog.shareDescription')
-                : search.dialog === 'print'
-                  ? t('wizard.dialog.printDescription')
-                  : t('wizard.dialog.scaffoldNote')}
+              {search.dialog === 'print'
+                ? t('wizard.dialog.printDescription')
+                : t('wizard.dialog.scaffoldNote')}
             </DialogDescription>
           </DialogHeader>
-          {search.dialog === 'share' ? <ShareActions search={search} /> : null}
           {search.dialog === 'print' ? (
             <div className="flex justify-end gap-2">
               <Button onClick={() => window.print()}>{t('wizard.actions.print')}</Button>

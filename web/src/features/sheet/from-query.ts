@@ -45,6 +45,7 @@ export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
     nusach: search.nusach as SheetNusach,
     name: search.name || undefined,
     parent: search.parent || undefined,
+    deathDate: search.deathDate,
     lineage: search.lineage,
     font,
     fontRoles: fontRolesFromQuery(search, font),
@@ -58,11 +59,10 @@ export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
   }
 }
 
-/** Layout for the preview/render: share target uses the 1080×1920 canvas. */
+/** Layout for the preview/render. */
 export function sheetLayoutFromQuery(search: WizardQuery): SheetLayout {
   const font = isSheetFontId(search.font) ? search.font : 'noto-serif'
-  const target = search.target === 'share' ? 'share' : 'print'
-  return buildLayout(target, search.paper, font, { lineDensity: search.lineDensity })
+  return buildLayout(search.paper, font, { lineDensity: search.lineDensity })
 }
 
 /** Settings + layout for a step's render, stable while the query is stable. */

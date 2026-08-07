@@ -1,17 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  performSheetShare,
-  sanitizeFilenamePart,
-  sheetFilename,
-  sharePdfFile,
-} from '@/features/wizard/sheet-actions'
+import { sanitizeFilenamePart, sheetFilename } from '@/features/wizard/sheet-actions'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
 
 function query(patch: Partial<WizardQuery> = {}): WizardQuery {
   return {
-    step: 7,
-    target: 'print',
+    step: 4,
     paper: 'a4',
     gender: 'male',
     nusach: 'ashkenaz',
@@ -33,12 +27,8 @@ function query(patch: Partial<WizardQuery> = {}): WizardQuery {
 }
 
 describe('sheetFilename', () => {
-  it('uses izkor-<name>.pdf for print layouts', () => {
+  it('uses izkor-<name>.pdf', () => {
     expect(sheetFilename(query({ name: 'משה בן אברהם' }))).toBe('izkor-משה-בן-אברהם.pdf')
-  })
-
-  it('appends -mobile for the share canvas layout', () => {
-    expect(sheetFilename(query({ target: 'share', name: 'רחל' }))).toBe('izkor-רחל-mobile.pdf')
   })
 
   it('falls back to izkor-sheet.pdf when no name', () => {
@@ -58,23 +48,5 @@ describe('sheetFilename', () => {
 
   it('strips control/emoji characters but keeps Hebrew and Latin', () => {
     expect(sanitizeFilenamePart('משה 😀 Smith')).toBe('משה-Smith')
-  })
-})
-
-describe('sharePdfFile', () => {
-  it('reports unsupported when navigator.share is missing', async () => {
-    const navigatorWithShare = navigator as unknown as {
-      share?: undefined
-      canShare?: undefined
-    }
-    navigatorWithShare.share = undefined
-    navigatorWithShare.canShare = undefined
-    const blob = new Blob(['%PDF'], { type: 'application/pdf' })
-    expect(await sharePdfFile(blob, 'izkor-test.pdf')).toBe('unsupported')
-  })
-
-  it('performs the full flow: render is a no-op guard (dom-only, skipped)', () => {
-    // performSheetShare touches the DOM (renderSheetHTML) — covered by e2e.
-    expect(performSheetShare).toBeTypeOf('function')
   })
 })

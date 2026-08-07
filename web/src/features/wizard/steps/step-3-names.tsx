@@ -7,10 +7,62 @@ import { filialWord, sheetHeaderLine } from '@/features/sheet/content'
 import { sheetSettingsFromQuery } from '@/features/sheet/from-query'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
 import { StepShell } from '@/features/wizard/steps/step-shell'
+import { cn } from '@/lib/utils'
 
 interface StepProps {
   search: WizardQuery
   setSearch: (patch: Partial<WizardQuery>) => void
+}
+
+/**
+ * Material-style floating label: invisible at rest — the real placeholder
+ * shows through in its normal spot — and fades in at the top-end corner
+ * once focused or filled, so it never overlaps the placeholder text.
+ * `text-align` itself can't be animated (the browser owns text layout
+ * inside a native `<input>`), so animating this separate `<label>` sibling
+ * is the standard, CSS-only way to get a settle/snap-into-place feel.
+ * `:not(:placeholder-shown)` (true once there's a value, even unfocused)
+ * keeps the label floated after blur if the field was filled in.
+ */
+function FloatingLabelInput({
+  id,
+  label,
+  placeholder,
+  value,
+  onChange,
+  className,
+}: {
+  id: string
+  label: string
+  placeholder?: string
+  value: string
+  onChange: (value: string) => void
+  className?: string
+}) {
+  return (
+    <div className={cn('relative', className)}>
+      <Input
+        id={id}
+        dir="rtl"
+        lang="he"
+        autoComplete="off"
+        placeholder={placeholder}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="peer border-white/25 bg-black/40 text-white placeholder:text-white/50 backdrop-blur-md"
+      />
+      <label
+        htmlFor={id}
+        className={cn(
+          'pointer-events-none absolute -top-2 inset-s-2 translate-y-1 rounded bg-black/70 px-1.5 text-[11px] text-white/80 opacity-0 backdrop-blur-sm transition-all duration-200',
+          'peer-focus:translate-y-0 peer-focus:opacity-100',
+          'peer-not-placeholder-shown:translate-y-0 peer-not-placeholder-shown:opacity-100',
+        )}
+      >
+        {label}
+      </label>
+    </div>
+  )
 }
 
 const LINEAGE_OPTIONS = ['kohen', 'levi', 'none'] as const
@@ -41,32 +93,24 @@ export function Step3Names({ search, setSearch }: StepProps) {
             className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center"
             dir="rtl"
           >
-            <div className="flex flex-1 items-center gap-2">
-              <Input
-                id="wizard-name"
-                dir="rtl"
-                lang="he"
-                autoComplete="off"
-                className="bg-white/95 backdrop-blur-sm"
-                aria-label={t('wizard.labels.name', { context: search.gender })}
-                value={search.name ?? ''}
-                onChange={(event) => setSearch({ name: event.target.value })}
-                placeholder={t('wizard.placeholders.name', { context: search.gender })}
-              />
-            </div>
+            <FloatingLabelInput
+              id="wizard-name"
+              className="flex-1"
+              label={t('wizard.labels.name', { context: search.gender })}
+              placeholder={t('wizard.placeholders.name', { context: search.gender })}
+              value={search.name ?? ''}
+              onChange={(value) => setSearch({ name: value })}
+            />
             <span className="text-center md:text-start text-white shrink-0 rounded-md bg-black/30 px-2 py-1 text-sm font-medium backdrop-blur-sm">
               {filialWord(search.gender)}
             </span>
-            <Input
+            <FloatingLabelInput
               id="wizard-parent"
-              dir="rtl"
-              lang="he"
-              autoComplete="off"
-              aria-label={t('wizard.labels.parent')}
-              className="flex-1 bg-white/95 backdrop-blur-sm"
-              value={search.parent ?? ''}
-              onChange={(event) => setSearch({ parent: event.target.value })}
+              className="flex-1"
+              label={t('wizard.labels.parent')}
               placeholder={t('wizard.placeholders.parent')}
+              value={search.parent ?? ''}
+              onChange={(value) => setSearch({ parent: value })}
             />
           </div>
           <p className="text-white/90 mt-2 w-fit rounded-md bg-black/30 px-2 py-1 text-xs backdrop-blur-sm">
@@ -90,19 +134,19 @@ export function Step3Names({ search, setSearch }: StepProps) {
               image={LINEAGE_IMAGES[lineage]}
               title={t(`wizard.options.lineage.${lineage}`)}
               hint={t(`wizard.hints.lineage.${lineage}`)}
-              className="aspect-[4/3]"
+              className="aspect-4/3"
             />
           ))}
         </RadioGroup>
       </div>
-      {search.name?.trim() ? (
+      
         <div className="bg-muted/30 rounded-lg border px-4 py-3">
           <p className="text-muted-foreground text-xs">{t('wizard.labels.namePreview')}</p>
           <p dir="rtl" lang="he" className="font-serif text-lg text-center">
-            {preview}
+            {search.name?.trim() ? preview : (<span className="blur-[1.8px]">פלוני אלמוני בן אברהם אבינו</span>)}
           </p>
         </div>
-      ) : null}
+      
     </StepShell>
   )
 }

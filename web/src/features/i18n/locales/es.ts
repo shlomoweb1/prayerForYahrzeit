@@ -119,8 +119,9 @@ export const es = {
           'Introduzca el nombre hebreo y el nombre del padre, tal como aparecerán en la parte superior de la hoja.',
       },
       '4': {
-        title: 'Finalidad de la hoja',
-        description: '¿La hoja es para imprimir, compartir o ambos?',
+        title: 'Fecha de fallecimiento',
+        description:
+          'Introduzca la fecha hebrea del fallecimiento, o elija la fecha gregoriana y calcularemos la fecha hebrea por usted.',
       },
       '5': {
         title: 'Editar y descargar',
@@ -133,7 +134,6 @@ export const es = {
       preview: 'Vista previa',
     },
     labels: {
-      target: 'Propósito de la hoja',
       paper: 'Tamaño de papel',
       gender: 'Género',
       nusach: 'Nusaj',
@@ -174,22 +174,12 @@ export const es = {
       print: 'Imprimir',
       download: 'Descargar PDF',
       downloading: 'Renderizando…',
-      share: 'Compartir',
       save: 'Guardar en la cuenta',
-      copyLink: 'Copiar enlace',
-      whatsapp: 'WhatsApp',
       settings: 'Ajustes',
       hideSettings: 'Ocultar ajustes',
       showSettings: 'Mostrar ajustes',
     },
-    toasts: {
-      linkCopied: 'Enlace copiado',
-      shareSuccess: 'Hoja conmemorativa compartida',
-      shareFailed: 'Error al compartir',
-    },
     fallback: {
-      shareUnsupported:
-        'Compartir archivos no es compatible con este navegador — el archivo se ha descargado y se ha copiado un enlace.',
       pdfPreviewUnsupported:
         'La vista previa de PDF no es compatible con este navegador, pero el archivo está listo.',
     },
@@ -199,11 +189,6 @@ export const es = {
       parent: 'p. ej. Avraham',
     },
     options: {
-      target: {
-        print: 'Imprimir',
-        share: 'Compartir',
-        both: 'Imprimir y compartir',
-      },
       paper: {
         a4: 'A4',
         letter: 'Carta',
@@ -245,11 +230,6 @@ export const es = {
     hints: {
       name_male: 'También puede añadir un segundo nombre, p. ej. Moshé David.',
       name_female: 'También puede añadir un segundo nombre, p. ej. Sara Rivka.',
-      target: {
-        print: 'Un PDF listo para imprimir, pensado para una impresora doméstica o una imprenta.',
-        share: 'Un archivo para compartir por enlace, WhatsApp o correo electrónico.',
-        both: 'Un archivo listo para imprimir, más una versión para compartir.',
-      },
       paper: {
         a4: 'El tamaño estándar en Israel, Europa y la mayor parte del mundo.',
         letter: 'El tamaño estándar en Estados Unidos y Canadá.',
@@ -272,17 +252,33 @@ export const es = {
       a4: '210 × 297 mm',
       letter: '215.9 × 279.4 mm',
     },
-    errors: {
-      render: 'Error al generar el PDF: {{message}}',
+    deathDate: {
+      instructions:
+        'Toque el día del fallecimiento en el calendario de abajo: la fecha hebrea se muestra cada día.',
+      gregorianSelected: 'Ha seleccionado el {{date}}.',
+      sunsetQuestion: '¿El fallecimiento ocurrió antes o después de la puesta de sol (anochecer)?',
+      before: 'Antes de la puesta de sol',
+      beforeHint: 'La fecha hebrea mostrada es correcta tal como está.',
+      after: 'Después de la puesta de sol (anochecer)',
+      afterHint: 'El día judío comienza al anochecer, por lo que la fecha hebrea avanza un día.',
+      unsure: 'No estoy seguro/a',
+      unsureHint: 'Usaremos la fecha hebrea de ese día — siempre puede corregirlo más adelante.',
+      confirmedLabel: 'Fecha hebrea de fallecimiento',
+      change: 'Elegir otra fecha',
+      skip: 'Omitir — aún no tengo este dato',
+      editMonthYear: 'Elegir otro mes o año',
+      chooseMonth: 'Mes',
+      chooseYear: 'Año',
+      earlierYears: 'Años anteriores',
+      laterYears: 'Años posteriores',
+      switchToGregorian: 'Calendario gregoriano',
+      switchToHebrew: 'Calendario hebreo',
     },
     dialog: {
-      share: 'Compartir',
       print: 'Imprimir',
       settings: 'Ajustes',
       scaffoldNote: 'Este diálogo se completará en una fase posterior del desarrollo.',
       saveNote: 'Guardar en la cuenta estará disponible en una versión futura.',
-      shareDescription:
-        'Comparta la hoja conmemorativa como archivo PDF, o copie un enlace a los ajustes de la hoja.',
       printDescription: 'La impresión se realiza mediante el diálogo de impresión del navegador.',
     },
   },

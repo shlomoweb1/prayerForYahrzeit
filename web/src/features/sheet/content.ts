@@ -9,6 +9,8 @@
  * and move whole, everything else moves as a unit.
  */
 
+import { HDate, Locale, gematriya } from '@hebcal/core'
+
 import { normalizePunctuation } from '@/lib/hebrew'
 import {
   elMaleRachamimText,
@@ -49,7 +51,7 @@ export interface MishnahItemBlock {
 }
 
 export type SheetBlock =
-  | { kind: 'header'; text: string }
+  | { kind: 'header'; text: string; deathDateText?: string }
   | { kind: 'blessing'; title: string; html: string }
   | { kind: 'psalms'; chapters: PsalmChapterBlock[] }
   | { kind: 'letters'; title: string; stanzas: StanzaBlock[] }
@@ -85,6 +87,23 @@ export function sheetHeaderLine(settings: SheetSettings): string {
   if (lineage) parts.push(lineage)
   parts.push('ז״ל')
   return normalizePunctuation(parts.join(' '))
+}
+
+/**
+ * "נפטר/ה <יום> <חודש> ה<שנה>" (e.g. נפטר י׳ אב התשפ״ו) from the Hebrew
+ * calendar date stored on step 4 (`SheetSettings.deathDate`, an R.D. day
+ * count — see `WizardQuery.deathDate`). `undefined` when the step was
+ * skipped, so callers can omit the phrase entirely rather than print a
+ * placeholder.
+ */
+export function sheetDeathDateLine(settings: SheetSettings): string | undefined {
+  if (!settings.deathDate) return undefined
+  const hdate = new HDate(settings.deathDate)
+  const day = gematriya(hdate.getDate())
+  const month = Locale.gettext(hdate.getMonthName(), 'he-x-NoNikud')
+  const year = gematriya(hdate.getFullYear())
+  const verb = settings.gender === 'female' ? 'נפטרה' : 'נפטר'
+  return normalizePunctuation(`${verb} ${day} ${month} ה${year}`)
 }
 
 /** Name phrase for the middle of a prayer (e.g. אל מלא רחמים, השכבה), e.g.
@@ -243,7 +262,11 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
   const nikud = settings.nikud === 1
   const texts = nusachTexts(settings.nusach)
 
-  blocks.push({ kind: 'header', text: sheetHeaderLine(settings) })
+  blocks.push({
+    kind: 'header',
+    text: sheetHeaderLine(settings),
+    deathDateText: sheetDeathDateLine(settings),
+  })
 
   if (settings.blessing === 1) {
     const blessing = texts.prayersBefore[0]
