@@ -1,41 +1,17 @@
-import { Link } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-const FEATURE_ITEM_KEYS = ['simple', 'preview', 'pdf', 'share'] as const
+import { HowItWorksCard } from '@/components/landing/HowItWorksCard'
+import { HeroCard } from '@/components/landing/HeroCard'
+import { MemorialCard } from '@/components/landing/MemorialCard'
+import { OrnamentDivider } from '@/components/theme/ornaments'
 
 export default function LandingPage() {
-  const { t } = useTranslation()
-
   return (
-    <div className="flex flex-col gap-10">
-      <section className="flex flex-col items-center gap-4 py-8 text-center bg-background/65 backdrop-blur-sm rounded-lg shadow-2xl">
-        <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-balance">
-          {t('landing.title')}
-        </h1>
-        <p className="text-muted-foreground max-w-xl text-lg">{t('landing.subtitle')}</p>
-      </section>
-      <Card className="bg-background/65 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl font-semibold text-center">
-            {t('landing.howItWorksTitle')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="grid gap-3">
-            {FEATURE_ITEM_KEYS.map((key) => (
-              <li key={key} className="text-muted-foreground font-extrabold text-sm">
-                {t(`landing.featureItems.${key}`)}
-              </li>
-            ))}
-          </ul>
-          <Button asChild size="lg" className="mt-6 w-full no-underline hover:font-semibold transition-all duration-75 text-yellow-900" variant="secondary">
-            <Link to="/wizard">{t('landing.ctaStart')}</Link>
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-8 lg:grid-cols-2 lg:items-stretch lg:py-12">
+      <div className="flex flex-col lg:gap-y-4">
+        <HeroCard className="" />
+        <OrnamentDivider className="hidden lg:flex" />
+        <MemorialCard className="flex-1" />
+      </div>
+      <HowItWorksCard className="lg:flex lg:flex-col" />
     </div>
   )
 }

@@ -30,6 +30,7 @@ import {
   type A11yPreferences,
 } from '@/features/a11y/preferences'
 import { cn } from '@/lib/utils'
+import { Link } from '@tanstack/react-router'
 
 type ToggleKey = Exclude<keyof A11yPreferences, 'textSize'>
 type ToggleLabelKey = `a11y.toggles.${ToggleKey}`
@@ -144,6 +145,14 @@ export function A11yWidget() {
             <RotateCcwIcon className="size-4" />
             {t('a11y.reset')}
           </Button>
+          <Separator />
+          <Link
+            to="/accessibility"
+            className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            onClick={() => setOpen(false)}
+          >
+            {t('common.footer.accessibility')}
+          </Link>
         </div>
       </DialogContent>
     </Dialog>

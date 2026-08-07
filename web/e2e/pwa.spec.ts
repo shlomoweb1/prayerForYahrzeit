@@ -19,8 +19,8 @@ test('exposes a valid web app manifest with Hebrew metadata', async ({ request }
     icons?: { src: string; sizes: string }[]
     start_url?: string
   }
-  expect(manifest.name).toContain('יזכור')
-  expect(manifest.short_name).toBe('יזכור')
+  expect(manifest.name).toContain('תפילה לנשמה')
+  expect(manifest.short_name).toBe('תפילה לנשמה')
   expect(manifest.lang).toBe('he')
   expect(manifest.dir).toBe('rtl')
   expect(manifest.start_url).toBe('/')

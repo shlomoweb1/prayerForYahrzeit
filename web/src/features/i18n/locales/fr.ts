@@ -2,8 +2,12 @@ import { he } from './he'
 
 export const fr = {
   common: {
-    brand: 'Yizkor',
-    tagline: 'Feuille commémorative imprimable',
+    brand: 'Tefila La-Neshama',
+    tagline: 'Feuilles de prière commémoratives pour le cimetière',
+    siyata: {
+      he: 'ב׳ס״ד',
+      en: "B'siyata D'shmaya",
+    },
     skipLink: 'Aller au contenu',
     nav: {
       home: 'Accueil',
@@ -13,6 +17,17 @@ export const fr = {
     footer: {
       accessibility: 'Déclaration d’accessibilité',
       rights: 'Tous droits réservés',
+      prayers: 'Prières',
+      categories: {
+        yizkor: 'Yizkor',
+        kaddish: 'Kaddish',
+        psalms: 'Psaumes',
+        mishnayot: 'Mishnayot',
+        hashkava: 'Hachkava',
+      },
+    },
+    cta: {
+      create: 'Créer une prière',
     },
     localeNames: {
       he: 'עברית',
@@ -35,19 +50,55 @@ export const fr = {
   landing: {
     title: 'Créez une feuille commémorative imprimable',
     subtitle:
-      'Saisissez un nom et le site crée une feuille commémorative ornée de psaumes, de kaddish et de mishnayot — à imprimer ou à partager.',
+      'Saisissez un nom et le site crée une belle feuille de prière ornée de psaumes, de kaddish et de mishnayot — à imprimer, à apporter au cimetière et à réciter à la mémoire d’un proche.',
     ctaStart: 'Commencer',
-    howItWorksTitle: 'Comment ça marche',
+    ctaLookInside: 'Voir un exemple',
+    howItWorksTitle: 'Une prière imprimable, prête pour le cimetière',
+    howItWorksIntro:
+      'En quelques minutes, créez une belle feuille de prière à imprimer et à apporter au cimetière — pour la réciter près de la tombe et honorer la mémoire de votre proche.',
+    memorialTitle: 'Honneur à travers les générations',
+    memorialText:
+      'Chaque feuille est composée avec une précision d’imprimerie, dans un format qui honore la tradition — et vous permet de partager le souvenir avec toute la famille.',
+    heroPick: 'Fond :',
     featureItems: {
+      simple: 'Nom hébraïque, genre et rite de prière — la feuille se compose d’elle-même',
 
-      simple: 'Sept étapes simples pour créer votre feuille',
+      preview:
+        'Chaque ligne est composée avec une précision d’imprimerie, telle qu’elle sera imprimée',
 
-      preview: 'Aperçu précis au millimètre',
+      pdf: 'Un PDF soigné, à imprimer chez soi ou chez un imprimeur — prêt pour le cimetière',
 
-      pdf: 'PDF de haute qualité — entièrement dans le navigateur',
-
-      share: 'Les réglages sont conservés dans l’URL, prêts à partager',
-
+      share: 'Envoyez la même prière à vos proches, pour qu’ils la récitent aussi',
+    },
+    featureTitles: {
+      simple: 'Quelques détails simples',
+      preview: 'Voyez la feuille',
+      pdf: 'Imprimez-la',
+      share: 'Partagez en famille',
+    },
+  },
+  theme: {
+    open: 'Thème',
+    dialogTitle: 'Thème et design',
+    dialogDescription: 'Choisissez l’ambiance de la page : couleurs, luminosité et image de fond.',
+    themeGroup: 'Thème',
+    themes: {
+      dusk: 'Crépuscule — lumière de bougie',
+      parchment: 'Parchemin — papier ancien',
+      stone: 'Pierre — Mont des Oliviers',
+    },
+    mode: {
+      light: 'Mode clair',
+      dark: 'Mode sombre',
+    },
+    toggleHint: 'cliquer pour changer',
+    heroGroup: 'Image de fond',
+    heroAuto: 'Automatique',
+    heroRandom: 'Aléatoire',
+    heroImages: {
+      candleDusk: 'Bougie du chabbat au couchant',
+      marbleParchment: 'Marbre parchemin',
+      tombstoneOlives: 'Stèle et oliviers',
     },
   },
   wizard: {
@@ -140,7 +191,8 @@ export const fr = {
     fallback: {
       shareUnsupported:
         'Le partage de fichiers n’est pas pris en charge par ce navigateur — le fichier a été téléchargé et un lien a été copié.',
-      pdfPreviewUnsupported: 'L’aperçu du PDF n’est pas pris en charge par ce navigateur, mais le fichier est prêt.',
+      pdfPreviewUnsupported:
+        'L’aperçu du PDF n’est pas pris en charge par ce navigateur, mais le fichier est prêt.',
     },
     placeholders: {
       name_male: 'ex. : Moshé David',
@@ -197,7 +249,7 @@ export const fr = {
       target: {
         print: 'Un PDF prêt à imprimer, adapté à une imprimante personnelle ou professionnelle.',
         share: 'Un fichier à partager par lien, WhatsApp ou e-mail.',
-        both: 'Un fichier prêt à imprimer, ainsi qu\'une version à partager.',
+        both: "Un fichier prêt à imprimer, ainsi qu'une version à partager.",
       },
       paper: {
         a4: 'Le format standard en Israël, en Europe et dans la majorité du monde.',
@@ -228,7 +280,8 @@ export const fr = {
       share: 'Partager',
       print: 'Imprimer',
       settings: 'Paramètres',
-      scaffoldNote: 'Cette boîte de dialogue sera achevée dans une phase ultérieure du développement.',
+      scaffoldNote:
+        'Cette boîte de dialogue sera achevée dans une phase ultérieure du développement.',
       saveNote: 'L’enregistrement au compte sera disponible dans une version future.',
       shareDescription:
         'Partagez la feuille commémorative en PDF, ou copiez un lien vers les réglages de la feuille.',
@@ -238,7 +291,8 @@ export const fr = {
   a11y: {
     open: 'Accessibilité',
     widgetTitle: 'Préférences d’accessibilité',
-    widgetDescription: 'Les préférences sont enregistrées sur cet appareil et s’appliquent à tout le site.',
+    widgetDescription:
+      'Les préférences sont enregistrées sur cet appareil et s’appliquent à tout le site.',
     textSize: 'Taille du texte',
     textSizeValue: '{{size}}%',
     applied: 'Préférence appliquée',
@@ -265,29 +319,29 @@ export const fr = {
       'Ce site vise à respecter les exigences de la norme israélienne IS 5568, fondée sur WCAG 2.0 niveau AA, conformément à la loi israélienne sur l’égalité des droits des personnes handicapées (1998).',
     featuresTitle: 'Fonctionnalités offertes',
     featuresItems: {
-
-      widget: 'Widget de préférences d’accessibilité (Reg-35) — ouvrir avec Alt+A depuis n’importe quelle page',
+      widget:
+        'Widget de préférences d’accessibilité (Reg-35) — ouvrir avec Alt+A depuis n’importe quelle page',
 
       keyboard: 'Navigation complète au clavier, y compris l’accès direct au contenu',
 
-      languages: 'Hébreu de droite à gauche (RTL) et anglais, espagnol et français de gauche à droite',
+      languages:
+        'Hébreu de droite à gauche (RTL) et anglais, espagnol et français de gauche à droite',
 
       scaling: 'Redimensionnement du texte jusqu’à 150 % sans casser la mise en page (unités rem)',
 
       contrast: 'Contraste des couleurs conforme aux exigences',
 
       nomouse: 'Toutes les fonctions sont utilisables sans souris',
-
     },
     limitationsTitle: 'Limitations connues',
     limitationsItems: {
-
       pdf: 'La prise en charge des lecteurs d’écran dans les fichiers PDF générés est en cours de test et devrait être achevée à la phase 7 — la version actuelle propose une vue HTML accessible en alternative.',
 
-      srMatrix: 'Certains tests professionnels (NVDA, JAWS, VoiceOver, TalkBack) n’ont pas encore été entièrement réalisés.',
-
+      srMatrix:
+        'Certains tests professionnels (NVDA, JAWS, VoiceOver, TalkBack) n’ont pas encore été entièrement réalisés.',
     },
     feedbackTitle: 'Retours',
-    feedbackBody: 'Nous serions ravis de connaître les problèmes d’accessibilité rencontrés. Écrivez-nous à :',
+    feedbackBody:
+      'Nous serions ravis de connaître les problèmes d’accessibilité rencontrés. Écrivez-nous à :',
   },
 } satisfies typeof he

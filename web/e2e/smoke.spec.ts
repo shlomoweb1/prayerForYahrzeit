@@ -13,11 +13,11 @@ async function tabToNextButton(page: Page): Promise<void> {
 test.describe('landing page', () => {
   test('renders Hebrew RTL shell with a11y widget', async ({ page }) => {
     await page.goto('/')
-    await expect(page).toHaveTitle(/יזכור/)
+    await expect(page).toHaveTitle(/תפילה לנשמה/)
     await expect(page.locator('html')).toHaveAttribute('lang', 'he')
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-      'יצירת דף יזכור להדפסה',
+      'לעילוי נשמת הנפטר',
     )
     await expect(page.getByRole('link', { name: 'התחילו כאן' })).toBeVisible()
     await expect(page.getByRole('button', { name: /נגישות/ })).toBeVisible()

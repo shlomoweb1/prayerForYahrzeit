@@ -4,6 +4,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { initI18n } from '@/features/i18n'
+import { ThemeProvider } from '@/features/theme'
 import './css/index.css'
 import { routeTree } from './routeTree.gen'
 
@@ -26,7 +27,9 @@ void initI18n().then(() => {
   createRoot(rootElement).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </QueryClientProvider>
     </StrictMode>,
   )

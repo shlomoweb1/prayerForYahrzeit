@@ -2,8 +2,9 @@ import { he } from './he'
 
 export const en = {
   common: {
-    brand: 'Yizkor',
-    tagline: 'Printable memorial sheet',
+    brand: 'Tefila La-Neshama',
+    tagline: 'Memorial prayer sheets for the cemetery',
+    bsd: "B'siyata D'shmaya",
     skipLink: 'Skip to content',
     nav: {
       home: 'Home',
@@ -13,6 +14,17 @@ export const en = {
     footer: {
       accessibility: 'Accessibility statement',
       rights: 'All rights reserved',
+      prayers: 'Prayers',
+      categories: {
+        yizkor: 'Yizkor',
+        kaddish: 'Kaddish',
+        psalms: 'Psalms',
+        mishnayot: 'Mishnayot',
+        hashkava: 'Hashkava',
+      },
+    },
+    cta: {
+      create: 'Create Prayer',
     },
     localeNames: {
       he: 'עברית',
@@ -35,19 +47,54 @@ export const en = {
   landing: {
     title: 'Create a printable yahrzeit sheet',
     subtitle:
-      'Enter a name and the site builds a beautifully designed memorial sheet with psalms, kaddish and mishnayot — for printing or sharing.',
+      'Enter a name and the site builds a beautifully designed memorial prayer sheet with psalms, kaddish and mishnayot — to print, bring to the graveside, and recite in memory of a loved one.',
     ctaStart: 'Get started',
-    howItWorksTitle: 'How it works',
+    ctaLookInside: 'See an example',
+    howItWorksTitle: 'A printable prayer, ready for the graveside',
+    howItWorksIntro:
+      'In a few minutes you can create a beautiful prayer sheet to print and bring to the cemetery — to recite by the grave and honour your loved one’s memory.',
+    memorialTitle: 'Honour across generations',
+    memorialText:
+      'Every sheet is set with print-house precision, in a format that honours tradition — and lets you share the memory with the whole family.',
+    heroPick: 'Background:',
     featureItems: {
+      simple: 'Hebrew name, gender and prayer rite — the sheet builds itself',
 
-      simple: 'Seven simple steps to create your sheet',
+      preview: 'Every line is set with print-house precision, exactly as it will print',
 
-      preview: 'Millimetre-accurate live preview',
+      pdf: 'A polished PDF to print at home or at a print shop — ready for the cemetery',
 
-      pdf: 'High-quality PDF output — entirely in the browser',
-
-      share: 'Settings are kept in the URL, ready to share',
-
+      share: 'Send the same prayer to relatives, so they can recite it too',
+    },
+    featureTitles: {
+      simple: 'A few simple details',
+      preview: 'See the sheet',
+      pdf: 'Print it',
+      share: 'Share with family',
+    },
+  },
+  theme: {
+    open: 'Theme',
+    dialogTitle: 'Theme and design',
+    dialogDescription: 'Choose the mood of the page: colours, brightness and background image.',
+    themeGroup: 'Theme',
+    themes: {
+      dusk: 'Dusk — candlelight',
+      parchment: 'Parchment — antique paper',
+      stone: 'Stone — Mount of Olives',
+    },
+    mode: {
+      light: 'Light mode',
+      dark: 'Dark mode',
+    },
+    toggleHint: 'click to switch',
+    heroGroup: 'Background image',
+    heroAuto: 'Automatic',
+    heroRandom: 'Random',
+    heroImages: {
+      candleDusk: 'Shabbat candle at sunset',
+      marbleParchment: 'Parchment marble',
+      tombstoneOlives: 'Tombstone and olive trees',
     },
   },
   wizard: {
@@ -66,7 +113,7 @@ export const en = {
       '3': {
         title: 'Name',
         description:
-          'Enter the Hebrew name and the father\'s name, as they will appear at the top of the sheet.',
+          "Enter the Hebrew name and the father's name, as they will appear at the top of the sheet.",
       },
       '4': {
         title: 'Sheet purpose',
@@ -89,7 +136,7 @@ export const en = {
       nusach: 'Nusach',
       name_male: 'Deceased name',
       name_female: 'Deceased name',
-      parent: 'Father\'s name',
+      parent: "Father's name",
       namePreview: 'Preview',
       lineage: 'Lineage',
       font: 'Font',
@@ -265,7 +312,6 @@ export const en = {
       'This site aims to meet the requirements of Israeli Standard IS 5568, based on WCAG 2.0 Level AA, under the Equal Rights for Persons with Disabilities Law, 1998.',
     featuresTitle: 'Features provided',
     featuresItems: {
-
       widget: 'Accessibility preferences widget (Reg-35) — open with Alt+A from any page',
 
       keyboard: 'Full keyboard navigation, including skip-to-content',
@@ -277,15 +323,13 @@ export const en = {
       contrast: 'Colour contrast meeting requirements',
 
       nomouse: 'All functionality available without a mouse',
-
     },
     limitationsTitle: 'Known limitations',
     limitationsItems: {
-
       pdf: 'Screen-reader support in generated PDF files is being tested and is planned to be completed in phase 7 — the current version includes an accessible HTML view as a fallback.',
 
-      srMatrix: 'Some professional tests (NVDA, JAWS, VoiceOver, TalkBack) have not yet been fully performed.',
-
+      srMatrix:
+        'Some professional tests (NVDA, JAWS, VoiceOver, TalkBack) have not yet been fully performed.',
     },
     feedbackTitle: 'Feedback',
     feedbackBody: 'We would love to hear about accessibility issues you encounter. Contact us at:',

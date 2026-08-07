@@ -3,11 +3,17 @@
 @import './generated/sheet-fonts.css';
 @import './preview.css';
 
+@custom-variant lang-he (&:lang(he));
+@custom-variant lang-en (&:lang(en));
+@custom-variant lang-fr (&:lang(fr));
+@custom-variant lang-es (&:lang(es));
+
 @theme {
   --font-sans:
     'Noto Sans Hebrew', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial,
     sans-serif;
   --font-readable: 'Frank Ruhl Libre', Georgia, 'Times New Roman', serif;
+  --font-display: 'Frank Ruhl Libre', 'Noto Serif Hebrew', Georgia, 'Times New Roman', serif;
   --color-link: oklch(0.51 0.19 258);
   --color-success: oklch(0.6401 0.1751 146.74);
   --color-light: oklch(0.91 0.19 106.56)
@@ -37,6 +43,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-veil: var(--veil);
 }
 
 :root {
@@ -60,7 +69,192 @@
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.705 0.015 286.067);
+  /* Theme extras (fallback = dusk dark) */
+  --gold: oklch(0.78 0.13 80);
+  --gold-foreground: oklch(0.2 0.03 265);
+  --veil: oklch(0.15 0.02 265 / 0.62);
+  --app-backdrop: url('/images/Yorzait-candle-sunset.png');
   color-scheme: light;
+}
+
+/*
+ * Theme blocks. Scoped with :where() only around the attributes so the themed
+ * variables keep :root's specificity but a11y-contrast (html.a11y-contrast,
+ * spec 0,1,1) still overrides them. Base :root is the fallback.
+ */
+
+:root:where([data-theme='dusk'][data-theme-mode='light']) {
+  /* Dusk-light: hazy stone-dawn, candle amber. */
+  --background: oklch(0.96 0.01 85);
+  --foreground: oklch(0.27 0.03 265);
+  --card: oklch(0.99 0.008 85);
+  --card-foreground: oklch(0.27 0.03 265);
+  --popover: oklch(0.99 0.008 85);
+  --popover-foreground: oklch(0.27 0.03 265);
+  --primary: oklch(0.72 0.14 80);
+  --primary-foreground: oklch(0.19 0.03 265);
+  --secondary: oklch(0.92 0.015 85);
+  --secondary-foreground: oklch(0.27 0.03 265);
+  --muted: oklch(0.93 0.015 85);
+  --muted-foreground: oklch(0.5 0.03 265);
+  --accent: oklch(0.6 0.13 60);
+  --accent-foreground: oklch(0.985 0.005 85);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.87 0.02 85);
+  --input: oklch(0.87 0.02 85);
+  --ring: oklch(0.72 0.14 80);
+  --color-link: oklch(0.51 0.12 55);
+  --gold: oklch(0.62 0.12 70);
+  --gold-foreground: oklch(0.985 0.005 85);
+  --veil: oklch(0.27 0.03 265 / 0.35);
+  --app-backdrop: url('/images/Yorzait-candle-sunset.png');
+  color-scheme: light;
+}
+
+:root:where([data-theme='dusk'][data-theme-mode='dark']) {
+  /* Dusk-dark (default): twilight navy, candle amber, embers. */
+  --background: oklch(0.16 0.025 275);
+  --foreground: oklch(0.93 0.015 85);
+  --card: oklch(0.2 0.02 275);
+  --card-foreground: oklch(0.93 0.015 85);
+  --popover: oklch(0.2 0.02 275);
+  --popover-foreground: oklch(0.93 0.015 85);
+  --primary: oklch(0.78 0.13 80);
+  --primary-foreground: oklch(0.19 0.03 275);
+  --secondary: oklch(0.24 0.02 275);
+  --secondary-foreground: oklch(0.93 0.015 85);
+  --muted: oklch(0.28 0.02 275);
+  --muted-foreground: oklch(0.72 0.025 85);
+  --accent: oklch(0.6 0.13 60);
+  --accent-foreground: oklch(0.985 0.005 85);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.3 0.02 275);
+  --input: oklch(0.3 0.02 275);
+  --ring: oklch(0.78 0.13 80);
+  --color-link: oklch(0.8 0.11 75);
+  --gold: oklch(0.78 0.13 80);
+  --gold-foreground: oklch(0.19 0.03 275);
+  --veil: oklch(0.15 0.02 265 / 0.62);
+  --app-backdrop: url('/images/Yorzait-candle-sunset.png');
+  color-scheme: dark;
+}
+
+:root:where([data-theme='parchment'][data-theme-mode='light']) {
+  /* Parchment-light: warm paper + ink, old-gold accents. */
+  --background: oklch(0.965 0.012 88);
+  --foreground: oklch(0.3 0.02 60);
+  --card: oklch(0.99 0.008 88);
+  --card-foreground: oklch(0.3 0.02 60);
+  --popover: oklch(0.99 0.008 88);
+  --popover-foreground: oklch(0.3 0.02 60);
+  --primary: oklch(0.55 0.07 55);
+  --primary-foreground: oklch(0.985 0.005 88);
+  --secondary: oklch(0.93 0.015 88);
+  --secondary-foreground: oklch(0.32 0.02 60);
+  --muted: oklch(0.93 0.015 88);
+  --muted-foreground: oklch(0.52 0.025 60);
+  --accent: oklch(0.62 0.1 70);
+  --accent-foreground: oklch(0.24 0.03 60);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.87 0.02 88);
+  --input: oklch(0.87 0.02 88);
+  --ring: oklch(0.62 0.1 70);
+  --color-link: oklch(0.51 0.08 55);
+  --gold: oklch(0.68 0.12 80);
+  --gold-foreground: oklch(0.985 0.005 88);
+  --veil: oklch(0.3 0.02 60 / 0.35);
+  --app-backdrop: url('/images/magnific_subtle-marble-and-fine-ha_yi4LguxPW9.jpg');
+  color-scheme: light;
+}
+
+:root:where([data-theme='parchment'][data-theme-mode='dark']) {
+  /* Parchment-dark: night ink on warm deep-brown paper. */
+  --background: oklch(0.14 0.015 60);
+  --foreground: oklch(0.92 0.015 88);
+  --card: oklch(0.18 0.015 60);
+  --card-foreground: oklch(0.92 0.015 88);
+  --popover: oklch(0.18 0.015 60);
+  --popover-foreground: oklch(0.92 0.015 88);
+  --primary: oklch(0.7 0.11 80);
+  --primary-foreground: oklch(0.2 0.02 60);
+  --secondary: oklch(0.24 0.015 60);
+  --secondary-foreground: oklch(0.92 0.015 88);
+  --muted: oklch(0.26 0.015 60);
+  --muted-foreground: oklch(0.7 0.025 88);
+  --accent: oklch(0.62 0.1 70);
+  --accent-foreground: oklch(0.22 0.03 60);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.3 0.02 60);
+  --input: oklch(0.3 0.02 60);
+  --ring: oklch(0.7 0.11 80);
+  --color-link: oklch(0.72 0.09 75);
+  --gold: oklch(0.72 0.11 85);
+  --gold-foreground: oklch(0.2 0.02 60);
+  --veil: oklch(0.14 0.015 60 / 0.62);
+  --app-backdrop: url('/images/magnific_subtle-marble-and-fine-ha_yi4LguxPW9.jpg');
+  color-scheme: dark;
+}
+
+:root:where([data-theme='stone'][data-theme-mode='light']) {
+  /* Stone-light: Jerusalem limestone + olive, aged gold. */
+  --background: oklch(0.955 0.012 95);
+  --foreground: oklch(0.3 0.03 130);
+  --card: oklch(0.99 0.008 95);
+  --card-foreground: oklch(0.3 0.03 130);
+  --popover: oklch(0.99 0.008 95);
+  --popover-foreground: oklch(0.3 0.03 130);
+  --primary: oklch(0.5 0.09 165);
+  --primary-foreground: oklch(0.985 0.005 95);
+  --secondary: oklch(0.93 0.015 95);
+  --secondary-foreground: oklch(0.3 0.03 130);
+  --muted: oklch(0.93 0.015 95);
+  --muted-foreground: oklch(0.5 0.03 130);
+  --accent: oklch(0.68 0.12 85);
+  --accent-foreground: oklch(0.22 0.03 130);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.88 0.02 95);
+  --input: oklch(0.88 0.02 95);
+  --ring: oklch(0.68 0.12 85);
+  --color-link: oklch(0.51 0.09 160);
+  --gold: oklch(0.68 0.12 85);
+  --gold-foreground: oklch(0.22 0.03 130);
+  --veil: oklch(0.3 0.03 130 / 0.35);
+  --app-backdrop: url('/images/kadish-on-tumbe.png');
+  color-scheme: light;
+}
+
+:root:where([data-theme='stone'][data-theme-mode='dark']) {
+  /* Stone-dark: olive dusk, graveyard-light, aged gold. */
+  --background: oklch(0.16 0.02 135);
+  --foreground: oklch(0.93 0.01 95);
+  --card: oklch(0.2 0.02 135);
+  --card-foreground: oklch(0.93 0.01 95);
+  --popover: oklch(0.2 0.02 135);
+  --popover-foreground: oklch(0.93 0.01 95);
+  --primary: oklch(0.6 0.1 160);
+  --primary-foreground: oklch(0.2 0.02 135);
+  --secondary: oklch(0.24 0.02 135);
+  --secondary-foreground: oklch(0.93 0.01 95);
+  --muted: oklch(0.28 0.02 135);
+  --muted-foreground: oklch(0.71 0.02 95);
+  --accent: oklch(0.68 0.12 85);
+  --accent-foreground: oklch(0.2 0.02 135);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.3 0.02 135);
+  --input: oklch(0.3 0.02 135);
+  --ring: oklch(0.68 0.12 85);
+  --color-link: oklch(0.74 0.1 95);
+  --gold: oklch(0.72 0.12 90);
+  --gold-foreground: oklch(0.2 0.02 135);
+  --veil: oklch(0.14 0.02 135 / 0.62);
+  --app-backdrop: url('/images/kadish-on-tumbe.png');
+  color-scheme: dark;
 }
 
 @layer base {
@@ -75,6 +269,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    @apply lang-he:font-shofar;
     -webkit-font-smoothing: antialiased;
   }
   h1,
@@ -174,6 +369,36 @@ html.a11y-stop-animations *::before,
 html.a11y-stop-animations *::after {
   animation: none !important;
   transition: none !important;
+}
+
+/* ---------- Memorial candle flame ---------- */
+
+@keyframes izkor-flame-flicker {
+  0%,
+  100% {
+    transform: rotate(-2deg) scale(1);
+  }
+  20% {
+    transform: rotate(2deg) scale(1.06, 0.94);
+  }
+  45% {
+    transform: rotate(-1deg) scale(0.94, 1.06);
+  }
+  70% {
+    transform: rotate(1.5deg) scale(1.04, 0.95);
+  }
+}
+
+.candle-flame {
+  transform-origin: 50% 90%;
+  transform-box: fill-box;
+  animation: izkor-flame-flicker 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candle-flame {
+    animation: none;
+  }
 }
 
 /* ---------- Print-CSS reset: a11y classes must not leak into PDF capture ---------- */

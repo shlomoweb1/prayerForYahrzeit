@@ -9,10 +9,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="יצירת דף יזכור להדפסה — מזכרת נשמה עם תהילים, קדיש ומשניות"
+      content="בניית דף תפילה מהודר להדפסה — תהילים, קדיש, משניות והשכבה — לקריאה בבית העלמין ולשיתוף עם המשפחה"
     />
-    <meta name="theme-color" content="#863bff" />
-    <title>עלייה לקבר - הדפסת תפילה</title>
+    <meta name="theme-color" content="#141a2e" />
+    <title>תפילה לנשמה — דף תפילה לקריאה בבית העלמין</title>
+    <script>
+      ;(function () {
+        var KEY = 'izkor:theme:v1'
+        var THEMES = ['dusk', 'parchment', 'stone']
+        var MODES = ['light', 'dark']
+        var state = { theme: 'dusk', mode: 'dark' }
+        try {
+          var stored = JSON.parse(window.localStorage.getItem(KEY) || 'null')
+          if (stored && typeof stored === 'object') {
+            if (THEMES.indexOf(stored.theme) !== -1) state.theme = stored.theme
+            if (MODES.indexOf(stored.mode) !== -1) state.mode = stored.mode
+          }
+        } catch (e) {
+          state = { theme: 'dusk', mode: 'dark' }
+        }
+        var root = document.documentElement
+        root.dataset.theme = state.theme
+        root.dataset.themeMode = state.mode
+        root.style.colorScheme = state.mode
+      })()
+    </script>
     <script>
       ;(function () {
         var LOCALE_KEY = 'izkor:locale:v1'

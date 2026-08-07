@@ -11,8 +11,8 @@ interface StepProps {
 }
 
 const GENDER_IMAGES: Record<WizardQuery['gender'], string> = {
-  male: '/images/male.png',
-  female: '/images/female.png',
+  male: '/images/man3.png',
+  female: '/images/female2.png',
 }
 
 export function Step1Gender({ search, setSearch }: StepProps) {
