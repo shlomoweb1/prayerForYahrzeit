@@ -14,6 +14,7 @@ The single source of truth for the izkor project. Every architectural and produc
 | [06-accessibility.md](06-accessibility.md) | IS 5568 / WCAG 2.0 AA, Reg-35 widget, statement page | approved |
 | [07-firebase.md](07-firebase.md) | Hosting / Firestore / Storage / Auth, share-link flow | approved |
 | [08-phases.md](08-phases.md) | Execution phases 1–7, mapping to `todo/` files | in-progress |
+| [09-step5-per-element-fonts.md](09-step5-per-element-fonts.md) | Step 5 redesign: 18 per-element fonts, sheet inventory, panel UI | approved |
 
 ## Status vocabulary
 
