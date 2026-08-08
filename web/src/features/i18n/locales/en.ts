@@ -4,12 +4,16 @@ export const en = {
   common: {
     brand: 'Tefila La-Neshama',
     tagline: 'Memorial prayer sheets for the cemetery',
-    bsd: "B'siyata D'shmaya",
+    siyata: {
+      he: 'בס״ד',
+      en: "B'siyata D'shmaya",
+    },
     skipLink: 'Skip to content',
     nav: {
       home: 'Home',
       wizard: 'Create sheet',
       accessibility: 'Accessibility',
+      about: 'About',
     },
     footer: {
       accessibility: 'Accessibility statement',
@@ -328,5 +332,23 @@ export const en = {
     },
     feedbackTitle: 'Feedback',
     feedbackBody: 'We would love to hear about accessibility issues you encounter. Contact us at:',
+  },
+  aboutPage: {
+    title: 'About',
+    photoAlt: 'A portrait of Shlomo',
+    contact: {
+      title: 'Contact',
+      description:
+        'Looking for someone to build a system, website, or project? Write a few lines and I will get back to you.',
+      emailLabel: 'Your email',
+      emailPlaceholder: 'How I can reach you',
+      messageLabel: 'Message',
+      messagePlaceholder: 'Tell me about the project…',
+      send: 'Send',
+      sending: 'Sending…',
+      success: 'Message sent. I will get back to you soon.',
+      error: 'Sending failed. Please try again in a moment.',
+      subject: 'New message from the About page',
+    },
   },
 } satisfies typeof he

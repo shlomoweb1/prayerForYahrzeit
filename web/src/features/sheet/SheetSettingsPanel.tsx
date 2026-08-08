@@ -74,6 +74,55 @@ function FontSelect({
   )
 }
 
+/**
+ * A segmented pill control backed by a RadioGroup (each option stays a real
+ * radio input, just visually hidden), so keyboard/tab behavior is unchanged.
+ * Options render as a 2-column grid of toggle-like buttons; the selected one
+ * is highlighted. Labels come from the caller so translation keys stay
+ * statically typed.
+ */
+function SegmentedRadioGroup<V extends string>({
+  idPrefix,
+  name,
+  value,
+  onValueChange,
+  options,
+  getLabel,
+}: {
+  idPrefix: string
+  name: string
+  value: V
+  onValueChange: (value: string) => void
+  options: readonly V[]
+  getLabel: (option: V) => string
+}) {
+  return (
+    <RadioGroup
+      id={`${idPrefix}-${name}`}
+      value={value}
+      onValueChange={onValueChange}
+      className="grid grid-cols-2 gap-2"
+    >
+      {options.map((option, index) => (
+        <Label
+          key={option}
+          htmlFor={`${idPrefix}-${name}-${option}`}
+          className={cn(
+            'cursor-pointer justify-center rounded-md border px-3 py-2 text-center text-sm font-medium transition-colors',
+            options.length % 2 === 1 && index === options.length - 1 && 'col-span-2',
+            value === option
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'text-muted-foreground hover:border-primary/50 hover:text-foreground',
+          )}
+        >
+          <RadioGroupItem id={`${idPrefix}-${name}-${option}`} value={option} className="sr-only" />
+          {getLabel(option)}
+        </Label>
+      ))}
+    </RadioGroup>
+  )
+}
+
 function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPanelProps & { idPrefix: string }) {
   const { t } = useTranslation()
   const isAdvanced = search.editorMode === 'advanced'
@@ -89,30 +138,14 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
     <div className="flex flex-col gap-4">
       <div className="grid gap-2">
         <Label htmlFor={`${idPrefix}-editor-mode`}>{t('wizard.labels.editorMode')}</Label>
-        <RadioGroup
-          id={`${idPrefix}-editor-mode`}
+        <SegmentedRadioGroup
+          idPrefix={idPrefix}
+          name="editorMode"
           value={search.editorMode}
           onValueChange={(value) => setSearch({ editorMode: value as 'simple' | 'advanced' })}
-          className="grid grid-cols-2 gap-2"
-        >
-          {(['simple', 'advanced'] as const).map((mode) => (
-            <Label
-              key={mode}
-              htmlFor={`${idPrefix}-editor-mode-${mode}`}
-              className={cn(
-                'cursor-pointer justify-center rounded-md border px-3 py-2 text-sm font-medium transition-colors',
-                search.editorMode === mode ? 'border-primary bg-primary/10 text-primary' : 'text-muted-foreground',
-              )}
-            >
-              <RadioGroupItem
-                id={`${idPrefix}-editor-mode-${mode}`}
-                value={mode}
-                className="sr-only"
-              />
-              {t(`wizard.options.editorMode.${mode}`)}
-            </Label>
-          ))}
-        </RadioGroup>
+          options={['simple', 'advanced']}
+          getLabel={(mode) => t(`wizard.options.editorMode.${mode}`)}
+        />
       </div>
 
       <SettingsGroup title={t('wizard.groups.design')}>
@@ -223,23 +256,17 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
         </div>
 
         <div className="grid gap-2">
-          <Label>{t('wizard.labels.acrostic')}</Label>
-          <RadioGroup
+          <Label htmlFor={`${idPrefix}-acrostic`}>{t('wizard.labels.acrostic')}</Label>
+          <SegmentedRadioGroup
+            idPrefix={idPrefix}
+            name="acrostic"
             value={search.acrostic}
             onValueChange={(value) =>
               setSearch({ acrostic: value as 'both' | 'name' | 'parent' | 'none' })
             }
-            className="flex flex-col gap-2"
-          >
-            {(['both', 'name', 'parent', 'none'] as const).map((mode) => (
-              <div key={mode} className="flex items-center gap-2">
-                <RadioGroupItem value={mode} id={`${idPrefix}-acrostic-${mode}`} />
-                <Label htmlFor={`${idPrefix}-acrostic-${mode}`}>
-                  {t(`wizard.options.acrostic.${mode}`)}
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
+            options={['both', 'name', 'parent', 'none']}
+            getLabel={(mode) => t(`wizard.options.acrostic.${mode}`)}
+          />
         </div>
       </SettingsGroup>
 
@@ -258,22 +285,16 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
                 </Label>
               </div>
               {section === 'hashkava' && search.sections.includes('hashkava') ? (
-                <RadioGroup
+                <SegmentedRadioGroup
+                  idPrefix={idPrefix}
+                  name="hashkava"
                   value={search.hashkavaVariant}
                   onValueChange={(value) =>
                     setSearch({ hashkavaVariant: value as 'elMaleh' | 'traditional' | 'both' })
                   }
-                  className="border-muted ms-2 flex flex-col gap-2 border-s-2 ps-4"
-                >
-                  {(['elMaleh', 'traditional', 'both'] as const).map((variant) => (
-                    <div key={variant} className="flex items-center gap-2">
-                      <RadioGroupItem value={variant} id={`${idPrefix}-hashkava-${variant}`} />
-                      <Label htmlFor={`${idPrefix}-hashkava-${variant}`}>
-                        {t(`wizard.options.hashkavaVariant.${variant}`)}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+                  options={['elMaleh', 'traditional', 'both']}
+                  getLabel={(variant) => t(`wizard.options.hashkavaVariant.${variant}`)}
+                />
               ) : null}
             </div>
           ))}

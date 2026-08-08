@@ -13,6 +13,7 @@ export const es = {
       home: 'Inicio',
       wizard: 'Crear hoja',
       accessibility: 'Accesibilidad',
+      about: 'Acerca de',
     },
     footer: {
       accessibility: 'Declaración de accesibilidad',
@@ -337,5 +338,23 @@ export const es = {
     feedbackTitle: 'Comentarios',
     feedbackBody:
       'Nos encantaría conocer los problemas de accesibilidad que encuentre. Escríbanos a:',
+  },
+  aboutPage: {
+    title: 'Acerca de',
+    photoAlt: 'Un retrato de Shlomo',
+    contact: {
+      title: 'Contacto',
+      description:
+        '¿Busca a alguien que construya un sistema, un sitio web o un proyecto? Escríbame unas líneas y le responderé.',
+      emailLabel: 'Su correo electrónico',
+      emailPlaceholder: 'Cómo puedo ponerme en contacto',
+      messageLabel: 'Mensaje',
+      messagePlaceholder: 'Cuénteme sobre el proyecto…',
+      send: 'Enviar',
+      sending: 'Enviando…',
+      success: 'Mensaje enviado. Le responderé pronto.',
+      error: 'No se pudo enviar. Inténtelo de nuevo en un momento.',
+      subject: 'Nuevo mensaje de la página Acerca de',
+    },
   },
 } satisfies typeof he

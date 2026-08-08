@@ -15,13 +15,20 @@ export default function Header() {
 
 
           <span className="font-display text-xl text-gold lang-he:font-keter">
-            {t('common.bsd')}
+            {t('common.siyata.he')}
           </span>
           {
             location.pathname !== '/' && (
               <Link to="/" className="group font-display text-xl text-muted-foreground lang-he:font-keter flex items-center gap-1 no-underline hover:text-gold">
                 <HomeIcon className="size-6 border rounded-sm p-0.75 border-muted-foreground group-hover:border-gold" />
-                <span>דף הבית</span>
+                <span>{t('common.nav.home')}</span>
+              </Link>
+            )
+          }
+          {
+            location.pathname !== '/about' && (
+              <Link to="/about" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+                {t('common.nav.about')}
               </Link>
             )
           }

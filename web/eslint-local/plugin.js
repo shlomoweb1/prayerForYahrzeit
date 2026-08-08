@@ -13,7 +13,8 @@ const LOGICAL_PROP_SUGGESTIONS = [
   [/^rounded-br(-|$)/, 'rounded-ee-'],
   [/^left-/, 'start- (inset-inline-start)'],
   [/^right-/, 'end- (inset-inline-end)'],
-  [/^inset-x/, 'inset-inline'],
+  // NOTE: inset-x-* is intentionally NOT flagged — in Tailwind v4 it compiles
+  // to `inset-inline` (logical), and there is no `inset-inline-*` utility.
   [/^text-left/, 'text-start'],
   [/^text-right/, 'text-end'],
   [/^float-left/, 'float-start'],

@@ -315,7 +315,7 @@ export function Step5Review({ search, setSearch }: StepProps) {
           type="button"
           aria-label={t('common.previous')}
           onClick={() => setSearch({ step: search.step - 1 })}
-          className="fixed top-16 min-[1050px]:top-4 inset-inline-start-4 z-40 flex size-9 items-center justify-center rounded-full border bg-background shadow-md print:hidden"
+          className="fixed top-16 min-[1050px]:top-4 inset-s-4 z-40 flex size-9 items-center justify-center rounded-full border bg-background shadow-md print:hidden"
         >
           <ArrowLeft className="size-4 rtl:-scale-x-100" />
         </button>

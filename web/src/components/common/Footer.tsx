@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import { A11yWidget } from '@/features/a11y/widget'

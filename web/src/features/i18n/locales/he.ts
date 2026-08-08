@@ -2,12 +2,16 @@ export const he = {
   common: {
     brand: 'תפילה לנשמה',
     tagline: 'דף תפילה מהודר לקריאה בבית העלמין',
-    bsd: 'בס״ד',
+    siyata: {
+      he: 'בס״ד',
+      en: "B'siyata D'shmaya",
+    },
     skipLink: 'דלג לתוכן',
     nav: {
       home: 'בית',
       wizard: 'יצירת דף',
       accessibility: 'נגישות',
+      about: 'אודות',
     },
     footer: {
       accessibility: 'הצהרת נגישות',
@@ -324,5 +328,22 @@ export const he = {
     },
     feedbackTitle: 'משוב ופניות',
     feedbackBody: 'נשמח לשמוע על בעיות נגישות שנתקלתם בהן. ניתן לפנות אלינו בכתובת:',
+  },
+  aboutPage: {
+    title: 'אודות',
+    photoAlt: 'תמונת פרופיל של שלמה',
+    contact: {
+      title: 'יצירת קשר',
+      description: 'מחפשים בונה למערכת, אתר או פרויקט? כתבו כמה שורות ואחזור אליכם.',
+      emailLabel: 'האימייל שלכם',
+      emailPlaceholder: 'איך אחזור אליכם',
+      messageLabel: 'ההודעה',
+      messagePlaceholder: 'ספרו לי על הפרויקט…',
+      send: 'שליחה',
+      sending: 'שולח…',
+      success: 'ההודעה נשלחה. אחזור אליכם בקרוב.',
+      error: 'השליחה נכשלה. נסו שוב בעוד רגע.',
+      subject: 'הודעה חדשה מעמוד האודות',
+    },
   },
 }

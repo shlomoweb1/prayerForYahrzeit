@@ -47,6 +47,8 @@
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.84.0",
     "react-i18next": "^17.0.11",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",

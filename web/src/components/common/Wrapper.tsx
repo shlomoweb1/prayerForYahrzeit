@@ -2,6 +2,7 @@ import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import Header from './Header'
 import Footer from './Footer'
+import { Toaster } from '@/components/ui/sonner'
 import { FloatingPrayerCta } from './FloatingPrayerCta'
 import { STEP_MAX } from '@/features/wizard/wizard-query'
 import { cn } from '@/lib/utils'
@@ -44,6 +45,7 @@ export default function WrapperComponent() {
         </div>
       </main>
       <Footer />
+      <Toaster />
       <FloatingPrayerCta hidden={isAppShell || inWizard} />
     </div>
   )
