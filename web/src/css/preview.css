@@ -47,25 +47,25 @@ div[data-page] {
   padding: var(--izkor-margin-y, 1cm) var(--izkor-margin-x, 1cm);
   font-size: var(--izkor-base-font-size, 14.7px);
   line-height: var(--izkor-line-height, 1.45);
-  font-family: var(--izkor-font-default, inherit);
+  font-family: var(--izkor-font-default, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
   [data-section="header"]{
     @apply flex flex-row relative;
     margin-bottom: 0.6em;
     [data-content="bsd"]{
       @apply absolute right-0 top-0 text-sm;
-      font-family: var(--izkor-font-bsd, inherit);
+      font-family: var(--izkor-font-bsd, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
     }
     [data-content="title"]{
       @apply text-center block w-full;
       h1{
         @apply font-bold;
-        font-family: var(--izkor-font-sheetTitle, inherit);
+        font-family: var(--izkor-font-sheetTitle, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         font-size: var(--izkor-title-font-size, 23px);
         margin: 0 0 0.15em;
       }
       h2{
         @apply text-sm font-bold;
-        font-family: var(--izkor-font-nameLine, inherit);
+        font-family: var(--izkor-font-nameLine, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         margin: 0;
       }
     }
@@ -76,7 +76,7 @@ div[data-page] {
     overflow: hidden;
     [data-content="section-title"]{
       @apply text-center font-bold;
-      font-family: var(--izkor-font-sectionTitle, inherit);
+      font-family: var(--izkor-font-sectionTitle, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       font-size: var(--izkor-heading-font-size, 15px);
       margin: 0.5em 0 0.35em;
     }
@@ -85,7 +85,7 @@ div[data-page] {
        each gets its own badge/text font pair. */
     [data-content="chapter-flow"]{
       @apply text-right;
-      font-family: var(--izkor-font-psalmText, inherit);
+      font-family: var(--izkor-font-psalmText, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       letter-spacing: 0.012em;
       word-spacing: 0.06em;
       margin-bottom: 0.55em;
@@ -94,7 +94,7 @@ div[data-page] {
       }
       [data-content="chapter-badge"]{
         @apply inline-flex flex-col items-center justify-center bg-black text-white align-middle rounded-xs;
-        font-family: var(--izkor-font-psalmBadge, inherit);
+        font-family: var(--izkor-font-psalmBadge, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         height: 1.625em;
         padding: 0 0.35em;
         margin-inline-end: 0.4em;
@@ -106,48 +106,48 @@ div[data-page] {
         }
       }
       &[data-letters]{
-        font-family: var(--izkor-font-letterText, inherit);
+        font-family: var(--izkor-font-letterText, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         [data-content="chapter-badge"]{
-          font-family: var(--izkor-font-letterBadge, inherit);
+          font-family: var(--izkor-font-letterBadge, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         }
       }
       &[data-type="mishnah-flow"]{
-        font-family: var(--izkor-font-mishnahText, inherit);
+        font-family: var(--izkor-font-mishnahText, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         [data-content="chapter-badge"]{
-          font-family: var(--izkor-font-mishnahBadge, inherit);
+          font-family: var(--izkor-font-mishnahBadge, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
         }
       }
     }
     [data-content="block"]{
       @apply text-center;
-      font-family: var(--izkor-font-default, inherit);
+      font-family: var(--izkor-font-default, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       margin-bottom: 0.5em;
       b{
         @apply font-bold;
       }
       &[data-prayer="blessing"]{
-        font-family: var(--izkor-font-blessingText, inherit);
+        font-family: var(--izkor-font-blessingText, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       }
       &[data-prayer="elMaleh"]{
-        font-family: var(--izkor-font-elMalehText, inherit);
+        font-family: var(--izkor-font-elMalehText, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       }
       &[data-prayer="hashkava"]{
-        font-family: var(--izkor-font-hashkavaText, inherit);
+        font-family: var(--izkor-font-hashkavaText, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       }
       &[data-prayer="closing-0"]{
-        font-family: var(--izkor-font-closingDryBones, inherit);
+        font-family: var(--izkor-font-closingDryBones, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       }
       &[data-prayer="closing-1"]{
-        font-family: var(--izkor-font-closingAvHaRachamim, inherit);
+        font-family: var(--izkor-font-closingAvHaRachamim, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       }
       &[data-prayer="closing-2"]{
-        font-family: var(--izkor-font-closingParting, inherit);
+        font-family: var(--izkor-font-closingParting, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
       }
     }
   }
   [data-section="footer"]{
     @apply flex flex-row;
-    font-family: var(--izkor-font-default, inherit);
+    font-family: var(--izkor-font-default, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
     [data-content="footer-text"]{
       @apply grow text-sm;
     }
@@ -169,13 +169,13 @@ div[data-page="a4"] {
   /* Base for the whole block — covers the joint (יהא שמיה רבא) and note
      lines too, which aren't individually font-controllable and read as part
      of the mourner's recitation. */
-  font-family: var(--izkor-font-kaddishMourner, inherit);
+  font-family: var(--izkor-font-kaddishMourner, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
     [data-speaker="mourner"]{
-      font-family: var(--izkor-font-kaddishMourner, inherit);
+      font-family: var(--izkor-font-kaddishMourner, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
     }
     [data-speaker="congregation"]{
       @apply mx-1 text-[0.8em];
-      font-family: var(--izkor-font-kaddishCongregation, inherit);
+      font-family: var(--izkor-font-kaddishCongregation, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
     }
     [data-content="kaddish-sections"] {
       @apply text-justify;
