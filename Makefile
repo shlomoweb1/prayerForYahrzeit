@@ -15,8 +15,10 @@ install:
 	$(NPM) install
 
 ## dev — Vite dev server (HMR) for development
+##   make dev HOST=--host  → bind 0.0.0.0, reachable on the LAN (e.g. http://10.0.0.100:5173)
+HOST ?=
 dev:
-	$(NPM) run dev
+	$(NPM) run dev -- $(HOST)
 
 ## build — production build (tsc + vite build)
 build:

@@ -5,15 +5,18 @@
  * section toggles) bound to the wizard URL query, so every change is
  * immediately reflected in the live preview and survives a reload.
  *
- * Simple / advanced mode: `editorMode` gates a second tier of controls
- * (per-role fonts, line density) that only make sense once someone wants
- * finer control — simple mode keeps the original one-font, one-density
- * surface. Controls are grouped under headings (design, content, sections)
- * rather than one flat list, both because RTL scanning benefits from clear
- * visual chunks and because this panel keeps growing.
+ * Simple / advanced mode: a local (non-URL) toggle gates a second tier of
+ * controls — the per-element font list and line density — that only make
+ * sense once someone wants finer control; simple mode keeps the original
+ * one-font, one-density surface. The per-element list covers every sheet
+ * element (SHEET_ELEMENT_FONTS), grouped under the same headings the sheet
+ * itself uses, each row writing its own `fontXxx` query key (see
+ * elementFontQueryKey). Controls are grouped under headings (design,
+ * content, sections) rather than one flat list, both because RTL scanning
+ * benefits from clear visual chunks and because this panel keeps growing.
  */
 
-import { DownloadIcon, FileCode2Icon, FileTextIcon } from 'lucide-react'
+import { DownloadIcon, FileCode2Icon, FileTextIcon, PencilIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useId, useState } from 'react'
 import type { ReactNode } from 'react'
@@ -25,9 +28,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { SHEET_FONTS } from '@/features/sheet/fonts'
+import { elementFontQueryKey } from '@/features/sheet/from-query'
 import { SHEET_FONT_CLASS } from '@/features/sheet/generated/sheet-font-ids'
 import { SHEET_SECTIONS } from '@/features/sheet/layout'
-import type { SheetFontId } from '@/features/sheet/layout'
+import type { SheetElementFont, SheetFontId } from '@/features/sheet/layout'
 import { cn } from '@/lib/utils'
 import { downloadBlob, exportSheetHtml } from '@/features/wizard/sheet-actions'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
@@ -37,6 +41,22 @@ export interface SheetSettingsPanelProps {
   setSearch: (patch: Partial<WizardQuery>) => void
   className?: string
 }
+
+/**
+ * Every sheet element that can carry its own font, grouped under the
+ * headings the sheet itself uses (header, psalms, letters, kaddish,
+ * mishnayot, blessing & closing) — the order SHEET_ELEMENT_FONTS lists them
+ * in, split where the sheet visually splits. Each element's row reads/writes
+ * its own `fontXxx` query key via elementFontQueryKey.
+ */
+const FONT_GROUPS: { groupKey: 'fontHeader' | 'fontPsalms' | 'fontLetters' | 'fontKaddish' | 'fontMishnayot' | 'fontPrayers'; elements: SheetElementFont[] }[] = [
+  { groupKey: 'fontHeader', elements: ['bsd', 'sheetTitle', 'nameLine'] },
+  { groupKey: 'fontPsalms', elements: ['psalmBadge', 'psalmText'] },
+  { groupKey: 'fontLetters', elements: ['letterBadge', 'letterText'] },
+  { groupKey: 'fontKaddish', elements: ['kaddishMourner', 'kaddishCongregation'] },
+  { groupKey: 'fontMishnayot', elements: ['mishnahBadge', 'mishnahText'] },
+  { groupKey: 'fontPrayers', elements: ['blessingText', 'elMalehText', 'hashkavaText', 'closingDryBones', 'closingAvHaRachamim', 'closingParting'] },
+]
 
 /** A labeled group of controls, visually separated from the next one — the
  * drawer reads as a handful of clear sections instead of one flat list. */
@@ -81,7 +101,7 @@ function FontSelect({
  * is highlighted. Labels come from the caller so translation keys stay
  * statically typed.
  */
-function SegmentedRadioGroup<V extends string>({
+export function SegmentedRadioGroup<V extends string>({
   idPrefix,
   name,
   value,
@@ -125,7 +145,7 @@ function SegmentedRadioGroup<V extends string>({
 
 function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPanelProps & { idPrefix: string }) {
   const { t } = useTranslation()
-  const isAdvanced = search.editorMode === 'advanced'
+  const [isAdvanced, setIsAdvanced] = useState(false)
 
   const toggleSection = (section: (typeof SHEET_SECTIONS)[number], checked: boolean) => {
     const next = checked
@@ -134,47 +154,44 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
     setSearch({ sections: next })
   }
 
+  const setElementFont = (element: SheetElementFont, value: SheetFontId) => {
+    setSearch({ [elementFontQueryKey(element)]: value } as Partial<WizardQuery>)
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="grid gap-2">
-        <Label htmlFor={`${idPrefix}-editor-mode`}>{t('wizard.labels.editorMode')}</Label>
+        <Label htmlFor={`${idPrefix}-settings-mode`}>{t('wizard.labels.settingsMode')}</Label>
         <SegmentedRadioGroup
           idPrefix={idPrefix}
-          name="editorMode"
-          value={search.editorMode}
-          onValueChange={(value) => setSearch({ editorMode: value as 'simple' | 'advanced' })}
+          name="settingsMode"
+          value={isAdvanced ? 'advanced' : 'simple'}
+          onValueChange={(value) => setIsAdvanced(value === 'advanced')}
           options={['simple', 'advanced']}
-          getLabel={(mode) => t(`wizard.options.editorMode.${mode}`)}
+          getLabel={(mode) => t(`wizard.options.settingsMode.${mode}`)}
         />
       </div>
 
       <SettingsGroup title={t('wizard.groups.design')}>
         {isAdvanced ? (
           <div className="grid gap-3">
-            <div className="grid gap-2">
-              <Label htmlFor={`${idPrefix}-font-title`}>{t('wizard.labels.fontTitle')}</Label>
-              <FontSelect
-                id={`${idPrefix}-font-title`}
-                value={search.fontTitle ?? search.font}
-                onChange={(value) => setSearch({ fontTitle: value })}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor={`${idPrefix}-font-heading`}>{t('wizard.labels.fontHeading')}</Label>
-              <FontSelect
-                id={`${idPrefix}-font-heading`}
-                value={search.fontHeading ?? search.font}
-                onChange={(value) => setSearch({ fontHeading: value })}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor={`${idPrefix}-font-body`}>{t('wizard.labels.fontBody')}</Label>
-              <FontSelect
-                id={`${idPrefix}-font-body`}
-                value={search.fontBody ?? search.font}
-                onChange={(value) => setSearch({ fontBody: value })}
-              />
-            </div>
+            {FONT_GROUPS.map((group) => (
+              <div key={group.groupKey} className="grid gap-3 border-t pt-3 first:border-t-0 first:pt-0">
+                <h4 className="text-muted-foreground text-xs font-semibold">{t(`wizard.groups.${group.groupKey}`)}</h4>
+                {group.elements.map((element) => (
+                  <div className="grid gap-2" key={element}>
+                    <Label htmlFor={`${idPrefix}-font-${element}`}>
+                      {t(`wizard.labels.${elementFontQueryKey(element)}`)}
+                    </Label>
+                    <FontSelect
+                      id={`${idPrefix}-font-${element}`}
+                      value={(search[elementFontQueryKey(element)] as string | undefined) ?? search.font}
+                      onChange={(value) => setElementFont(element, value)}
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid gap-2">
@@ -283,18 +300,45 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
                 <Label htmlFor={`${idPrefix}-section-${section}`} className="min-h-5 flex-1 py-0.5">
                   {t(`wizard.sections.${section}`)}
                 </Label>
+                {section === 'kaddish' ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="size-7"
+                    aria-label={t('wizard.labels.kaddishAdvanced')}
+                    onClick={() => setSearch({ dialog: 'kaddish' })}
+                  >
+                    <PencilIcon className="size-4" />
+                  </Button>
+                ) : null}
               </div>
               {section === 'hashkava' && search.sections.includes('hashkava') ? (
-                <SegmentedRadioGroup
-                  idPrefix={idPrefix}
-                  name="hashkava"
-                  value={search.hashkavaVariant}
-                  onValueChange={(value) =>
-                    setSearch({ hashkavaVariant: value as 'elMaleh' | 'traditional' | 'both' })
-                  }
-                  options={['elMaleh', 'traditional', 'both']}
-                  getLabel={(variant) => t(`wizard.options.hashkavaVariant.${variant}`)}
-                />
+                <>
+                  <SegmentedRadioGroup
+                    idPrefix={idPrefix}
+                    name="hashkava"
+                    value={search.hashkavaVariant}
+                    onValueChange={(value) =>
+                      setSearch({ hashkavaVariant: value as 'elMaleh' | 'traditional' | 'both' })
+                    }
+                    options={['elMaleh', 'traditional', 'both']}
+                    getLabel={(variant) => t(`wizard.options.hashkavaVariant.${variant}`)}
+                  />
+                  {search.hashkavaVariant === 'elMaleh' || search.hashkavaVariant === 'both' ? (
+                    <div className="grid gap-2">
+                      <Label>{t('wizard.labels.elMalehPhrase')}</Label>
+                      <SegmentedRadioGroup
+                        idPrefix={idPrefix}
+                        name="elMalehPhrase"
+                        value={search.elMalehPhrase}
+                        onValueChange={(value) => setSearch({ elMalehPhrase: value as 'charity' | 'psalms' })}
+                        options={['charity', 'psalms']}
+                        getLabel={(phrase) => t(`wizard.options.elMalehPhrase.${phrase}`)}
+                      />
+                    </div>
+                  ) : null}
+                </>
               ) : null}
             </div>
           ))}

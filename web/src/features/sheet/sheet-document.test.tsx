@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { buildSheetContent } from '@/features/sheet/content'
-import { printLayoutDefaults } from '@/features/sheet/layout'
+import { defaultElementFonts, printLayoutDefaults } from '@/features/sheet/layout'
 import { SheetDocument } from '@/features/sheet/sheet-document'
 import type { SheetSettings } from '@/features/sheet/layout'
 
@@ -14,13 +14,15 @@ const settings = (overrides: Partial<SheetSettings> = {}): SheetSettings => ({
   parent: 'צבי מרדכי',
   lineage: 'none',
   font: 'noto-serif',
-  fontRoles: { title: 'noto-serif', heading: 'noto-serif', body: 'noto-serif' },
+  fonts: defaultElementFonts('noto-serif'),
   lineDensity: 'normal',
   nikud: 1,
   deco: 1,
   acrostic: 'both',
   blessing: 0,
   hashkavaVariant: 'elMaleh',
+  kaddishResponseLabel: 'congregation',
+  elMalehPhrase: 'charity',
   sections: ['psalms', 'neshama', 'kaddish', 'mishnayot', 'hashkava', 'closing'],
   ...overrides,
 })

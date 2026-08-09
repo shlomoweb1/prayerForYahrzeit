@@ -13,7 +13,12 @@ export const SECTIONS = [
   'closing',
 ] as const
 
-export const DIALOGS = ['print', 'settings'] as const
+export const DIALOGS = ['print', 'settings', 'kaddish'] as const
+
+/** Default section set: the עלייה לקבר (graveside) sheet — the format most
+ * people printing from this app actually need. Everything else (mishnayot,
+ * closing prayers) stays available but opt-in. */
+export const DEFAULT_SECTIONS = ['psalms', 'neshama', 'kaddish', 'hashkava'] as const
 
 const sectionsArray = z.array(z.enum(SECTIONS))
 
@@ -26,7 +31,7 @@ export const WizardQuery = z.object({
     .default(STEP_MIN),
   paper: z.enum(['a4', 'letter']).default('a4').catch('a4'),
   gender: z.enum(['male', 'female']).default('male').catch('male'),
-  nusach: z.enum(['ashkenaz', 'sefard']).default('ashkenaz').catch('ashkenaz'),
+  nusach: z.enum(['ashkenaz', 'ashkenazSefard', 'sefard']).default('ashkenaz').catch('ashkenaz'),
   name: z.string().max(100).optional().catch(undefined),
   parent: z.string().max(100).optional().catch(undefined),
   lineage: z.enum(['none', 'kohen', 'levi']).default('none').catch('none'),
@@ -50,24 +55,46 @@ export const WizardQuery = z.object({
     .optional()
     .catch(undefined),
   font: z.string().min(1).default('noto-serif').catch('noto-serif'),
+  /** Per-element font overrides (optional): every sheet element falls back to
+   * the global `font` unless its own `fontXxx` key is set. The full element
+   * list lives in SHEET_ELEMENT_FONTS (features/sheet/layout.ts); the mapping
+   * from element -> query key is `font` + PascalCase(element). */
+  fontBsd: z.string().min(1).optional().catch(undefined),
+  fontSheetTitle: z.string().min(1).optional().catch(undefined),
+  fontNameLine: z.string().min(1).optional().catch(undefined),
+  fontSectionTitle: z.string().min(1).optional().catch(undefined),
+  fontPsalmBadge: z.string().min(1).optional().catch(undefined),
+  fontPsalmText: z.string().min(1).optional().catch(undefined),
+  fontLetterBadge: z.string().min(1).optional().catch(undefined),
+  fontLetterText: z.string().min(1).optional().catch(undefined),
+  fontKaddishMourner: z.string().min(1).optional().catch(undefined),
+  fontKaddishCongregation: z.string().min(1).optional().catch(undefined),
+  fontMishnahBadge: z.string().min(1).optional().catch(undefined),
+  fontMishnahText: z.string().min(1).optional().catch(undefined),
+  fontBlessingText: z.string().min(1).optional().catch(undefined),
+  fontElMalehText: z.string().min(1).optional().catch(undefined),
+  fontHashkavaText: z.string().min(1).optional().catch(undefined),
+  fontClosingDryBones: z.string().min(1).optional().catch(undefined),
+  fontClosingAvHaRachamim: z.string().min(1).optional().catch(undefined),
+  fontClosingParting: z.string().min(1).optional().catch(undefined),
   nikud: z.coerce.number().int().min(0).max(1).catch(1).default(1),
   deco: z.coerce.number().int().min(0).max(1).catch(1).default(1),
   acrostic: z.enum(['both', 'name', 'parent', 'none']).default('name').catch('name'),
   blessing: z.coerce.number().int().min(0).max(1).catch(0).default(0),
   hashkavaVariant: z.enum(['elMaleh', 'traditional', 'both']).default('elMaleh').catch('elMaleh'),
-  editorMode: z.enum(['simple', 'advanced']).default('simple').catch('simple'),
+  kaddishResponseLabel: z
+    .enum(['congregation', 'responders', 'none'])
+    .default('congregation')
+    .catch('congregation'),
+  elMalehPhrase: z.enum(['charity', 'psalms']).default('psalms').catch('psalms'),
   /**
    * Hidden dev flag: forces the step-5 preview pane into the live HTML
-   * editor-preview instead of the default Folio-rendered PDF viewer. Not
-   * `editorMode` (simple/advanced settings density) — an unrelated concept
-   * that happens to share the word "editor". Deliberately has no UI
-   * affordance (no toggle, no label, no i18n key) — `?editor=1` only.
+   * editor-preview instead of the default Folio-rendered PDF viewer.
+   * Deliberately has no UI affordance (no toggle, no label, no i18n key) —
+   * `?editor=1` only.
    */
   editor: z.coerce.number().int().min(0).max(1).catch(0).default(0),
   lineDensity: z.enum(['tidy', 'normal', 'loose']).default('normal').catch('normal'),
-  fontTitle: z.string().min(1).optional().catch(undefined),
-  fontHeading: z.string().min(1).optional().catch(undefined),
-  fontBody: z.string().min(1).optional().catch(undefined),
   sections: z
     .union([
       sectionsArray,
@@ -76,8 +103,8 @@ export const WizardQuery = z.object({
         .transform((value) => value.split(','))
         .pipe(sectionsArray),
     ])
-    .default([...SECTIONS])
-    .catch([...SECTIONS]),
+    .default([...DEFAULT_SECTIONS])
+    .catch([...DEFAULT_SECTIONS]),
   dialog: z.enum(DIALOGS).optional().catch(undefined),
 })
 

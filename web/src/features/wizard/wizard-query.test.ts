@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { SECTIONS, WizardQuery } from '@/features/wizard/wizard-query'
+import { DEFAULT_SECTIONS, WizardQuery } from '@/features/wizard/wizard-query'
 
 describe('WizardQuery schema', () => {
   it('parses a full URL query from string params', () => {
@@ -45,7 +45,10 @@ describe('WizardQuery schema', () => {
       nikud: 1,
       deco: 1,
       acrostic: 'name',
-      sections: [...SECTIONS],
+      sections: [...DEFAULT_SECTIONS],
+      hashkavaVariant: 'elMaleh',
+      kaddishResponseLabel: 'congregation',
+      elMalehPhrase: 'psalms',
     })
     expect(parsed.dialog).toBeUndefined()
     expect(parsed.name).toBeUndefined()

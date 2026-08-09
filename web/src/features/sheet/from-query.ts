@@ -9,7 +9,7 @@
 
 import { useMemo } from 'react'
 
-import { buildLayout, type SheetFontRoles, type SheetSettings } from '@/features/sheet/layout'
+import { buildLayout, SHEET_ELEMENT_FONTS, type SheetElementFonts, type SheetSettings } from '@/features/sheet/layout'
 import type { SheetFontId, SheetLayout, SheetNusach } from '@/features/sheet/layout'
 import { SHEET_FONTS } from '@/features/sheet/fonts'
 import type { WizardQuery } from '@/features/wizard/wizard-query'
@@ -22,18 +22,22 @@ function resolveFontId(value: string | undefined, fallback: SheetFontId): SheetF
   return value && isSheetFontId(value) ? value : fallback
 }
 
-/** Per-role fonts: in simple mode (or when a role override isn't set) every
- * role falls back to the single global `font` — advanced mode is the only
- * place role overrides can diverge from it. */
-function fontRolesFromQuery(search: WizardQuery, font: SheetFontId): SheetFontRoles {
-  if (search.editorMode !== 'advanced') {
-    return { title: font, heading: font, body: font }
+/** WizardQuery key holding the override for an element: `bsd` -> `fontBsd`,
+ * `closingAvHaRachamim` -> `fontClosingAvHaRachamim`, etc. */
+export function elementFontQueryKey<Element extends (typeof SHEET_ELEMENT_FONTS)[number]>(
+  element: Element,
+): `font${Capitalize<Element>}` {
+  return `font${element.charAt(0).toUpperCase()}${element.slice(1)}` as `font${Capitalize<Element>}`
+}
+
+/** Per-element fonts: every element resolves to its `fontXxx` override when
+ * set (and a real font id), otherwise to the single global `font`. */
+function elementFontsFromQuery(search: WizardQuery, font: SheetFontId): SheetElementFonts {
+  const fonts = {} as SheetElementFonts
+  for (const element of SHEET_ELEMENT_FONTS) {
+    fonts[element] = resolveFontId(search[elementFontQueryKey(element)] as string | undefined, font)
   }
-  return {
-    title: resolveFontId(search.fontTitle, font),
-    heading: resolveFontId(search.fontHeading, font),
-    body: resolveFontId(search.fontBody, font),
-  }
+  return fonts
 }
 
 /** Build the sheet settings for a wizard query (in-memory every call). */
@@ -48,13 +52,15 @@ export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
     deathDate: search.deathDate,
     lineage: search.lineage,
     font,
-    fontRoles: fontRolesFromQuery(search, font),
+    fonts: elementFontsFromQuery(search, font),
     lineDensity: search.lineDensity,
     nikud: search.nikud,
     deco: search.deco,
     acrostic: search.acrostic,
     blessing: search.blessing,
     hashkavaVariant: search.hashkavaVariant,
+    kaddishResponseLabel: search.kaddishResponseLabel,
+    elMalehPhrase: search.elMalehPhrase,
     sections: [...search.sections],
   }
 }

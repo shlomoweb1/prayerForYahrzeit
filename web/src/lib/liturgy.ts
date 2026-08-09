@@ -7,16 +7,37 @@
 import raw from '../../../data/liturgy.json'
 
 import { normalizePunctuation, stripNikud } from '@/lib/hebrew'
-import type { SheetGender, SheetNusach } from '@/features/sheet/layout'
+import type { ElMalehPhrase, SheetGender, SheetNusach } from '@/features/sheet/layout'
 
 export interface PrayersBeforeBlock {
   title: string
   content: string
 }
 
+/**
+ * Who speaks a kaddish line, as labeled in the harvest's speaker cues
+ * (האבלים / הקהל / הקהל והאבלים). The labels themselves are a rendering
+ * concern — the data only carries the role, so the layout can style and
+ * label each speaker independently (see the kaddish-section rendering).
+ * `note` is a printing rubric — e.g. "(האומרים קדיש פוסעים שלוש פסיעות
+ * לאחור)" — rendered before the exchange it annotates.
+ */
+export type KaddishSpeaker = 'mourner' | 'congregation' | 'joint' | 'note'
+
+/** One kaddish line: the speaker role and the pure text (no markup). */
+export interface KaddishLine {
+  speaker: KaddishSpeaker
+  text: string
+  /** Alternate text for the נוסח ספרד variant of the ashkenaz rite — carried
+   * only by the lines that differ (the בעלמא line's פורקנא/משיחא insertion). */
+  sefardVariant?: string
+}
+
 export interface NusachTextsData {
   prayersBefore: PrayersBeforeBlock[]
-  kaddishYatom: string
+  /** קדיש יתום as structured speaker-labeled lines (the layout groups them
+   * into mourner-line + response sections at render time). */
+  kaddishYatom: KaddishLine[]
   kaddishDerabanan: string
   kaddishDeAtchadta: string | null
   hashkava: string
@@ -29,7 +50,14 @@ export interface LiturgyData {
   neshamaLetters: string[]
   sofitMap: Record<string, string>
   nusach: Record<'ashkenaz' | 'sepharad', NusachTextsData>
-  elMaleRachamim: { male: string; female: string }
+  /** `male`/`female` carry a `[בעבור]` placeholder in place of the "why the
+   * deceased deserves rest" clause — `reasonPhrases` supplies the wording
+   * for each `ElMalehPhrase` option, per gender. */
+  elMaleRachamim: {
+    male: string
+    female: string
+    reasonPhrases: Record<ElMalehPhrase, { male: string; female: string }>
+  }
 }
 
 export const liturgyData = raw as LiturgyData
@@ -40,9 +68,21 @@ export const FIXED_PSALMS: readonly number[] = liturgyData.fixedPsalms
 /** The letters of נשמה (fallback acrostic when no parent name is given). */
 export const NESHAMA_LETTERS: readonly string[] = liturgyData.neshamaLetters
 
-/** Map nusach keys to the data keys ('sefard' -> 'sepharad'). */
+/** Map nusach keys to the data keys. נוסח ספרד ('ashkenazSefard') is the
+ * ashkenaz rite with its per-line variant texts (KaddishLine.sefardVariant)
+ * swapped in — the two share everything else. */
 export function nusachTexts(nusach: SheetNusach): NusachTextsData {
-  return nusach === 'sefard' ? liturgyData.nusach.sepharad : liturgyData.nusach.ashkenaz
+  if (nusach === 'sefard') return liturgyData.nusach.sepharad
+  const base = liturgyData.nusach.ashkenaz
+  if (nusach === 'ashkenazSefard') {
+    return {
+      ...base,
+      kaddishYatom: base.kaddishYatom.map((line) =>
+        line.sefardVariant ? { ...line, text: line.sefardVariant } : line,
+      ),
+    }
+  }
+  return base
 }
 
 /**
@@ -78,61 +118,15 @@ export function liturgyBlockHtml(block: string, opts?: { nikud?: boolean }): str
   return html
 }
 
-/**
- * קדיש יתום: the harvest puts a single <br> between every speaker cue
- * (האבלים: / הקהל: / etc.), which renders each cue on its own line — reading
- * like a script instead of flowing liturgical text. This flattens it into
- * one continuous paragraph, with per-speaker handling:
- *
- * - Mourners' lines (האבלים:) lose the label entirely and just flow — the
- *   label would otherwise repeat before nearly every line, which is the
- *   thing this rewrite exists to fix.
- * - Congregation lines (הקהל:) keep their label but become a small
- *   parenthesized inline aside — "(הקהל: אמן)" — right where the line
- *   occurred, via the `.izkor-rubric` CSS hook (see sheet-css.ts).
- * - The one line spoken jointly ("הקהל והאבלים: יהא שמה רבא...") is left
- *   alone on its own paragraph (wrapped in <br><br> so it becomes its own
- *   pagination block via splitBlocks(), same as a normal paragraph break) —
- *   its label only appears once, so there's no repetition to fix there.
- *
- * The Ashkenaz harvest also has one spot that wrote the congregation cue as
- * "קהל:" (missing the ה) — normalized to "הקהל:" before classification so it
- * gets the same rubric treatment as every other congregation line.
- */
-export function kaddishYatomText(nusach: SheetNusach): string {
-  const MOURNERS = 'האבלים:'
-  const CONGREGATION = 'הקהל:'
-  const JOINT = 'הקהל והאבלים:'
-
-  const lines = nusachTexts(nusach)
-    .kaddishYatom.split(/<br\s*\/?>/i)
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0)
-    .map((line) => (line.startsWith('קהל:') ? `ה${line}` : line))
-
-  const parts = lines.map((line) => {
-    if (line.startsWith(JOINT)) return `<br><br><b>${line}</b><br><br>`
-    // Unquoted class attribute on purpose: this markup still passes through
-    // liturgyBlockHtml -> normalizePunctuation, which blindly rewrites every
-    // ASCII " and ' in the string (Hebrew gershayim/geresh normalization) —
-    // quoting the attribute would have it mangled into class=״izkor-rubric״.
-    if (line.startsWith(CONGREGATION)) return `<span class=izkor-rubric>(${line})</span>`
-    if (line.startsWith(MOURNERS)) return line.slice(MOURNERS.length).trim()
-    return line
-  })
-
-  return parts
-    .join(' ')
-    .trim()
-    .replace(/^<br\s*\/?>\s*<br\s*\/?>\s*/i, '')
-    .replace(/\s*<br\s*\/?>\s*<br\s*\/?>$/i, '')
-}
-
-/** אל מלא רחמים: the [פלוני בן פלוני] / [פלונית בת פלוני] placeholder replaced with the real name phrase, bolded. */
-export function elMaleRachamimText(gender: SheetGender, namePhrase: string): string {
+/** אל מלא רחמים: the [פלוני בן פלוני] / [פלונית בת פלוני] placeholder
+ * replaced with the real name phrase (bolded), and the [בעבור] placeholder
+ * replaced with the chosen reason-for-rest wording (charity donated vs.
+ * psalms recited), per gender. */
+export function elMaleRachamimText(gender: SheetGender, namePhrase: string, phrase: ElMalehPhrase): string {
   const template = gender === 'female' ? liturgyData.elMaleRachamim.female : liturgyData.elMaleRachamim.male
   const placeholder = gender === 'female' ? '[פלונית בת פלוני]' : '[פלוני בן פלוני]'
-  return template.replace(placeholder, `<b>${namePhrase}</b>`)
+  const reason = liturgyData.elMaleRachamim.reasonPhrases[phrase][gender]
+  return template.replace(placeholder, `<b>${namePhrase}</b>`).replace('[בעבור]', reason)
 }
 
 /**

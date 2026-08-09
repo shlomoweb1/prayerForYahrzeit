@@ -24,15 +24,25 @@ export const SHEET_SECTIONS = [
 export type SheetSectionToggle = (typeof SHEET_SECTIONS)[number]
 
 export type SheetPaper = 'a4' | 'letter'
-export type SheetNusach = 'ashkenaz' | 'sefard'
+/** נוסח אשכנז, נוסח ספרד (the Chassidic/Israeli variant of the Ashkenazi
+ * rite — resolved to the ashkenaz texts with per-line variant swaps), and
+ * עדות המזרח. */
+export type SheetNusach = 'ashkenaz' | 'ashkenazSefard' | 'sefard'
 export type SheetGender = 'male' | 'female'
 export type SheetLineage = 'none' | 'kohen' | 'levi'
 export type AcrosticMode = 'both' | 'name' | 'parent' | 'none'
 export type HashkavaVariant = 'elMaleh' | 'traditional' | 'both'
-export type EditorMode = 'simple' | 'advanced'
+/** How the congregation's response lines are labeled in the printed קדיש:
+ * "(הקהל: ...)", "(עונים: ...)", or unlabeled (the response text still
+ * prints, just without the parenthesized cue). */
+export type KaddishResponseLabel = 'congregation' | 'responders' | 'none'
+/** Which wording אל מלא רחמים gives for why the deceased deserves rest —
+ * the traditional "charity was donated in their memory" clause, or a
+ * "psalms were recited for the elevation of their soul" alternative. */
+export type ElMalehPhrase = 'charity' | 'psalms'
 
-/** Line-height density presets — advanced-mode control over vertical rhythm.
- * `normal` is the tuned print default from the compact-layout pass. */
+/** Line-height density presets — the "compact vs airy" control. `normal` is
+ * the tuned print default from the compact-layout pass. */
 export type LineDensity = 'tidy' | 'normal' | 'loose'
 
 export const LINE_DENSITY_MULTIPLIER: Record<LineDensity, number> = {
@@ -41,13 +51,48 @@ export const LINE_DENSITY_MULTIPLIER: Record<LineDensity, number> = {
   loose: 1.15,
 }
 
-/** The three visual roles a font can be assigned to independently in advanced
- * mode: the sheet title/בס"ד, section/chapter headings, and the running body
- * text (psalm verses, prayer blocks, mishnah text). Simple mode collapses all
- * three to `SheetSettings.font`. */
-export type SheetFontRole = 'title' | 'heading' | 'body'
+/**
+ * Every visually distinct element of the sheet that can carry its own font.
+ * Each one falls back to the global `SheetSettings.font` unless overridden
+ * via its matching `fontXxx` WizardQuery key (`font` + PascalCase(element)).
+ * Listed in the order they appear on the sheet; the advanced font panel
+ * groups them under the same headings the sheet itself uses.
+ */
+export const SHEET_ELEMENT_FONTS = [
+  'bsd',
+  'sheetTitle',
+  'nameLine',
+  'sectionTitle',
+  'psalmBadge',
+  'psalmText',
+  'letterBadge',
+  'letterText',
+  'kaddishMourner',
+  'kaddishCongregation',
+  'mishnahBadge',
+  'mishnahText',
+  'blessingText',
+  'elMalehText',
+  'hashkavaText',
+  'closingDryBones',
+  'closingAvHaRachamim',
+  'closingParting',
+] as const
 
-export type SheetFontRoles = Record<SheetFontRole, SheetFontId>
+export type SheetElementFont = (typeof SHEET_ELEMENT_FONTS)[number]
+
+/** Every sheet element's resolved font (overrides applied, global fallback). */
+export type SheetElementFonts = Record<SheetElementFont, SheetFontId>
+
+/** All 18 sheet elements set to one font — the default settings/tests start
+ * from (overrides applied later via the fontXxx query keys). */
+export function defaultElementFonts(font: SheetFontId): SheetElementFonts {
+  const fonts = {} as SheetElementFonts
+  for (const element of SHEET_ELEMENT_FONTS) {
+    fonts[element] = font
+  }
+  return fonts
+}
 
 /** Settings consumed by the layout/content model (subset of WizardQuery). */
 export interface SheetSettings {
@@ -60,15 +105,16 @@ export interface SheetSettings {
   deathDate?: number
   lineage: SheetLineage
   font: SheetFontId
-  /** Resolved per-role fonts: equal to `font` for all roles in simple mode,
-   * independently selectable per role in advanced mode. */
-  fontRoles: SheetFontRoles
+  /** Resolved per-element fonts: each equals `font` unless overridden. */
+  fonts: SheetElementFonts
   lineDensity: LineDensity
   nikud: number
   deco: number
   acrostic: AcrosticMode
   blessing: number
   hashkavaVariant: HashkavaVariant
+  kaddishResponseLabel: KaddishResponseLabel
+  elMalehPhrase: ElMalehPhrase
   sections: SheetSectionToggle[]
 }
 

@@ -12,6 +12,7 @@ interface StepProps {
 
 const NUSACH_IMAGES: Record<WizardQuery['nusach'], string> = {
   ashkenaz: '/images/Ashkenaz-torah.png',
+  ashkenazSefard: '/images/Ashkenaz-torah.png',
   sefard: '/images/separadi-torah.png',
 }
 
@@ -31,7 +32,7 @@ export function Step2Nusach({ search, setSearch }: StepProps) {
         aria-label={t('wizard.labels.nusach')}
         dir={i18n.dir()}
       >
-        {(['ashkenaz', 'sefard'] as const).map((nusach) => (
+        {(['ashkenaz', 'ashkenazSefard', 'sefard'] as const).map((nusach) => (
           <OptionCard
             key={nusach}
             value={nusach}

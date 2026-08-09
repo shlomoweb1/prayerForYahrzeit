@@ -13,6 +13,8 @@ import {
 import { detectPaperFromIp } from '@/features/wizard/paper-geo'
 import { getStep } from '@/features/wizard/step-registry'
 import { STEP_MAX, STEP_MIN, WizardQuery } from '@/features/wizard/wizard-query'
+import { SegmentedRadioGroup } from '@/features/sheet/SheetSettingsPanel'
+import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
 const routeApi = getRouteApi('/wizard/')
@@ -101,17 +103,38 @@ export default function WizardPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {search.dialog === 'print' ? t('wizard.dialog.print') : t('wizard.dialog.settings')}
+              {search.dialog === 'print'
+                ? t('wizard.dialog.print')
+                : search.dialog === 'kaddish'
+                  ? t('wizard.dialog.kaddish')
+                  : t('wizard.dialog.settings')}
             </DialogTitle>
             <DialogDescription>
               {search.dialog === 'print'
                 ? t('wizard.dialog.printDescription')
-                : t('wizard.dialog.scaffoldNote')}
+                : search.dialog === 'kaddish'
+                  ? t('wizard.dialog.kaddishDescription')
+                  : t('wizard.dialog.scaffoldNote')}
             </DialogDescription>
           </DialogHeader>
           {search.dialog === 'print' ? (
             <div className="flex justify-end gap-2">
               <Button onClick={() => window.print()}>{t('wizard.actions.print')}</Button>
+            </div>
+          ) : null}
+          {search.dialog === 'kaddish' ? (
+            <div className="grid gap-2">
+              <Label htmlFor="kaddish-response-label">{t('wizard.labels.kaddishResponseLabel')}</Label>
+              <SegmentedRadioGroup
+                idPrefix="kaddish-dialog"
+                name="kaddishResponseLabel"
+                value={search.kaddishResponseLabel}
+                onValueChange={(value) =>
+                  setSearch({ kaddishResponseLabel: value as 'congregation' | 'responders' | 'none' })
+                }
+                options={['congregation', 'responders', 'none']}
+                getLabel={(option) => t(`wizard.options.kaddishResponseLabel.${option}`)}
+              />
             </div>
           ) : null}
         </DialogContent>

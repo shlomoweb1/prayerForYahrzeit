@@ -15,7 +15,6 @@ import { normalizePunctuation } from '@/lib/hebrew'
 import {
   elMaleRachamimText,
   hashkavaTraditionalText,
-  kaddishYatomText,
   liturgyBlockHtml,
   nusachTexts,
   NESHAMA_LETTERS,
@@ -25,7 +24,8 @@ import { mishnahFor, psalm119Stanza, resolveNameLetters, type NameLetter } from 
 import { psalmChapterLabel, psalmVerseTextsByIds, psalmVerseTexts } from '@/lib/tehillim'
 import { FIXED_PSALMS } from '@/lib/liturgy'
 
-import type { SheetSettings } from '@/features/sheet/layout'
+import type { KaddishSpeaker } from '@/lib/liturgy'
+import type { SheetSettings, SheetNusach, KaddishResponseLabel } from '@/features/sheet/layout'
 
 export interface PsalmChapterBlock {
   chapter: number
@@ -46,17 +46,63 @@ export interface StanzaBlock {
 export interface MishnahItemBlock {
   letter: string
   label: string
-  source: string
+  source: {
+    chapter: string;
+    tractate: string;
+  }
   text: string
 }
 
+/**
+ * Which prayer a rendered text block belongs to. Rows in the per-element
+ * font panel and the matching `--izkor-font-*` CSS vars are keyed on this.
+ * `closing` (the whole "תפילות ביציאה" section) is resolved into per-passage
+ * ids (`closing-0/1/2`) in buildPageItems, since splitBlocks() cuts it into
+ * three separate chunks: the dry-bones vision, אב הרחמים and בקשת פרידה.
+ */
+export type SheetPrayerId = 'blessing' | 'kaddish' | 'elMaleh' | 'hashkava' | 'closing'
+export type SheetPrayerChunk = SheetPrayerId | 'closing-0' | 'closing-1' | 'closing-2'
+
 export type SheetBlock =
   | { kind: 'header'; text: string; deathDateText?: string }
-  | { kind: 'blessing'; title: string; html: string }
+  | { kind: 'blessing'; title: string; html: string; prayer: 'blessing' }
+  | { kind: 'kaddish'; title: string; sections: KaddishSectionChunk[]; nusach: SheetNusach; responseLabel: KaddishResponseLabel }
   | { kind: 'psalms'; chapters: PsalmChapterBlock[] }
   | { kind: 'letters'; title: string; stanzas: StanzaBlock[] }
   | { kind: 'mishnayot'; items: MishnahItemBlock[] }
-  | { kind: 'prayer'; title: string; html: string }
+  | { kind: 'prayer'; title: string; html: string; prayer: SheetPrayerId }
+
+/**
+ * One rendered kaddish line inside a section: the speaker role (which drives
+ * the layout's per-speaker styling and the printed label) plus the processed
+ * html. Sections are the exchange granularity — a mourner line followed by
+ * the response lines it ends in (אמן etc.), or a standalone rubric note —
+ * and each renders as its own flex container, so a section is never split
+ * across pages or lines.
+ */
+export interface KaddishSectionLine {
+  speaker: KaddishSpeaker
+  html: string
+}
+
+/**
+ * Which visual treatment a kaddish exchange gets, computed once here instead
+ * of guessed from position in CSS (:nth-child) — the ashkenaz and sepharadi
+ * rites have a different number of exchanges before the יהא שמיה רבא line
+ * (sepharad splits בעלמא... into two, ashkenaz keeps it in one), so a fixed
+ * nth-child index in CSS would point at the wrong chunk depending on nusach.
+ * `lead` is the opening יתגדל exchange (tiny congregation cue), `wide` is
+ * every exchange between it and the joint line (width-constrained so the
+ * long בעלמא text wraps like the printed original), `joint` / `note` mirror
+ * the line-level speaker roles, and `plain` is everything after the joint
+ * line.
+ */
+export type KaddishChunkRole = 'lead' | 'wide' | 'joint' | 'note' | 'plain'
+
+export interface KaddishSectionChunk {
+  role: KaddishChunkRole
+  lines: KaddishSectionLine[]
+}
 
 export const HEADER_PREFIX = 'לע״נ'
 
@@ -160,8 +206,8 @@ function buildLettersBlock(title: string, letters: NameLetter[], nikud: boolean)
   return { kind: 'letters', title, stanzas }
 }
 
-function buildPrayerBlock(title: string, html: string): SheetBlock {
-  return { kind: 'prayer', title, html }
+function buildPrayerBlock(title: string, html: string, prayer: SheetPrayerId): SheetBlock {
+  return { kind: 'prayer', title, html, prayer }
 }
 
 /**
@@ -173,12 +219,13 @@ function buildPrayerBlock(title: string, html: string): SheetBlock {
 export type PageItem =
   | { id: string; kind: 'header'; text: string }
   | { id: string; kind: 'section-title'; text: string; keepWithNext?: boolean }
-  | { id: string; kind: 'block'; html: string }
+  | { id: string; kind: 'block'; title?: string; html: string; prayer?: SheetPrayerChunk }
+  | { id: string; kind: 'kaddish'; title: string; sections: KaddishSectionChunk[]; nusach: SheetNusach; responseLabel: KaddishResponseLabel }
   | { id: string; kind: 'psalm-title'; label: string; keepWithNext?: boolean }
   | { id: string; kind: 'psalm-verse'; text: string }
   | { id: string; kind: 'stanza-title'; label: string; keepWithNext?: boolean }
   | { id: string; kind: 'stanza-verse'; text: string }
-  | { id: string; kind: 'mishnah-title'; label: string; source: string; keepWithNext?: boolean }
+  | { id: string; kind: 'mishnah-title'; label: string; source: MishnahItemBlock["source"]; keepWithNext?: boolean }
   | { id: string; kind: 'mishnah-text'; text: string }
 
 let itemSeq = 0
@@ -191,6 +238,32 @@ export function sectionTitle(text: string, keepWithNext = true): PageItem {
   return { id: nextItemId(), kind: 'section-title', text, keepWithNext }
 }
 
+/**
+ * The closing section's three passages, in order, as emitted by splitBlocks()
+ * on the closing-prayers text. Chunk ids map straight onto the per-passage
+ * font panel rows (closingDryBones / closingAvHaRachamim / closingParting).
+ */
+const CLOSING_CHUNK_PRAYERS = ['closing-0', 'closing-1', 'closing-2'] as const
+
+function closingChunkPrayer(index: number): SheetPrayerChunk {
+  return CLOSING_CHUNK_PRAYERS[Math.min(index, CLOSING_CHUNK_PRAYERS.length - 1)]!
+}
+
+/**
+ * Split a mishnah's text at its inline paragraph markers — the harvested data
+ * marks each mishnah paragraph with a Hebrew letter + period ("ב. ", "ג. ",
+ * ...) instead of <br> tags, and the sheet renders them as one flowing block.
+ * Splitting here turns each paragraph into a `data-type="psalm"` span, which
+ * is exactly what splitOversizedItem needs to cut an oversized mishnah at a
+ * paragraph boundary (same as it cuts psalm chapters at verse boundaries).
+ */
+export function splitMishnahParagraphs(text: string): string[] {
+  return text
+    .split(/\s(?=[א-ת]\.\s)/)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0)
+}
+
 /** Flatten SheetBlocks into pagination items (psalms/letters per verse). */
 export function buildPageItems(content: SheetBlock[]): PageItem[] {
   const items: PageItem[] = []
@@ -201,10 +274,15 @@ export function buildPageItems(content: SheetBlock[]): PageItem[] {
         items.push({ id: nextItemId(), kind: 'header', text: block.text })
         break
       case 'blessing':
-        items.push(sectionTitle(block.title))
-        for (const html of splitBlocks(block.html)) {
-          items.push({ id: nextItemId(), kind: 'block', html })
-        }
+        splitBlocks(block.html).forEach((html, index) => {
+          items.push({ id: nextItemId(), kind: 'block', title: index === 0 ? block.title : undefined, html, prayer: 'blessing' })
+        })
+        break
+      case 'kaddish':
+        // The whole קדיש יתום block is one page item: title + every exchange
+        // in a single container (it fits a page, and it keeps the section a
+        // self-contained unit to restyle — see [data-content="kaddish"]).
+        items.push({ id: nextItemId(), kind: 'kaddish', title: block.title, sections: block.sections, nusach: block.nusach, responseLabel: block.responseLabel })
         break
       case 'psalms': {
         items.push(sectionTitle('תהילים'))
@@ -235,17 +313,23 @@ export function buildPageItems(content: SheetBlock[]): PageItem[] {
             label: entry.label,
             source: entry.source,
             keepWithNext: true,
-          })
+          });
           items.push({ id: nextItemId(), kind: 'mishnah-text', text: entry.text })
         }
         break
       }
-      case 'prayer':
-        items.push(sectionTitle(block.title))
-        for (const html of splitBlocks(block.html)) {
-          items.push({ id: nextItemId(), kind: 'block', html })
-        }
+      case 'prayer': {
+        splitBlocks(block.html).forEach((html, index) => {
+          items.push({
+            id: nextItemId(),
+            kind: 'block',
+            title: index === 0 ? block.title : undefined,
+            html,
+            prayer: block.prayer === 'closing' ? closingChunkPrayer(index) : block.prayer,
+          })
+        })
         break
+      }
     }
   }
 
@@ -275,6 +359,7 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
         kind: 'blessing',
         title: blessing.title,
         html: liturgyBlockHtml(blessing.content, { nikud }),
+        prayer: 'blessing',
       })
     }
   }
@@ -301,7 +386,42 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
   // (after learning mishnayot) belongs to the shiva/mourning-house visit,
   // not this sheet; a future "shiva" sheet edition can add it back.
   if (settings.sections.includes('kaddish')) {
-    blocks.push(buildPrayerBlock('קדיש יתום', liturgyBlockHtml(kaddishYatomText(settings.nusach), { nikud })))
+    const sections: KaddishSectionLine[][] = []
+    let current: KaddishSectionLine[] = []
+    for (const line of texts.kaddishYatom) {
+      // Every section opens with the mourners' line; the congregation's
+      // response (הקהל) that ends in it belongs to the same section. The
+      // joint line (הקהל והאבלים: יהא שמה רבא) and the rubric notes open
+      // sections of their own — the layout CSS styles the joint line as its
+      // own row ([data-content="kaddish-section-chunk"]:nth-child(3)).
+      if (line.speaker !== 'congregation' && current.length > 0) {
+        sections.push(current)
+        current = []
+      }
+      current.push({ speaker: line.speaker, html: liturgyBlockHtml(line.text, { nikud }) })
+    }
+    if (current.length > 0) sections.push(current)
+
+    const jointIndex = sections.findIndex((section) => section.some((line) => line.speaker === 'joint'))
+    const chunks: KaddishSectionChunk[] = sections.map((lines, index) => {
+      const role: KaddishChunkRole = lines.some((line) => line.speaker === 'note')
+        ? 'note'
+        : lines.some((line) => line.speaker === 'joint')
+          ? 'joint'
+          : index === 0
+            ? 'lead'
+            : jointIndex >= 0 && index < jointIndex
+              ? 'wide'
+              : 'plain'
+      return { role, lines }
+    })
+    blocks.push({
+      kind: 'kaddish',
+      title: 'קדיש יתום',
+      sections: chunks,
+      nusach: settings.nusach,
+      responseLabel: settings.kaddishResponseLabel,
+    })
   }
 
   if (settings.sections.includes('mishnayot')) {
@@ -310,11 +430,14 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
     const items: MishnahItemBlock[] = []
     for (const { display, lookup } of letters) {
       const mishnah = mishnahFor(lookup)
-      if (!mishnah) continue
+      if (!mishnah) continue;
       items.push({
         letter: display,
         label: `אות ${display}׳`,
-        source: mishnah.source,
+        source: {
+          chapter: mishnah.chapter,
+          tractate: mishnah.tractate
+        },
         text: liturgyBlockHtml(mishnah.text, { nikud }),
       })
     }
@@ -325,7 +448,11 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
     const namePhrase = deceasedNamePhrase(settings)
     if (settings.hashkavaVariant === 'elMaleh' || settings.hashkavaVariant === 'both') {
       blocks.push(
-        buildPrayerBlock('אל מלא רחמים', liturgyBlockHtml(elMaleRachamimText(settings.gender, namePhrase), { nikud })),
+        buildPrayerBlock(
+          'אל מלא רחמים',
+          liturgyBlockHtml(elMaleRachamimText(settings.gender, namePhrase, settings.elMalehPhrase), { nikud }),
+          'elMaleh',
+        ),
       )
     }
     if (settings.hashkavaVariant === 'traditional' || settings.hashkavaVariant === 'both') {
@@ -333,6 +460,7 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
         buildPrayerBlock(
           'השכבה',
           liturgyBlockHtml(hashkavaTraditionalText(settings.nusach, settings.gender, namePhrase), { nikud }),
+          'hashkava',
         ),
       )
     }
@@ -340,7 +468,7 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
 
   if (settings.sections.includes('closing')) {
     blocks.push(
-      buildPrayerBlock('תפילות ביציאה מבית העלמין', liturgyBlockHtml(texts.closingPrayers, { nikud })),
+      buildPrayerBlock('תפילות ביציאה מבית העלמין', liturgyBlockHtml(texts.closingPrayers, { nikud }), 'closing'),
     )
   }
 

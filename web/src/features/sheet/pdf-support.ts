@@ -28,23 +28,15 @@
  * platforms are trusted on `pdfViewerEnabled` alone and skip the probe.
  */
 
-/** "Smallest possible PDF" — no xref table, but every viewer (including
- * PDFium and pdf.js) falls back to a linear object scan for files this
- * degenerate, so it's a reliable, dependency-free probe payload. */
-const MINIMAL_PDF = [
-  '%PDF-1.1',
-  '1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj',
-  '2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj',
-  '3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 3 3]>>endobj',
-  'trailer<</Root 1 0 R>>',
-].join('\n')
-
 // const PROBE_TIMEOUT_MS = 1500
 
 function claimsPdfSupport(): boolean {
   if (typeof navigator === 'undefined') return false
   if ('pdfViewerEnabled' in navigator) return navigator.pdfViewerEnabled
-  return Boolean(navigator.mimeTypes && navigator.mimeTypes['application/pdf'])
+  // Legacy fallback for older engines — `navigator.mimeTypes` is gone from
+  // the modern DOM typings, so it's accessed via a cast.
+  const mimeTypes = (navigator as Navigator & { mimeTypes?: { 'application/pdf'?: unknown } }).mimeTypes
+  return Boolean(mimeTypes?.['application/pdf'])
 }
 
 /** iOS mandates WebKit for every browser, so this also covers Chrome/Firefox on iOS — all of them get Safari's native (extension-less) PDF rendering. */

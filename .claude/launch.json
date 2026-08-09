@@ -6,6 +6,12 @@
       "runtimeExecutable": "make",
       "runtimeArgs": ["dev"],
       "port": 5173
+    },
+    {
+      "name": "scratchpad-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8098", "--directory", "/tmp/claude-1000/-home-shlomo-framowitz-Developments-izkor/f885965e-c95b-42db-a53c-91be70269900/scratchpad/serve"],
+      "port": 8098
     }
   ]
 }

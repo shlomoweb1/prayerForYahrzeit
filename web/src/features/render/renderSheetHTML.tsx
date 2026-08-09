@@ -206,7 +206,9 @@ export async function renderSheetHTML(options: RenderSheetOptions): Promise<stri
       )
       const pdfBody = pages.map((page) => page.outerHTML).join(PAGE_BREAK)
 
-      const familiesInUse = [settings.fontRoles.title, settings.fontRoles.heading, settings.fontRoles.body]
+      // Exactly the fonts this render uses — the resolved per-element fonts,
+      // deduped (typically just the ones the user overrode + the global).
+      const familiesInUse = [...new Set(Object.values(settings.fonts))]
 
       let compiledCss = stripBoxShadow(pdfCss)
       compiledCss = stripRelativeUrlFontFaces(compiledCss)

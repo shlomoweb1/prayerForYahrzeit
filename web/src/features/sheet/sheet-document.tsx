@@ -24,10 +24,11 @@
 import { useMemo, useRef } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 
-import { buildPageItems } from '@/features/sheet/content'
-import type { PageItem, SheetBlock } from '@/features/sheet/content'
+import { buildPageItems, splitMishnahParagraphs } from '@/features/sheet/content'
+import type { MishnahItemBlock, PageItem, SheetBlock } from '@/features/sheet/content'
 import { fontDef } from '@/features/sheet/fonts'
-import type { SheetFontRoles, SheetGender, SheetLayout, SheetSettings } from '@/features/sheet/layout'
+import { KaddishSection } from '@/features/sheet/kaddish-section'
+import { SHEET_ELEMENT_FONTS, type SheetElementFonts, type SheetGender, type SheetLayout, type SheetSettings } from '@/features/sheet/layout'
 import { useSheetPagePlan } from '@/features/sheet/useSheetPagePlan'
 import { hebrewNumeral } from '@/lib/hebrew'
 
@@ -82,7 +83,28 @@ interface LettersHeadingItem {
   text: string
 }
 
-export type DisplayItem = PageItem | ChapterItem | LetterStanzaItem | LettersHeadingItem
+/**
+ * A whole mishnah (black badge "משנה" + the מסכת/פרק source + the flowing
+ * text) renders and paginates as one block, mirroring psalm chapters. The
+ * text is pre-split into paragraphs (splitMishnahParagraphs — the data marks
+ * paragraphs with "ב. " "ג. " inline letters, not <br>s) so an oversized
+ * mishnah can be cut at a paragraph boundary by splitOversizedItem, exactly
+ * like a psalm chapter is cut at verse boundaries.
+ */
+interface MishnahFlowItem {
+  id: string
+  kind: 'mishnah'
+  label: string
+  source: MishnahItemBlock["source"]
+  paragraphs: NumberedVerse[]
+}
+
+export type DisplayItem = PageItem | ChapterItem | LetterStanzaItem | LettersHeadingItem | MishnahFlowItem
+
+/**
+ * Printed speaker labels for kaddish lines live in KaddishSection
+ * (kaddish-section.tsx), the component that renders the kaddish sections.
+ */
 
 /** "המנוחה" for female, "הנפטר" for male — used mid-sentence (loading copy, section headings). */
 export function deceasedWord(gender: SheetGender): string {
@@ -128,6 +150,23 @@ export function buildDisplayItems(items: PageItem[], gender: SheetGender, conten
       chapterCursor += 1
       result.push({ id: item.id, kind: 'psalm-chapter', label: item.label, chapter, verses })
       i = j
+      continue
+    }
+
+    if (item.kind === 'mishnah-title') {
+      const textItem = items[i + 1]
+      const text = textItem && textItem.kind === 'mishnah-text' ? textItem.text : ''
+      result.push({
+        id: item.id,
+        kind: 'mishnah',
+        label: 'משנה',
+        source: item.source,
+        paragraphs: splitMishnahParagraphs(text).map((paragraph, index) => ({
+          text: paragraph,
+          pasuk: index + 1,
+        })),
+      })
+      i += 2
       continue
     }
 
@@ -182,7 +221,8 @@ export function buildDisplayItems(items: PageItem[], gender: SheetGender, conten
 const SPLIT_SAFETY_MARGIN_PX = 16
 
 function splitOversizedItem(item: DisplayItem, el: HTMLElement, maxHeight: number): DisplayItem[] | null {
-  if (item.kind !== 'psalm-chapter' && item.kind !== 'letter-stanza') return null
+  if (item.kind !== 'psalm-chapter' && item.kind !== 'letter-stanza' && item.kind !== 'mishnah') return null
+  const verses = item.kind === 'mishnah' ? item.paragraphs : item.verses
   const verseEls = Array.from(el.querySelectorAll('[data-type="psalm"]')) as HTMLElement[]
   if (verseEls.length < 2) return null
 
@@ -205,13 +245,16 @@ function splitOversizedItem(item: DisplayItem, el: HTMLElement, maxHeight: numbe
   if (chunkVerseIndices.length < 2) return null
 
   return chunkVerseIndices.map((idxs, chunkIndex) => {
-    const chunkVerses = idxs.map((i) => item.verses[i]!)
+    const chunkVerses = idxs.map((i) => verses[i]!)
     const id = `${item.id}-chunk${chunkIndex}`
     const label = chunkIndex === 0 ? item.label : ''
     if (item.kind === 'psalm-chapter') {
       return { id, kind: 'psalm-chapter', label, chapter: item.chapter, verses: chunkVerses } satisfies ChapterItem
     }
-    return { id, kind: 'letter-stanza', groupCaption: item.groupCaption, label, verses: chunkVerses } satisfies LetterStanzaItem
+    if (item.kind === 'letter-stanza') {
+      return { id, kind: 'letter-stanza', groupCaption: item.groupCaption, label, verses: chunkVerses } satisfies LetterStanzaItem
+    }
+    return { id, kind: 'mishnah', label, source: item.source, paragraphs: chunkVerses } satisfies MishnahFlowItem
   })
 }
 
@@ -227,7 +270,33 @@ export function renderPageItem(item: DisplayItem): ReactNode {
       if (item.text === 'תהילים') return null
       return <h2 data-content="section-title">{item.text}</h2>
     case 'block':
-      return <div data-content="block" dangerouslySetInnerHTML={{ __html: item.html }} />
+      // data-prayer keys the per-prayer font override in the sheet CSS
+      // (each prayer block renders in its own font unless overridden — see
+      // SHEET_ELEMENT_FONTS' blessingText / elMalehText / closing* rows).
+      // The section title lives inside the same wrapper as the content, so
+      // every block is one self-contained div: title first, text after.
+      return (
+        <div data-content="block" data-prayer={item.prayer}>
+          {item.title ? <h2 data-content="section-title">{item.title}</h2> : null}
+          <div dangerouslySetInnerHTML={{ __html: item.html }} />
+        </div>
+      )
+    case 'kaddish':
+      // The whole קדיש יתום block as one container: the section title and
+      // every exchange inside it. Each exchange is rendered by the dedicated
+      // KaddishSection component (its own [data-content="kaddish-section"]
+      // div), so the block reads title-first, content-after and every part
+      // stays individually addressable in CSS.
+      return (
+        <div data-content="kaddish" data-nusach={item.nusach}>
+          <h2 data-content="section-title">{item.title}</h2>
+          <div data-content="kaddish-sections">
+          {item.sections.map((chunk, index) => (
+            <KaddishSection key={index} chunk={chunk} responseLabel={item.responseLabel} />
+          ))}
+          </div>
+        </div>
+      )
     case 'psalm-chapter':
       return (
         <p data-content="chapter-flow" data-perek={hebrewNumeral(item.chapter)} data-perek-gimatriya={item.chapter}>
@@ -248,7 +317,12 @@ export function renderPageItem(item: DisplayItem): ReactNode {
       return <h2 data-content="section-title">{item.text}</h2>
     case 'letter-stanza':
       return (
-        <p data-content="chapter-flow" data-perek={hebrewNumeral(PSALM_119_CHAPTER)} data-perek-gimatriya={PSALM_119_CHAPTER}>
+        <p
+          data-content="chapter-flow"
+          data-letters
+          data-perek={hebrewNumeral(PSALM_119_CHAPTER)}
+          data-perek-gimatriya={PSALM_119_CHAPTER}
+        >
           {item.label ? (
             <span data-content="chapter-badge">
               <span data-content="chapter-caption">{item.groupCaption}</span>
@@ -265,26 +339,54 @@ export function renderPageItem(item: DisplayItem): ReactNode {
     case 'stanza-title':
     case 'stanza-verse':
       return null
-    case 'mishnah-title':
+    case 'mishnah':
+      // A whole mishnah flows as one justified block, badged like a psalm
+      // chapter: the black "משנה" badge carries the מסכת/פרק source where
+      // a chapter badge carries the psalm number. Continuation chunks (from
+      // splitOversizedItem) drop the badge, same as chapter chunks.
       return (
-        <div data-content="mishnah-title">
-          <h4>{item.label}</h4>
-          <span data-content="source">{item.source}</span>
-        </div>
+        <p data-content="chapter-flow" data-type="mishnah-flow">
+          {item.label ? (
+            <span data-content="chapter-badge">
+              <span data-content="chapter-caption">מסכת {item.source.tractate}</span>
+              <span data-content="chapter-num">{item.source.chapter}</span>
+            </span>
+          ) : null}
+          {item.paragraphs.map((paragraph) => (
+            <span data-type="psalm" data-pasuk={hebrewNumeral(paragraph.pasuk)} data-pasuk-gimatriya={paragraph.pasuk} key={paragraph.pasuk}>
+              {paragraph.text}{' '}
+            </span>
+          ))}
+        </p>
       )
+    case 'mishnah-title':
     case 'mishnah-text':
-      return <p data-content="mishnah-text">{item.text}</p>
+      // Consumed by buildDisplayItems (merged into a single 'mishnah' flow
+      // item above) — never rendered on their own.
+      return null
   }
 }
 
 /**
  * CSS custom properties consumed by preview.css's `div[data-page]` rules —
- * the one place SheetLayout/SheetFontRoles get translated into a page's
+ * the one place SheetLayout/SheetElementFonts get translated into a page's
  * inline style. Width/height are also set directly (not left to the
  * `div[data-page="a4"]` CSS selector alone) so a paper size preview.css
  * doesn't have an explicit rule for still renders at the right size.
+ *
+ * Each of the 18 sheet elements (SHEET_ELEMENT_FONTS) gets its own
+ * `--izkor-font-<element>` var; the sheet CSS maps the per-prayer blocks
+ * onto them via data-prayer, the rest onto the element selectors directly.
  */
-export function sheetPageVars(layout: SheetLayout, fontRoles: SheetFontRoles): CSSProperties {
+function elementFontVar(element: (typeof SHEET_ELEMENT_FONTS)[number]): string {
+  return `--izkor-font-${element}`
+}
+
+export function sheetPageVars(layout: SheetLayout, fonts: SheetElementFonts): CSSProperties {
+  const vars: Record<string, string> = {}
+  for (const element of SHEET_ELEMENT_FONTS) {
+    vars[elementFontVar(element)] = fontDef(fonts[element]).cssFamily
+  }
   return {
     width: layout.page.widthPx,
     height: layout.page.heightPx,
@@ -294,9 +396,11 @@ export function sheetPageVars(layout: SheetLayout, fontRoles: SheetFontRoles): C
     '--izkor-margin-y': `${layout.marginY}px`,
     '--izkor-title-font-size': `${layout.titleFontPx}px`,
     '--izkor-heading-font-size': `${layout.headingFontPx}px`,
-    '--izkor-font-title': fontDef(fontRoles.title).cssFamily,
-    '--izkor-font-heading': fontDef(fontRoles.heading).cssFamily,
-    '--izkor-font-body': fontDef(fontRoles.body).cssFamily,
+    // Base cascade fallback for chrome that isn't one of the 18
+    // individually-controllable elements (the page footer, the joint/note
+    // קדיש lines) — the global font, not a hardcoded family.
+    '--izkor-font-default': fontDef(layout.fontId).cssFamily,
+    ...vars,
   } as CSSProperties
 }
 
@@ -343,7 +447,7 @@ export function SheetDocument({ content, layout, settings }: SheetDocumentProps)
   const headerBlock = content.find((c) => c.kind === 'header')
   const headerText = headerBlock?.text ?? ''
   const deathDateText = headerBlock?.deathDateText
-  const pageVars = useMemo(() => sheetPageVars(layout, settings.fontRoles), [layout, settings.fontRoles])
+  const pageVars = useMemo(() => sheetPageVars(layout, settings.fonts), [layout, settings.fonts])
 
   const emptyContentRef = useRef<HTMLDivElement>(null)
   const itemsHostRef = useRef<HTMLDivElement>(null)
