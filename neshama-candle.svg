@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 92" width="64" height="92" color="#c79b2a" style="color:#c79b2a">
+    <defs>
+        <radialGradient id="flame-glow" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="currentColor" stop-opacity="0.9"></stop>
+            <stop offset="100%" stop-color="currentColor" stop-opacity="0"></stop>
+        </radialGradient>
+        <linearGradient id="wax" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="currentColor" stop-opacity="0.55"></stop>
+            <stop offset="50%" stop-color="currentColor"></stop>
+            <stop offset="100%" stop-color="currentColor" stop-opacity="0.55"></stop>
+        </linearGradient>
+    </defs>
+    <g transform="translate(0 8)">
+        <circle cx="32" cy="20" r="16" fill="url(#flame-glow)" opacity="0.5"></circle>
+        <g class="candle-flame">
+            <path d="M32 4c5 7 9 11 9 16a9 9 0 0 1-18 0c0-5 4-9 9-16Z" fill="currentColor"></path>
+            <path d="M32 9c3 5 5 8 5 12a5 5 0 0 1-10 0c0-4 2-7 5-12Z" fill="#f6e8b2" opacity="0.9"></path>
+        </g>
+    </g>
+    <rect x="31" y="28" width="2" height="6" fill="currentColor" opacity="0.9"></rect>
+    <rect x="10" y="40" width="44" height="40" rx="7" fill="url(#wax)"></rect>
+    <rect x="13" y="43" width="3" height="34" rx="1.5" fill="currentColor" opacity="0.22"></rect>
+    <rect x="10" y="55" width="44" height="11" fill="currentColor" opacity="0.2"></rect>
+    <rect x="10" y="54" width="44" height="1.5" fill="currentColor" opacity="0.35"></rect>
+    <rect x="10" y="66" width="44" height="1.5" fill="currentColor" opacity="0.35"></rect>
+    <rect x="10" y="78" width="44" height="2" rx="1" fill="currentColor" opacity="0.18"></rect>
+</svg>
