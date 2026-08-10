@@ -3,12 +3,14 @@ import { ArrowLeft, DownloadIcon, Loader2, PanelRightClose, Settings2 } from 'lu
 import { useTranslation } from 'react-i18next'
 
 import { buildSheetContent } from '@/features/sheet/content'
+import { folioClient } from '@/features/folio/folio-client'
 import { supportsWasm } from '@/features/folio/wasm-support'
 import { useSheetDraft } from '@/features/sheet/from-query'
 import { supportsPdfEmbed } from '@/features/sheet/pdf-support'
 import { PdfViewer } from '@/features/sheet/PdfViewer'
 import { ScaleA4Preview } from '@/features/sheet/ScaleA4Preview'
-import { deceasedWord, SheetDocument } from '@/features/sheet/sheet-document'
+import { SheetDocument } from '@/features/sheet/sheet-document'
+import { deceasedWord } from '@/features/sheet/labels'
 import { SheetSettingsPanel } from '@/features/sheet/SheetSettingsPanel'
 import { downloadPdf, renderPdf, sheetFilename } from '@/features/wizard/sheet-actions'
 import type { StepProps } from '@/features/wizard/step-registry'
@@ -255,6 +257,19 @@ export function Step5Review({ search, setSearch }: StepProps) {
   // `pdfViewerSupported` is false, since that PDF is exactly what the
   // download banner below offers on browsers that can't display it inline.
   const renderEnabled = search.editor !== 1 && wasmSupported
+  // The ~16MB Folio WASM starts downloading the moment THIS step mounts (the
+  // first time the PDF is actually within reach), not when the wizard was
+  // entered — so entering the wizard stays light. Warm-up is fire-and-forget
+  // and overlapped with the review time; renderPdf() below works whether or
+  // not the warm-up finished. Skipped in editor mode (`?editor=1`, no render
+  // will ever run) and on devices with no real WASM support.
+  useEffect(() => {
+    if (!renderEnabled) return
+    folioClient.warm().catch(() => {
+      // Non-fatal: the first real render re-attempts regardless — a failed
+      // warm just means that render didn't have a head start.
+    })
+  }, [renderEnabled])
   const pdfModeRequested = renderEnabled && pdfViewerSupported
   const {
     url: pdfUrl,

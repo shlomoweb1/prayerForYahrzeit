@@ -14,6 +14,10 @@ export default defineConfig({
     tanstackRouter({
       routesDirectory: './src/routes',
       generatedRouteTree: './src/routeTree.gen.ts',
+      // Split each route's component (and its imports, e.g. js-yaml + the
+      // blog's markdown posts) into lazy chunks fetched only when that route
+      // is actually requested — the blog stays out of the initial bundle.
+      autoCodeSplitting: true,
     }),
     react(),
     tailwindcss(),
@@ -47,6 +51,10 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ttf,otf}'],
+        // The four hero images (man3/male/female2/Ashkenaz-torah.png) are
+        // 2.1–2.3 MB, over workbox's 2 MiB default precache limit — raise it
+        // so the landing hero still works offline.
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         // font-data/* chunks (base64-embedded fonts for the Folio PDF
         // capture, see vite-plugins/sheet-fonts.ts) are NOT precached, same
         // reasoning as folio.wasm below — precaching all ~20 fonts on

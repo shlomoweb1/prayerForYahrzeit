@@ -9,7 +9,8 @@ export {
   type ThemeMode,
   type ThemeState,
 } from './themes'
-export { ThemeProvider, useTheme } from './theme-provider'
+export { ThemeProvider } from './theme-provider'
+export { ThemeContext, useTheme } from './theme-context'
 export {
   HERO_IMAGES,
   useHeroImage,

@@ -2,7 +2,7 @@ import { HDate } from '@hebcal/core'
 import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react'
 import { Datepicker, config as gregorianDatepickerConfig } from 'headless-datetimepicker'
 import type { DateItemType } from 'headless-datetimepicker'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -124,16 +124,19 @@ function MonthYearPopover({
   const [yearPageStart, setYearPageStart] = useState(year - Math.floor(YEAR_PAGE_SIZE / 2))
 
   // Re-centre the year page on the live year each time the popover opens —
-  // simpler to reason about than remembering the last scroll position.
-  useEffect(() => {
-    if (open) setYearPageStart(year - Math.floor(YEAR_PAGE_SIZE / 2))
-  }, [open, year])
+  // simpler to reason about than remembering the last scroll position. Done
+  // in the open handler rather than an effect (the year can't change from
+  // outside while the popover is open).
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next)
+    if (next) setYearPageStart(year - Math.floor(YEAR_PAGE_SIZE / 2))
+  }
 
   const pageYears = Array.from({ length: YEAR_PAGE_SIZE }, (_, i) => yearPageStart + i)
   const monthCount = adapter.monthsInYear(year)
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <button
           type="button"

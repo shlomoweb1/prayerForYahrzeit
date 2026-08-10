@@ -14,8 +14,7 @@ export const es = {
       home: 'Inicio',
       wizard: 'Crear hoja',
       accessibility: 'Accesibilidad',
-      tools: 'Herramientas',
-      folio: 'Cómo se hace el PDF',
+      blog: 'Blog',
       about: 'Acerca de',
     },
     footer: {
@@ -406,5 +405,9 @@ export const es = {
       error: 'No se pudo enviar. Inténtelo de nuevo en un momento.',
       subject: 'Nuevo mensaje de la página Acerca de',
     },
+  },
+  blog: {
+    title: 'Blog',
+    tagline: 'Notas del taller: cómo se construye este sitio',
   },
 } satisfies typeof he

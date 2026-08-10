@@ -7,7 +7,7 @@ import izkorLogicalProps from './eslint-local/plugin.js'
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'playwright-report', 'test-results', 'public/wasm'],
+    ignores: ['dist', 'dev-dist', 'coverage', 'playwright-report', 'test-results', 'public/wasm'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { useTheme } from '@/features/theme/theme-provider'
+import { useTheme } from '@/features/theme/theme-context'
 import type { ThemeId } from '@/features/theme/themes'
 
 export const HERO_STORAGE_KEY = 'izkor:hero:v1'

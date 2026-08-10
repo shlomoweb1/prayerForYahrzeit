@@ -27,7 +27,7 @@
  * every other item, not an estimate — so pass counts and chunk heights stay
  * correct automatically.
  */
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import type { RefObject } from 'react'
 
 import { paginate, type PageableItem } from '@/features/sheet/pagination'
@@ -63,16 +63,15 @@ export function useSheetPagePlan<T extends PageableItem>(
 ): SheetPagePlan<T> {
   const [plan, setPlan] = useState<T[][]>([items])
   const [effectiveItems, setEffectiveItems] = useState<T[]>(items)
-  const splitPassRef = useRef(0)
-
-  // Reset to the fresh input list (and forget prior split attempts) whenever
-  // the source content changes — the React-sanctioned "adjust state during
-  // render when a prop changes" pattern, cheaper than a extra effect + render.
-  const lastItemsRef = useRef(items)
-  if (lastItemsRef.current !== items) {
-    lastItemsRef.current = items
+  const [splitPass, setSplitPass] = useState(0)
+  // Tracks the last `items` value seen, so the state reset below only runs
+  // once per external change (React's sanctioned "adjust state during render
+  // when a prop changes" pattern — cheaper than an extra effect + render).
+  const [prevItems, setPrevItems] = useState(items)
+  if (prevItems !== items) {
+    setPrevItems(items)
     setEffectiveItems(items)
-    splitPassRef.current = 0
+    setSplitPass(0)
   }
 
   useLayoutEffect(() => {
@@ -107,7 +106,7 @@ export function useSheetPagePlan<T extends PageableItem>(
         lastBottom = bottom
       }
 
-      if (splitOversized && splitPassRef.current < MAX_SPLIT_PASSES) {
+      if (splitOversized && splitPass < MAX_SPLIT_PASSES) {
         let didSplit = false
         const next: T[] = []
         for (const item of effectiveItems) {
@@ -122,7 +121,7 @@ export function useSheetPagePlan<T extends PageableItem>(
           }
         }
         if (didSplit) {
-          splitPassRef.current += 1
+          setSplitPass((n) => n + 1)
           setEffectiveItems(next)
           return
         }
@@ -141,7 +140,7 @@ export function useSheetPagePlan<T extends PageableItem>(
     let fontsReady: Promise<unknown> = Promise.resolve()
     if (typeof document !== 'undefined' && document.fonts?.ready) fontsReady = document.fonts.ready
     void fontsReady.then(measureAndPack)
-  }, [effectiveItems, emptyContentRef, itemsHostRef, splitOversized])
+  }, [effectiveItems, splitPass, emptyContentRef, itemsHostRef, splitOversized])
 
   return { plan, measuredItems: effectiveItems }
 }

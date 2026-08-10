@@ -52,7 +52,6 @@ async function loadWasmExec(): Promise<void> {
   }
   const resp = await fetch(url)
   if (!resp.ok) throw new Error(`fetch wasm_exec.js failed: ${resp.status}`)
-  // eslint-disable-next-line no-eval
   ;(0, eval)(await resp.text())
 }
 

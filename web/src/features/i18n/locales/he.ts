@@ -12,8 +12,7 @@ export const he = {
       home: 'בית',
       wizard: 'יצירת דף',
       accessibility: 'נגישות',
-      tools: 'כלים',
-      folio: 'איך נוצר ה-PDF',
+      blog: 'בלוג',
       about: 'אודות',
     },
     footer: {
@@ -395,5 +394,9 @@ export const he = {
       error: 'השליחה נכשלה. נסו שוב בעוד רגע.',
       subject: 'הודעה חדשה מעמוד האודות',
     },
+  },
+  blog: {
+    title: 'בלוג',
+    tagline: 'פרקים מהסדנה — איך האתר הזה נבנה',
   },
 }

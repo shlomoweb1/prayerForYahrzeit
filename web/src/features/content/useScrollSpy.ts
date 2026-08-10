@@ -43,7 +43,8 @@ export function useScrollSpy({
         ? scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 4
         : false
       if (isAtBottom) {
-        setActiveId(targets[targets.length - 1].id)
+        const lastTarget = targets.at(-1)
+        if (lastTarget) setActiveId(lastTarget.id)
         return
       }
       const threshold = (scroller?.getBoundingClientRect().top ?? 0) + offset

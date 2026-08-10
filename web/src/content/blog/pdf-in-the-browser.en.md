@@ -1,4 +1,8 @@
-# How Can a PDF Be Created Directly in the Browser?
+---
+title: "How Can a PDF Be Created Directly in the Browser?"
+date: '2026-08-10'
+excerpt: "Every memorial sheet becomes a PDF — but the interesting part is how. No server, no screenshots: a real layout engine compiled to WebAssembly rebuilds the document right in your browser, Hebrew vowels and all."
+---
 
 Creating a PDF sounds simple.
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* global CSSRule */
 /**
  * Diagnostic only — Folio itself never sees this. Given a captured HTML
  * payload (the same string renderSheetHTML.tsx hands to Folio), report
@@ -112,7 +113,7 @@ function buildReport(html, registry) {
     const used = new Map() // prop -> value (last writer wins, mirrors cascade order roughly)
 
     for (const { selectorText, declarations } of rules) {
-      let matches = false
+      let matches
       try {
         matches = el.matches(selectorText)
       } catch {

@@ -28,6 +28,7 @@ import { buildPageItems, splitMishnahParagraphs } from '@/features/sheet/content
 import type { MishnahItemBlock, PageItem, SheetBlock } from '@/features/sheet/content'
 import { fontDef } from '@/features/sheet/fonts'
 import { KaddishSection } from '@/features/sheet/kaddish-section'
+import { deceasedWord } from '@/features/sheet/labels'
 import { SHEET_ELEMENT_FONTS, type SheetElementFonts, type SheetGender, type SheetLayout, type SheetSettings } from '@/features/sheet/layout'
 import { useSheetPagePlan } from '@/features/sheet/useSheetPagePlan'
 import { hebrewNumeral } from '@/lib/hebrew'
@@ -104,12 +105,8 @@ export type DisplayItem = PageItem | ChapterItem | LetterStanzaItem | LettersHea
 /**
  * Printed speaker labels for kaddish lines live in KaddishSection
  * (kaddish-section.tsx), the component that renders the kaddish sections.
+ * `deceasedWord` lives in labels.ts (a non-component module).
  */
-
-/** "המנוחה" for female, "הנפטר" for male — used mid-sentence (loading copy, section headings). */
-export function deceasedWord(gender: SheetGender): string {
-  return gender === 'female' ? 'המנוחה' : 'הנפטר'
-}
 
 function nameSectionHeading(gender: SheetGender): string {
   return `כאן אומרים ממזמור תהילים קי"ט פסוקים כשמו של ${deceasedWord(gender)}`
@@ -118,7 +115,7 @@ function nameSectionHeading(gender: SheetGender): string {
 /** Psalm 119 is the only source for every letter stanza — its chapter number never varies. */
 const PSALM_119_CHAPTER = 119
 
-export function buildDisplayItems(items: PageItem[], gender: SheetGender, content: SheetBlock[]): DisplayItem[] {
+function buildDisplayItems(items: PageItem[], gender: SheetGender, content: SheetBlock[]): DisplayItem[] {
   const psalmsBlock = content.find((block): block is Extract<SheetBlock, { kind: 'psalms' }> => block.kind === 'psalms')
   const chapterNumbers = psalmsBlock?.chapters.map((c) => c.chapter) ?? []
   let chapterCursor = 0
@@ -258,7 +255,7 @@ function splitOversizedItem(item: DisplayItem, el: HTMLElement, maxHeight: numbe
   })
 }
 
-export function renderPageItem(item: DisplayItem): ReactNode {
+function renderPageItem(item: DisplayItem): ReactNode {
   switch (item.kind) {
     case 'header':
     case 'psalm-title':
@@ -382,7 +379,7 @@ function elementFontVar(element: (typeof SHEET_ELEMENT_FONTS)[number]): string {
   return `--izkor-font-${element}`
 }
 
-export function sheetPageVars(layout: SheetLayout, fonts: SheetElementFonts): CSSProperties {
+function sheetPageVars(layout: SheetLayout, fonts: SheetElementFonts): CSSProperties {
   const vars: Record<string, string> = {}
   for (const element of SHEET_ELEMENT_FONTS) {
     vars[elementFontVar(element)] = fontDef(fonts[element]).cssFamily

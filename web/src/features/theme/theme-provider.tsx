@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 
 import {
   applyThemeState,
@@ -16,17 +9,7 @@ import {
   type ThemeMode,
   type ThemeState,
 } from '@/features/theme/themes'
-
-interface ThemeContextValue {
-  theme: ThemeId
-  mode: ThemeMode
-  setTheme: (theme: ThemeId) => void
-  setMode: (mode: ThemeMode) => void
-  toggleMode: () => void
-  cycleTheme: () => void
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null)
+import { ThemeContext } from '@/features/theme/theme-context'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ThemeState>(() => loadThemeState())
@@ -35,17 +18,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     applyThemeState(state)
   }, [state])
 
-  const value = useMemo<ThemeContextValue>(
+  const value = useMemo(
     () => ({
       mode: state.mode,
       theme: state.theme,
-      setTheme: (theme) =>
+      setTheme: (theme: ThemeId) =>
         setState((current) => {
           const next = { ...current, theme }
           saveThemeState(next)
           return next
         }),
-      setMode: (mode) => {
+      setMode: (mode: ThemeMode) => {
         setState((current) => {
           const next = { ...current, mode }
           saveThemeState(next)
@@ -76,12 +59,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   )
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-}
-
-export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext)
-  if (!ctx) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  return ctx
 }

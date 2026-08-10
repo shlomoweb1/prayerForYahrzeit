@@ -1,6 +1,10 @@
-# The Tools Behind This Website — Explained Simply
+---
+title: "The Tools Behind This Website — Explained Simply"
+date: '2026-08-10'
+excerpt: "What quietly powers this site — the open-source stack, the Hebrew fonts, and the choice to do all the work in your browser so your sheet never leaves your device."
+---
 
-This page explains, in plain language, what tools and technologies we use to build and run this website.
+People often ask what quietly runs a site like this — so this is our answer, in plain language, from the workshop where it is built.
 
 No technical knowledge is needed to read it. Every term is explained the first time it appears.
 

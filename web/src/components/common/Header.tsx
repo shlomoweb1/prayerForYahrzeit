@@ -29,13 +29,8 @@ export default function Header() {
             </Link>
           }
           {
-            <Link to="/tools/system" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
-              {t('common.nav.tools')}
-            </Link>
-          }
-          {
-            <Link to="/tools/folio" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
-              {t('common.nav.folio')}
+            <Link to="/blog" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+              {t('common.nav.blog')}
             </Link>
           }
         </div>

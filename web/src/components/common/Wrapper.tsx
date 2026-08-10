@@ -15,11 +15,12 @@ export default function WrapperComponent() {
   // instead of growing with content (which would push the footer off-screen).
   const isAppShell =
     location.pathname === '/wizard' && (location.search as { step?: number })?.step === STEP_MAX
-  // The long tech documents (tools, folio) get the same pinned treatment:
-  // header and footer stay on screen, the document scrolls in its own region.
-  // (The routes are /tools/system and /tools/folio — a bare prefix match keeps
-  // this true for any future tool page without a route file edit.)
-  const isPinnedPage = location.pathname.startsWith('/tools')
+  // The blog post pages get the same pinned treatment: header and footer stay
+  // on screen, the article scrolls in its own region. The /blog index keeps
+  // the trailing slash so it scrolls normally like the landing page — a bare
+  // prefix match keeps this true for any future post route without a route
+  // file edit.
+  const isPinnedPage = location.pathname.startsWith('/blog/')
   // The floating CTA's job is to route people into the wizard — hide it once
   // they're already inside the creation flow.
   const inWizard = location.pathname.startsWith('/wizard')

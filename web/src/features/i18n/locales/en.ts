@@ -14,8 +14,7 @@ export const en = {
       home: 'Home',
       wizard: 'Create sheet',
       accessibility: 'Accessibility',
-      tools: 'Tools',
-      folio: 'How PDFs work',
+      blog: 'Blog',
       about: 'About',
     },
     footer: {
@@ -400,5 +399,9 @@ export const en = {
       error: 'Sending failed. Please try again in a moment.',
       subject: 'New message from the About page',
     },
+  },
+  blog: {
+    title: 'Blog',
+    tagline: 'Notes from the workshop — how this site is built',
   },
 } satisfies typeof he

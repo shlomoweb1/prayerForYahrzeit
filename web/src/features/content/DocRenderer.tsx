@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 import ReactMarkdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'
 import remarkGfm from 'remark-gfm'
@@ -19,6 +21,12 @@ interface DocRendererProps {
   withToc?: boolean
   /** Compact rhythm for short snippets (about bios). */
   compact?: boolean
+  /**
+   * Optional content rendered at the top of the reading pane, inside the
+   * readable background — used by the blog to show the frontmatter title and
+   * dateline above the markdown body.
+   */
+  header?: ReactNode
 }
 
 /**
@@ -27,7 +35,7 @@ interface DocRendererProps {
  * spied on with an IntersectionObserver and the matching section is
  * highlighted in the fixed table of contents as the reader scrolls.
  */
-export function DocRenderer({ content, withToc = false, compact = false }: DocRendererProps) {
+export function DocRenderer({ content, withToc = false, compact = false, header }: DocRendererProps) {
   const { t } = useTranslation()
   const headings = withToc
     ? extractHeadings(content).filter((heading) => heading.level === 2)
@@ -80,6 +88,7 @@ export function DocRenderer({ content, withToc = false, compact = false }: DocRe
         </Accordion>
       )}
       <div ref={containerRef} className={cn('min-w-0 bg-background/80 p-4 rounded-sm', hasToc && 'lg:pe-67.5')}>
+        {header}
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={createDocComponents({ compact })}>
           {content}
         </ReactMarkdown>
