@@ -7,12 +7,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favico/favicon-16x16.png">
     <link rel="manifest" href="/icons/favico/site.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="בניית דף תפילה מהודר להדפסה - תהילים, קדיש, משניות והשכבה - לקריאה בבית העלמין ולשיתוף עם המשפחה"
-    />
     <meta name="theme-color" content="#141a2e" />
-    <title>תפילה לנשמה - דף תפילה לקריאה בבית העלמין</title>
+    <!-- title/description/OG are managed per route via TanStack Router's head() -->
     <script>
       ;(function () {
         var KEY = 'izkor:theme:v1'
@@ -39,8 +35,10 @@
         var LOCALE_KEY = 'izkor:locale:v1'
         var LOCALES = ['he', 'en', 'es', 'fr']
         var locale = 'he'
+        var hasPref = false
         try {
           var storedLocale = window.localStorage.getItem(LOCALE_KEY)
+          hasPref = storedLocale !== null
           if (LOCALES.indexOf(storedLocale) !== -1) locale = storedLocale
         } catch (e) {
           locale = 'he'
@@ -48,6 +46,22 @@
         var root = document.documentElement
         root.lang = locale
         root.dir = locale === 'he' ? 'rtl' : 'ltr'
+        // First visit (no stored preference): route the browser to the /en
+        // form when its language is not Hebrew, so non-Hebrew readers land on
+        // English content. The locale-neutral wizard is skipped.
+        if (locale === 'he' && !hasPref) {
+          var pathname = window.location.pathname
+          var prefixed = pathname === '/en' || pathname.indexOf('/en/') === 0
+          var neutral = pathname === '/wizard' || pathname.indexOf('/wizard/') === 0
+          var lang = (navigator.language || 'he').toLowerCase()
+          var hebrew = lang === 'he' || lang.indexOf('he-') === 0
+          if (!prefixed && !neutral && !hebrew) {
+            window.location.replace(
+              '/en' + pathname + window.location.search + window.location.hash,
+            )
+            return
+          }
+        }
         var KEY = 'izkor:a11y:v1'
         var classes = []
         var stored = null

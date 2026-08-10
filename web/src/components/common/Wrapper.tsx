@@ -4,12 +4,17 @@ import Header from './Header'
 import Footer from './Footer'
 import { Toaster } from '@/components/ui/sonner'
 import { FloatingPrayerCta } from './FloatingPrayerCta'
+import { useSyncRouteLocale } from '@/features/i18n/route-locale'
+import { RouteHead } from '@/features/seo/RouteHead'
 import { STEP_MAX } from '@/features/wizard/wizard-query'
 import { cn } from '@/lib/utils'
 
 export default function WrapperComponent() {
   const { t } = useTranslation()
   const location = useRouterState({ select: (s) => s.location })
+  // The route locale owns the UI language on content routes (bare path =
+  // Hebrew, /en = English); the wizard is exempt and keeps the picker choice.
+  useSyncRouteLocale(location.pathname)
   // The wizard's final step is an app-like editor/preview screen: it owns its
   // own internal scroll region, so the shell must be pinned to the viewport
   // instead of growing with content (which would push the footer off-screen).
@@ -33,6 +38,7 @@ export default function WrapperComponent() {
       )}
       style={{ backgroundImage: 'var(--app-backdrop)' }}
     >
+      <RouteHead />
       <a
         href="#main"
         className="sr-only inset-s-4 top-4 z-50 rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground focus:not-sr-only"

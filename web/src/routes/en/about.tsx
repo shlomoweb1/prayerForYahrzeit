@@ -5,21 +5,22 @@ import { buildHreflang } from '@/features/seo/hreflang'
 import { buildPersonSchema } from '@/features/seo/schemas'
 import { siteUrl } from '@/lib/site'
 
-const TITLE = 'אודות — תפילה לנשמה'
-const DESCRIPTION = 'האיש שמאחורי תפילה לנשמה — שלמה, בונה מערכות שרת, אתרים ויישומים.'
+const TITLE = 'About — Prayer for the Soul'
+const DESCRIPTION =
+  'The person behind Prayer for the Soul — Shlomo, a builder of servers, websites and applications.'
 
-export const Route = createFileRoute('/about')({
+export const Route = createFileRoute('/en/about')({
   head: () => ({
     meta: [
       { title: TITLE },
       { name: 'description', content: DESCRIPTION },
       { property: 'og:title', content: TITLE },
       { property: 'og:description', content: DESCRIPTION },
-      { property: 'og:url', content: siteUrl('/about') },
-      { 'script:ld+json': buildPersonSchema('שלמה', siteUrl('/about')) },
+      { property: 'og:url', content: siteUrl('/en/about') },
+      { 'script:ld+json': buildPersonSchema('Shlomo', siteUrl('/en/about')) },
     ],
     links: [
-      { rel: 'canonical', href: siteUrl('/about') },
+      { rel: 'canonical', href: siteUrl('/en/about') },
       ...buildHreflang('/about'),
     ],
   }),

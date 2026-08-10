@@ -31,6 +31,7 @@ import {
 } from '@/features/a11y/preferences'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
+import { localizedPath, useRouteLocale } from '@/features/i18n/route-locale'
 
 type ToggleKey = Exclude<keyof A11yPreferences, 'textSize'>
 type ToggleLabelKey = `a11y.toggles.${ToggleKey}`
@@ -55,6 +56,7 @@ const TOGGLES: A11yToggle[] = [
 
 export function A11yWidget() {
   const { t } = useTranslation()
+  const routeLocale = useRouteLocale()
   const [open, setOpen] = useState(false)
   const [prefs, setPrefs] = useState<A11yPreferences>(() => loadA11yPreferences())
 
@@ -147,7 +149,7 @@ export function A11yWidget() {
           </Button>
           <Separator />
           <Link
-            to="/accessibility"
+            to={localizedPath('/accessibility', routeLocale)}
             className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
             onClick={() => setOpen(false)}
           >

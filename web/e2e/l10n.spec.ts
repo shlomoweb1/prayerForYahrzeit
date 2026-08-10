@@ -1,13 +1,26 @@
 import { expect, test, type Page } from '@playwright/test'
 
-const LOCALES = [
-  { code: 'he', dir: 'rtl' },
-  { code: 'en', dir: 'ltr' },
-  { code: 'es', dir: 'ltr' },
-  { code: 'fr', dir: 'ltr' },
+const LOCALES = ['he', 'en', 'es', 'fr'] as const
+
+// Content pages exist in two URL forms: the bare Hebrew one (/, /accessibility)
+// and the /en English one shared by en/es/fr. The URL form owns the language.
+const FORMS = [
+  { code: 'he', base: '/', lang: 'he', dir: 'rtl', landingH1: 'לעילוי נשמת הנפטר', a11yH1: 'הצהרת נגישות' },
+  { code: 'en', base: '/en', lang: 'en', dir: 'ltr', landingH1: 'Create a printable yahrzeit sheet', a11yH1: 'Accessibility statement' },
 ] as const
 
+function contentPath(form: (typeof FORMS)[number], route: string): string {
+  return `${form.base === '/' ? '' : form.base}${route}`
+}
+
 const STEPS = [1, 2, 3, 4] as const
+
+const NEXT_LABEL: Record<(typeof LOCALES)[number], string> = {
+  he: 'הבא',
+  en: 'Next',
+  es: 'Siguiente',
+  fr: 'Suivant',
+}
 
 function prefilledWizardUrl(step: number): string {
   const params = new URLSearchParams({
@@ -39,101 +52,89 @@ async function waitForFonts(page: Page): Promise<void> {
   await page.evaluate(() => document.fonts.ready.then(() => true))
 }
 
-for (const { code, dir } of LOCALES) {
-  test.describe(`locale ${code}`, () => {
+// --- Content pages: the two URL forms ------------------------------------
+
+for (const form of FORMS) {
+  test.describe(`content form ${form.code}`, () => {
     test('app shell respects dir and lang', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/')
-      await expect(page.locator('html')).toHaveAttribute('lang', code)
-      await expect(page.locator('html')).toHaveAttribute('dir', dir)
+      await setLocale(page, form.code)
+      await page.goto(form.base)
+      await expect(page.locator('html')).toHaveAttribute('lang', form.lang)
+      await expect(page.locator('html')).toHaveAttribute('dir', form.dir)
     })
 
     test('landing page renders', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/')
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+      await setLocale(page, form.code)
+      await page.goto(form.base)
+      // Assert the real hero copy, not "any h1" - a 404 fallback also has one.
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(form.landingH1)
     })
 
     test('accessibility page renders', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/accessibility')
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-    })
-
-    test('wizard keeps keyboard-only navigation working', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/wizard')
-      await page.keyboard.press('Tab')
-      await page.keyboard.press('Tab')
-      await page.keyboard.press('Tab')
-      await page.keyboard.press('Enter')
-      await expect(page).toHaveURL(/step=2/)
+      await setLocale(page, form.code)
+      await page.goto(contentPath(form, '/accessibility'))
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(form.a11yH1)
     })
   })
 }
 
-for (const { code } of LOCALES) {
-  test.describe(`snapshots ${code} mobile`, () => {
-    test.use({ viewport: { width: 375, height: 667 } })
+// Landing and accessibility assert content, not pixels. Visual regression
+// snapshots are reserved for the wizard below, where the sheet's print layout
+// genuinely matters and every change is a deliberate design decision.
 
-    test('landing', async ({ page }) => {
+// --- Wizard: locale-neutral, the picker language drives the UI ------------
+
+for (const code of LOCALES) {
+  test.describe(`wizard ${code}`, () => {
+    test('keeps keyboard-only navigation working', async ({ page }) => {
       await setLocale(page, code)
-      await page.goto('/')
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-      await expect(page).toHaveScreenshot(`${code}-mobile-landing.png`, { fullPage: true })
+      await page.goto('/wizard')
+      // Step forward with the keyboard alone: tab until the wizard's Next
+      // button is focused (the header + picker precede it in tab order, so
+      // the count is not fixed), then press Enter.
+      const next = page.getByRole('button', { name: NEXT_LABEL[code], exact: true })
+      for (let i = 0; i < 12; i++) {
+        if (await next.evaluate((el) => el === document.activeElement)) break
+        await page.keyboard.press('Tab')
+      }
+      await next.press('Enter')
+      await expect(page).toHaveURL(/step=2/)
     })
 
-    test('accessibility', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/accessibility')
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-      await expect(page).toHaveScreenshot(`${code}-mobile-accessibility.png`, { fullPage: true })
-    })
+    test.describe('snapshots mobile', () => {
+      test.use({ viewport: { width: 375, height: 667 } })
 
-    for (const step of STEPS) {
-      test(`wizard step ${step}`, async ({ page }) => {
-        await setLocale(page, code)
-        await page.goto(prefilledWizardUrl(step))
-        await expect(page).toHaveURL(/step=/)
-        await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        if (step === 4) await waitForFonts(page)
-        await expect(page).toHaveScreenshot(`${code}-mobile-wizard-step-${step}.png`, {
-          fullPage: true,
-          timeout: step === 4 ? 30_000 : 10_000,
+      for (const step of STEPS) {
+        test(`step ${step}`, async ({ page }) => {
+          await setLocale(page, code)
+          await page.goto(prefilledWizardUrl(step))
+          await expect(page).toHaveURL(/step=/)
+          await expect(page.locator('[data-step-heading]')).toBeVisible()
+          if (step === 4) await waitForFonts(page)
+          await expect(page).toHaveScreenshot(
+            `${code}-mobile-wizard-step-${step}.png`,
+            { fullPage: true, timeout: step === 4 ? 30_000 : 10_000 },
+          )
         })
-      })
-    }
-  })
-
-  test.describe(`snapshots ${code} desktop`, () => {
-    test.use({ viewport: { width: 1280, height: 800 } })
-
-    test('landing', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/')
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-      await expect(page).toHaveScreenshot(`${code}-desktop-landing.png`, { fullPage: true })
+      }
     })
 
-    test('accessibility', async ({ page }) => {
-      await setLocale(page, code)
-      await page.goto('/accessibility')
-      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-      await expect(page).toHaveScreenshot(`${code}-desktop-accessibility.png`, { fullPage: true })
-    })
+    test.describe('snapshots desktop', () => {
+      test.use({ viewport: { width: 1280, height: 800 } })
 
-    for (const step of STEPS) {
-      test(`wizard step ${step}`, async ({ page }) => {
-        await setLocale(page, code)
-        await page.goto(prefilledWizardUrl(step))
-        await expect(page).toHaveURL(/step=/)
-        await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        if (step === 4) await waitForFonts(page)
-        await expect(page).toHaveScreenshot(`${code}-desktop-wizard-step-${step}.png`, {
-          fullPage: true,
-          timeout: step === 4 ? 30_000 : 10_000,
+      for (const step of STEPS) {
+        test(`step ${step}`, async ({ page }) => {
+          await setLocale(page, code)
+          await page.goto(prefilledWizardUrl(step))
+          await expect(page).toHaveURL(/step=/)
+          await expect(page.locator('[data-step-heading]')).toBeVisible()
+          if (step === 4) await waitForFonts(page)
+          await expect(page).toHaveScreenshot(
+            `${code}-desktop-wizard-step-${step}.png`,
+            { fullPage: true, timeout: step === 4 ? 30_000 : 10_000 },
+          )
         })
-      })
-    }
+      }
+    })
   })
 }

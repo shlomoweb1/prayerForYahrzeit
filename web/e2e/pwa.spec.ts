@@ -96,7 +96,8 @@ test('app shell stays usable offline (wizard route included)', async ({ browser 
 
   await context.setOffline(true)
   await page.goto('/wizard')
-  await expect(page.getByRole('heading', { name: 'אשף יצירת דף יזכור' })).toBeVisible()
+  await expect(page.locator('[data-step-heading]')).toBeVisible()
+  await expect(page.locator('[data-step-heading]')).toHaveText('מגדר')
   await context.setOffline(false)
   await context.close()
 })

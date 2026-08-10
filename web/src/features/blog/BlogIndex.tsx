@@ -2,6 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 import { OrnamentDivider } from '@/components/theme/ornaments'
+import {
+  localizedPath,
+  useRouteLocale,
+  type RouteLocale,
+} from '@/features/i18n/route-locale'
 
 import { BLOG_POSTS, formatPostDate, getPostDate, type BlogPost } from './posts'
 import { useLocalizedPost } from './useLocalizedPost'
@@ -10,10 +15,12 @@ import { useLocalizedPost } from './useLocalizedPost'
  * The blog's front page: a small editorial masthead over a dated list of
  * posts. Kept deliberately light - one ornament, one column, no cards - so
  * it reads like a journal rather than a dashboard. The date is localized via
- * Intl (Hebrew shows a Hebrew dateline, LTR locales their own).
+ * Intl (Hebrew shows a Hebrew dateline, LTR locales their own) and post links
+ * stay within the URL's locale form.
  */
 export function BlogIndex() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const routeLocale = useRouteLocale()
   const posts = [...BLOG_POSTS].sort((a, b) => getPostDate(b).localeCompare(getPostDate(a)))
 
   return (
@@ -28,14 +35,14 @@ export function BlogIndex() {
 
       <ul className="grid gap-12">
         {posts.map((post) => (
-          <BlogPostListItem key={post.slug} post={post} locale={i18n.language} />
+          <BlogPostListItem key={post.slug} post={post} locale={routeLocale} />
         ))}
       </ul>
     </div>
   )
 }
 
-function BlogPostListItem({ post, locale }: { post: BlogPost; locale: string }) {
+function BlogPostListItem({ post, locale }: { post: BlogPost; locale: RouteLocale }) {
   const { title, excerpt, date } = useLocalizedPost(post)
   return (
     <li>
@@ -45,7 +52,7 @@ function BlogPostListItem({ post, locale }: { post: BlogPost; locale: string }) 
         </time>
         <h2 className="mt-1.5 font-display text-2xl font-semibold lang-he:font-keter">
           <Link
-            to="/blog/$slug"
+            to={localizedPath('/blog/$slug', locale)}
             params={{ slug: post.slug }}
             className="no-underline transition-colors hover:text-gold"
           >

@@ -1,4 +1,3 @@
-import { siteUrl } from '@/lib/site'
 import { ogImageUrl } from './schemas'
 
 const SITE_NAME = 'תפילה לנשמה'
@@ -8,8 +7,10 @@ const DEFAULT_DESCRIPTION =
 
 /**
  * Site-wide fallback head, attached to the root route. Nested routes override
- * title/description/canonical/og via their own head(); these tags cover any
- * route that does not, and carry the shared OG image and social card.
+ * title/description/og via their own head() and set their own canonical link
+ * (the router does not dedupe `links`, so a fallback canonical here would
+ * clash with per-route ones). These tags cover any route that does not, and
+ * carry the shared OG image and social card.
  */
 export function siteDefaults() {
   return {
@@ -24,6 +25,5 @@ export function siteDefaults() {
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:image', content: ogImageUrl() },
     ],
-    links: [{ rel: 'canonical', href: siteUrl('/') }],
   }
 }

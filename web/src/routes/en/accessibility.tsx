@@ -5,23 +5,24 @@ import { buildHreflang } from '@/features/seo/hreflang'
 import { buildWebPageSchema } from '@/features/seo/schemas'
 import { siteUrl } from '@/lib/site'
 
-const TITLE = 'הצהרת נגישות — תפילה לנשמה'
-const DESCRIPTION = 'הצהרת הנגישות של תפילה לנשמה — תאימות, תכונות נגישות, מגבלות ידועות ודרכי יצירת קשר.'
+const TITLE = 'Accessibility Statement — Prayer for the Soul'
+const DESCRIPTION =
+  'The Prayer for the Soul accessibility statement — conformance, accessibility features, known limitations and how to reach us.'
 
-export const Route = createFileRoute('/accessibility')({
+export const Route = createFileRoute('/en/accessibility')({
   head: () => ({
     meta: [
       { title: TITLE },
       { name: 'description', content: DESCRIPTION },
       { property: 'og:title', content: TITLE },
       { property: 'og:description', content: DESCRIPTION },
-      { property: 'og:url', content: siteUrl('/accessibility') },
+      { property: 'og:url', content: siteUrl('/en/accessibility') },
       {
-        'script:ld+json': buildWebPageSchema('הצהרת נגישות', siteUrl('/accessibility'), DESCRIPTION),
+        'script:ld+json': buildWebPageSchema('Accessibility Statement', siteUrl('/en/accessibility'), DESCRIPTION),
       },
     ],
     links: [
-      { rel: 'canonical', href: siteUrl('/accessibility') },
+      { rel: 'canonical', href: siteUrl('/en/accessibility') },
       ...buildHreflang('/accessibility'),
     ],
   }),

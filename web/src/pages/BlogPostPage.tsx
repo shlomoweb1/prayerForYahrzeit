@@ -14,9 +14,14 @@ const EMPTY_POST: BlogPost = {
   contentByLocale: { en: '' },
 }
 
+/**
+ * Renders a single post for whatever locale form it is mounted under
+ * (/blog/$slug or /en/blog/$slug) - the slug comes from the matched params
+ * generically, and the content locale from the URL form.
+ */
 export default function BlogPostPage() {
   const { t } = useTranslation()
-  const { slug } = useParams({ from: '/blog/$slug' })
+  const { slug = '' } = useParams({ strict: false })
   const post = getPostBySlug(slug)
   const { title } = useLocalizedPost(post ?? EMPTY_POST)
 

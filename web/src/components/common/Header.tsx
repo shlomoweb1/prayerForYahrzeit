@@ -1,11 +1,20 @@
 import { useTranslation } from 'react-i18next'
-
-import { LocalePicker } from '@/features/i18n/locale-picker'
 import { Link } from '@tanstack/react-router'
 
-export default function Header() {
-  const { t } = useTranslation();
+import { LocalePicker } from '@/features/i18n/locale-picker'
+import {
+  localizedPath,
+  useRouteLocale,
+  type RouteLocale,
+} from '@/features/i18n/route-locale'
 
+function toForm(locale: RouteLocale, path: string): string {
+  return localizedPath(path, locale)
+}
+
+export default function Header() {
+  const { t } = useTranslation()
+  const routeLocale = useRouteLocale()
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/50 backdrop-blur">
@@ -18,21 +27,15 @@ export default function Header() {
           {t('common.siyata.he')}
         </span>
         <div className="flex items-center gap-4">
-          {
-            <Link to="/" className="group font-display text-xl text-muted-foreground lang-he:font-keter flex items-center gap-1 no-underline hover:text-gold">
-              <span>{t('common.nav.home')}</span>
-            </Link>
-          }
-          {
-            <Link to="/about" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
-              {t('common.nav.about')}
-            </Link>
-          }
-          {
-            <Link to="/blog" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
-              {t('common.nav.blog')}
-            </Link>
-          }
+          <Link to={toForm(routeLocale, '/')} className="group font-display text-xl text-muted-foreground lang-he:font-keter flex items-center gap-1 no-underline hover:text-gold">
+            <span>{t('common.nav.home')}</span>
+          </Link>
+          <Link to={toForm(routeLocale, '/about')} className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+            {t('common.nav.about')}
+          </Link>
+          <Link to={toForm(routeLocale, '/blog')} className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+            {t('common.nav.blog')}
+          </Link>
         </div>
         <LocalePicker />
       </div>
