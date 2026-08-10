@@ -9,90 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#141a2e" />
     <!-- title/description/OG are managed per route via TanStack Router's head() -->
-    <script>
-      ;(function () {
-        var KEY = 'izkor:theme:v1'
-        var THEMES = ['dusk', 'parchment', 'stone']
-        var MODES = ['light', 'dark']
-        var state = { theme: 'dusk', mode: 'dark' }
-        try {
-          var stored = JSON.parse(window.localStorage.getItem(KEY) || 'null')
-          if (stored && typeof stored === 'object') {
-            if (THEMES.indexOf(stored.theme) !== -1) state.theme = stored.theme
-            if (MODES.indexOf(stored.mode) !== -1) state.mode = stored.mode
-          }
-        } catch (e) {
-          state = { theme: 'dusk', mode: 'dark' }
-        }
-        var root = document.documentElement
-        root.dataset.theme = state.theme
-        root.dataset.themeMode = state.mode
-        root.style.colorScheme = state.mode
-      })()
-    </script>
-    <script>
-      ;(function () {
-        var LOCALE_KEY = 'izkor:locale:v1'
-        var LOCALES = ['he', 'en', 'es', 'fr']
-        var locale = 'he'
-        var hasPref = false
-        try {
-          var storedLocale = window.localStorage.getItem(LOCALE_KEY)
-          hasPref = storedLocale !== null
-          if (LOCALES.indexOf(storedLocale) !== -1) locale = storedLocale
-        } catch (e) {
-          locale = 'he'
-        }
-        var root = document.documentElement
-        root.lang = locale
-        root.dir = locale === 'he' ? 'rtl' : 'ltr'
-        // First visit (no stored preference): route the browser to the /en
-        // form when its language is not Hebrew, so non-Hebrew readers land on
-        // English content. The locale-neutral wizard is skipped.
-        if (locale === 'he' && !hasPref) {
-          var pathname = window.location.pathname
-          var prefixed = pathname === '/en' || pathname.indexOf('/en/') === 0
-          var neutral = pathname === '/wizard' || pathname.indexOf('/wizard/') === 0
-          var lang = (navigator.language || 'he').toLowerCase()
-          var hebrew = lang === 'he' || lang.indexOf('he-') === 0
-          if (!prefixed && !neutral && !hebrew) {
-            window.location.replace(
-              '/en' + pathname + window.location.search + window.location.hash,
-            )
-            return
-          }
-        }
-        var KEY = 'izkor:a11y:v1'
-        var classes = []
-        var stored = null
-        try {
-          stored = JSON.parse(window.localStorage.getItem(KEY) || 'null')
-        } catch (e) {
-          stored = null
-        }
-        if (stored && typeof stored === 'object') {
-          if (stored.contrast) classes.push('a11y-contrast')
-          if (stored.mono) classes.push('a11y-mono')
-          if (stored.textSize === 125 || stored.textSize === 150) {
-            classes.push('a11y-text-' + stored.textSize)
-          }
-          if (stored.lineSpacing) classes.push('a11y-line-spacing')
-          if (stored.wordSpacing) classes.push('a11y-word-spacing')
-          if (stored.letterSpacing) classes.push('a11y-letter-spacing')
-          if (stored.readableFont) classes.push('a11y-readable-font')
-          if (stored.highlightLinks) classes.push('a11y-highlight-links')
-          if (stored.highlightHeadings) classes.push('a11y-highlight-headings')
-          if (stored.largeCursor) classes.push('a11y-large-cursor')
-          if (stored.stopAnimations) classes.push('a11y-stop-animations')
-        }
-        if (classes.length > 0) {
-          document.documentElement.classList.add.apply(
-            document.documentElement.classList,
-            classes,
-          )
-        }
-      })()
-    </script>
+    <!-- Deliberately synchronous (no async/defer): these must run and paint
+         document.documentElement's theme/dir/lang/a11y state before first
+         paint, or the page flashes the wrong theme/RTL direction/locale for
+         a frame. The version query strings are appended by
+         vite-plugins/head-scripts-version.ts. -->
+    <script src="/scripts/theme-init.js"></script>
+    <script src="/scripts/locale-init.js"></script>
   </head>
   <body>
     <div id="root"></div>

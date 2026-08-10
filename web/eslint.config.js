@@ -12,10 +12,21 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['scripts/**/*.mjs'],
+    files: ['scripts/**/*.mjs', '*.cjs'],
     languageOptions: {
       globals: {
         ...globals.node,
+      },
+    },
+  },
+  {
+    // Synchronous pre-React head scripts (index.html) - plain browser
+    // scripts, not ES modules, so `var`/no-strict-mode is intentional.
+    files: ['public/scripts/**/*.js'],
+    languageOptions: {
+      sourceType: 'script',
+      globals: {
+        ...globals.browser,
       },
     },
   },

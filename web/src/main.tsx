@@ -23,6 +23,30 @@ declare module '@tanstack/react-router' {
 
 const rootElement = document.getElementById('root')!
 
+// scripts/prerender.mjs bakes route-specific title/meta/link/JSON-LD tags
+// into the static HTML for crawlers. This app renders with createRoot (no
+// hydrateRoot - there is no real SSR here), so React has no way to recognize
+// those static tags as "its own" once RouteHead portals in the live,
+// route-managed set - left alone, the two would coexist, duplicating title/
+// canonical/OG/JSON-LD in the DOM for the lifetime of the page view. Static
+// index.html has none of these tags itself (see its own comment), so on a
+// non-prerendered load this is a safe no-op; it only ever removes prerendered
+// artifacts before the live TanStack Router head takes over.
+function clearPrerenderedHead(): void {
+  const selector = [
+    'title',
+    'meta[name="description"]',
+    'meta[property^="og:"]',
+    'meta[name="robots"]',
+    'link[rel="canonical"]',
+    'link[rel="alternate"][hreflang]',
+    'script[type="application/ld+json"]',
+  ].join(', ')
+  document.head.querySelectorAll(selector).forEach((el) => el.remove())
+}
+
+clearPrerenderedHead()
+
 void initI18n().then(() => {
   createRoot(rootElement).render(
     <StrictMode>

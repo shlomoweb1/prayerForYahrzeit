@@ -36,6 +36,9 @@ export default function Header() {
           <Link to={toForm(routeLocale, '/blog')} className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
             {t('common.nav.blog')}
           </Link>
+          <Link to={toForm(routeLocale, '/contact')} className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+            {t('common.nav.contact')}
+          </Link>
         </div>
         <LocalePicker />
       </div>

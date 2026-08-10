@@ -1,0 +1,22 @@
+# TODO(prod): the Sitemap URL below uses the placeholder domain from .env -
+# update it (and VITE_SITE_URL) to the real production origin before launch.
+
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://izkor.example/sitemap.xml

@@ -14,9 +14,12 @@ export const he = {
       accessibility: 'נגישות',
       blog: 'בלוג',
       about: 'אודות',
+      contact: 'יצירת קשר',
     },
     footer: {
       accessibility: 'הצהרת נגישות',
+      contact: 'יצירת קשר',
+      privacy: 'פרטיות',
       rights: 'כל הזכויות שמורות',
       prayers: 'סוגי תפילה',
       categories: {
@@ -398,5 +401,13 @@ export const he = {
   blog: {
     title: 'בלוג',
     tagline: 'פרקים מהסדנה - איך האתר הזה נבנה',
+  },
+  contactPage: {
+    title: 'יצירת קשר',
+    intro: 'מחפשים בונה למערכת, אתר או פרויקט? כתבו כמה שורות ואחזור אליכם.',
+  },
+  privacyPage: {
+    title: 'מדיניות פרטיות',
+    updatedAt: 'עודכן לאחרונה',
   },
 }

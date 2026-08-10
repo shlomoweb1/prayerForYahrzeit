@@ -16,9 +16,12 @@ export const es = {
       accessibility: 'Accesibilidad',
       blog: 'Blog',
       about: 'Acerca de',
+      contact: 'Contacto',
     },
     footer: {
       accessibility: 'Declaración de accesibilidad',
+      contact: 'Contacto',
+      privacy: 'Privacidad',
       rights: 'Todos los derechos reservados',
       prayers: 'Oraciones',
       categories: {
@@ -409,5 +412,13 @@ export const es = {
   blog: {
     title: 'Blog',
     tagline: 'Notas del taller: cómo se construye este sitio',
+  },
+  contactPage: {
+    title: 'Contacto',
+    intro: '¿Buscas a alguien para construir un sistema, sitio web o proyecto? Escribe unas líneas y te responderé.',
+  },
+  privacyPage: {
+    title: 'Política de privacidad',
+    updatedAt: 'Última actualización',
   },
 } satisfies typeof he

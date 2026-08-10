@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+import { headScriptsVersion } from './vite-plugins/head-scripts-version.ts'
 import { pdfCss } from './vite-plugins/pdf-css.ts'
 import { sheetFonts } from './vite-plugins/sheet-fonts.ts'
 import { wasmVersion } from './vite-plugins/wasm-version.ts'
@@ -24,6 +25,7 @@ export default defineConfig({
     sheetFonts(),
     pdfCss(),
     wasmVersion(),
+    headScriptsVersion(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons.svg'],

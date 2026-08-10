@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from '@tanstack/react-router'
 
+import { ShieldCheckIcon, UserPenIcon } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 import { A11yWidget } from '@/features/a11y/widget'
+import { localizedPath, useRouteLocale } from '@/features/i18n/route-locale'
 import { ThemeSwitcher } from '@/features/theme/theme-switcher'
 import { ThemeToggle } from '@/features/theme/theme-toggle'
 
@@ -8,6 +13,7 @@ import { ThemeToggle } from '@/features/theme/theme-toggle'
 
 export default function Footer() {
   const { t } = useTranslation()
+  const routeLocale = useRouteLocale()
   return (
     <footer className="border-t bg-background/60 backdrop-blur">
       <div className="mx-auto flex flex-row max-w-6xl gap-8 px-4 py-8">
@@ -20,7 +26,7 @@ export default function Footer() {
         </div>
 
         {/* <nav aria-label={t('common.footer.prayers')} className="grid gap-2"> */}
-          {/* <h2 className="text-sm font-semibold">{t('common.footer.prayers')}</h2>
+        {/* <h2 className="text-sm font-semibold">{t('common.footer.prayers')}</h2>
           {PRAYER_CATEGORIES.map((category) => (
             <Link
               key={category}
@@ -36,6 +42,18 @@ export default function Footer() {
           <div className="flex-wrap items-end gap-2 inline-flex justify-end">
             <ThemeToggle />
             <ThemeSwitcher />
+            <Button variant="outline" size="sm" asChild>
+              <Link to={localizedPath('/contact', routeLocale)} className="no-underline text-foreground">
+                <UserPenIcon className="size-4" />
+                {t('common.footer.contact')}
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <Link to={localizedPath('/privacy', routeLocale)} className="no-underline text-foreground">
+                <ShieldCheckIcon className="size-4" />
+                {t('common.footer.privacy')}
+              </Link>
+            </Button>
             <A11yWidget />
           </div>
         </div>

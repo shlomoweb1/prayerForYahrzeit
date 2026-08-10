@@ -16,9 +16,12 @@ export const en = {
       accessibility: 'Accessibility',
       blog: 'Blog',
       about: 'About',
+      contact: 'Contact',
     },
     footer: {
       accessibility: 'Accessibility statement',
+      contact: 'Contact',
+      privacy: 'Privacy',
       rights: 'All rights reserved',
       prayers: 'Prayers',
       categories: {
@@ -403,5 +406,13 @@ export const en = {
   blog: {
     title: 'Blog',
     tagline: 'Notes from the workshop - how this site is built',
+  },
+  contactPage: {
+    title: 'Contact',
+    intro: 'Looking for someone to build a system, website or project? Write a few lines and I will get back to you.',
+  },
+  privacyPage: {
+    title: 'Privacy Policy',
+    updatedAt: 'Last updated',
   },
 } satisfies typeof he

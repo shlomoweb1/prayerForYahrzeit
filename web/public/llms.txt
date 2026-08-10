@@ -1,0 +1,23 @@
+# Prayer for the Soul (Tefila La-Neshama)
+
+> A free, in-browser tool that builds a printable Hebrew memorial prayer
+> sheet - Tehillim (Psalms), Kaddish, Mishnayot and Hashkava/Yizkor - for
+> reading at the cemetery or sharing with family. The wizard runs entirely
+> client-side: the finished sheet is turned into a PDF by a layout engine
+> compiled to WebAssembly, in the visitor's own browser. No document content
+> is ever sent to a server, and the site has no tracking or analytics.
+
+## Pages
+
+- [Home](https://izkor.example/): the prayer-sheet wizard.
+- [About](https://izkor.example/about): who built the site and why.
+- [Blog](https://izkor.example/blog): notes on how the site and its tools work.
+- [Contact](https://izkor.example/contact): get in touch with the author.
+- [Accessibility statement](https://izkor.example/accessibility)
+- [Privacy policy](https://izkor.example/privacy)
+
+English versions of every page above are available under the `/en` prefix,
+e.g. https://izkor.example/en, https://izkor.example/en/blog.
+
+<!-- TODO(prod): the URLs above use the placeholder domain from .env -
+     regenerate once VITE_SITE_URL is set to the real production origin. -->

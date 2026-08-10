@@ -9,7 +9,15 @@
  *
  *   1. `tailwindcss -i _pdf.css -o pdf.css`   - resolves @import/@source/@apply
  *   2. `lightningcss --targets "chrome 100" pdf.css -o pdf.css` - flattens
- *      nesting/@layer down to plain flat rules Folio can parse
+ *      nesting down to plain flat rules Folio can parse
+ *   3. stripLayerBlocks() on the result - lightningcss does NOT flatten
+ *      `@layer` (cascade layers are natively supported by any target recent
+ *      enough to matter, so it has no polyfill reason to touch them - this
+ *      was wrongly assumed to be lightningcss's job and silently regressed:
+ *      Folio discards `@layer` blocks wholesale as an unrecognized at-rule
+ *      (html/css.go), so every rule inside one - including the actual
+ *      `font-family` declarations - was invisible to Folio, which then fell
+ *      back to its built-in default font with no error).
  *
  * Runs once at buildStart (so `vite build` always has a fresh pdf.css to
  * bundle) and again on every dev-server change to _pdf.css, the files it
@@ -148,7 +156,12 @@ export function pdfCss(): Plugin {
       execFileSync(lightningcssBin, ['--targets', 'chrome 100', out, '-o', out], {
         stdio: 'inherit',
       })
-      assertFolioCompatibleDisplay(fs.readFileSync(out, 'utf-8'), path.relative(root, out))
+      // lightningcss leaves `@layer` wrappers in place (see header comment) -
+      // strip them here so the file actually written/bundled has them gone,
+      // not just the copy the assertion below scans.
+      const flattened = stripLayerBlocks(fs.readFileSync(out, 'utf-8'))
+      fs.writeFileSync(out, flattened)
+      assertFolioCompatibleDisplay(flattened, path.relative(root, out))
     } finally {
       generating = false
       if (pendingRerun) {

@@ -13,11 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccessibilityRouteImport } from './routes/accessibility'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as EnIndexRouteImport } from './routes/en/index'
 import { Route as EnAboutRouteImport } from './routes/en/about'
 import { Route as EnAccessibilityRouteImport } from './routes/en/accessibility'
+import { Route as EnContactRouteImport } from './routes/en/contact'
+import { Route as EnPrivacyRouteImport } from './routes/en/privacy'
 import { Route as WizardIndexRouteImport } from './routes/wizard/index'
 import { Route as EnBlogIndexRouteImport } from './routes/en/blog/index'
 import { Route as EnBlogSlugRouteImport } from './routes/en/blog/$slug'
@@ -40,6 +44,16 @@ const AboutRoute = AboutRouteImport.update({
 const AccessibilityRoute = AccessibilityRouteImport.update({
   id: '/accessibility',
   path: '/accessibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -67,6 +81,16 @@ const EnAccessibilityRoute = EnAccessibilityRouteImport.update({
   path: '/en/accessibility',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnContactRoute = EnContactRouteImport.update({
+  id: '/en/contact',
+  path: '/en/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnPrivacyRoute = EnPrivacyRouteImport.update({
+  id: '/en/privacy',
+  path: '/en/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WizardIndexRoute = WizardIndexRouteImport.update({
   id: '/wizard/',
   path: '/wizard/',
@@ -88,9 +112,13 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/contact': typeof ContactRoute
+  '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/en/about': typeof EnAboutRoute
   '/en/accessibility': typeof EnAccessibilityRoute
+  '/en/contact': typeof EnContactRoute
+  '/en/privacy': typeof EnPrivacyRoute
   '/blog/': typeof BlogIndexRoute
   '/en/': typeof EnIndexRoute
   '/wizard/': typeof WizardIndexRoute
@@ -102,9 +130,13 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/contact': typeof ContactRoute
+  '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/en/about': typeof EnAboutRoute
   '/en/accessibility': typeof EnAccessibilityRoute
+  '/en/contact': typeof EnContactRoute
+  '/en/privacy': typeof EnPrivacyRoute
   '/blog': typeof BlogIndexRoute
   '/en': typeof EnIndexRoute
   '/wizard': typeof WizardIndexRoute
@@ -117,9 +149,13 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/contact': typeof ContactRoute
+  '/privacy': typeof PrivacyRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/en/about': typeof EnAboutRoute
   '/en/accessibility': typeof EnAccessibilityRoute
+  '/en/contact': typeof EnContactRoute
+  '/en/privacy': typeof EnPrivacyRoute
   '/blog/': typeof BlogIndexRoute
   '/en/': typeof EnIndexRoute
   '/wizard/': typeof WizardIndexRoute
@@ -133,9 +169,13 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/accessibility'
+    | '/contact'
+    | '/privacy'
     | '/blog/$slug'
     | '/en/about'
     | '/en/accessibility'
+    | '/en/contact'
+    | '/en/privacy'
     | '/blog/'
     | '/en/'
     | '/wizard/'
@@ -147,9 +187,13 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/accessibility'
+    | '/contact'
+    | '/privacy'
     | '/blog/$slug'
     | '/en/about'
     | '/en/accessibility'
+    | '/en/contact'
+    | '/en/privacy'
     | '/blog'
     | '/en'
     | '/wizard'
@@ -161,9 +205,13 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/accessibility'
+    | '/contact'
+    | '/privacy'
     | '/blog/$slug'
     | '/en/about'
     | '/en/accessibility'
+    | '/en/contact'
+    | '/en/privacy'
     | '/blog/'
     | '/en/'
     | '/wizard/'
@@ -176,9 +224,13 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AccessibilityRoute: typeof AccessibilityRoute
+  ContactRoute: typeof ContactRoute
+  PrivacyRoute: typeof PrivacyRoute
   BlogSlugRoute: typeof BlogSlugRoute
   EnAboutRoute: typeof EnAboutRoute
   EnAccessibilityRoute: typeof EnAccessibilityRoute
+  EnContactRoute: typeof EnContactRoute
+  EnPrivacyRoute: typeof EnPrivacyRoute
   BlogIndexRoute: typeof BlogIndexRoute
   EnIndexRoute: typeof EnIndexRoute
   WizardIndexRoute: typeof WizardIndexRoute
@@ -216,6 +268,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccessibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -251,6 +317,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnAccessibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/contact': {
+      id: '/en/contact'
+      path: '/en/contact'
+      fullPath: '/en/contact'
+      preLoaderRoute: typeof EnContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/privacy': {
+      id: '/en/privacy'
+      path: '/en/privacy'
+      fullPath: '/en/privacy'
+      preLoaderRoute: typeof EnPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wizard/': {
       id: '/wizard/'
       path: '/wizard'
@@ -280,9 +360,13 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AccessibilityRoute: AccessibilityRoute,
+  ContactRoute: ContactRoute,
+  PrivacyRoute: PrivacyRoute,
   BlogSlugRoute: BlogSlugRoute,
   EnAboutRoute: EnAboutRoute,
   EnAccessibilityRoute: EnAccessibilityRoute,
+  EnContactRoute: EnContactRoute,
+  EnPrivacyRoute: EnPrivacyRoute,
   BlogIndexRoute: BlogIndexRoute,
   EnIndexRoute: EnIndexRoute,
   WizardIndexRoute: WizardIndexRoute,
