@@ -34,11 +34,18 @@ export default function WrapperComponent() {
         {t('common.skipLink')}
       </a>
       <Header />
-      <main id="main" className={cn('flex w-full flex-1', isAppShell && 'min-h-0 overflow-hidden')}>
+      {/* `contain-layout` (not just overflow-hidden) is load-bearing: the
+          deeply-nested `overflow-y-auto` scroll panels inside the step-5
+          editor (settings sidebar + A4 preview) still leak their intrinsic
+          content height into <html>'s own scrollable overflow on desktop —
+          overflow-hidden alone doesn't stop it — which made the whole page
+          scroll instead of just the inner panels. Layout containment cuts
+          that propagation off here. */}
+      <main id="main" className={cn('flex w-full flex-1', isAppShell && 'min-h-0 overflow-hidden contain-layout')}>
         <div
           className={cn(
             'mx-auto flex w-full items-center justify-center',
-            isAppShell && 'h-full min-h-0',
+            isAppShell && 'h-full min-h-0 items-stretch',
           )}
         >
           <Outlet />
