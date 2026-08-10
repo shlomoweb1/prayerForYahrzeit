@@ -2,7 +2,7 @@
 /**
  * The durable checklist: every CSS property that can matter to a static
  * HTML->PDF render (per MDN's own registry, `mdn-data`, filtered to
- * "printable" — see mdn-css-properties.mjs for what that excludes and why),
+ * "printable" - see mdn-css-properties.mjs for what that excludes and why),
  * cross-referenced against Folio's declared support
  * (go-html-to-pdf/docs/CSS_SUPPORT.md) and flagged for whether this
  * project's actual toolchain (Tailwind v4) can even emit it.
@@ -10,7 +10,7 @@
  * This is intentionally decoupled from any one document or bug: rerun it
  * after `npm update mdn-data` (new CSS lands in browsers) or after Folio's
  * registry changes (`go generate ./html/...` in go-html-to-pdf), and it
- * re-derives the gap list from scratch — nobody has to remember to update a
+ * re-derives the gap list from scratch - nobody has to remember to update a
  * hand-written list of "things Folio is missing".
  *
  * Priority tiers in the output:
@@ -79,7 +79,7 @@ const tier2 = rows.filter((r) => r.printable && !r.tailwindCanEmit && r.folioSta
 const printableSupported = rows.filter((r) => r.printable && r.folioStatus !== 'unsupported')
 const nonPrintable = rows.filter((r) => !r.printable)
 
-console.log(`\nCSS support matrix — MDN registry (${rows.length} properties) x Folio x Tailwind`)
+console.log(`\nCSS support matrix - MDN registry (${rows.length} properties) x Folio x Tailwind`)
 console.log(`  Printable properties (relevant to a static render): ${rows.length - nonPrintable.length}`)
 console.log(`  ...recognized by Folio:                             ${printableSupported.length}`)
 console.log(`  ...NOT recognized, AND this project's Tailwind build can emit them:  ${tier1.length}`)
@@ -87,14 +87,14 @@ console.log(`  ...NOT recognized, but Tailwind can't emit them (theoretical only
 console.log(`  Non-printable (animation/interaction/etc., correctly out of scope): ${nonPrintable.length}`)
 
 console.log(
-  `\n=== Tier 1: live risk — used by this project's toolchain, invisible to Folio ===\n`,
+  `\n=== Tier 1: live risk - used by this project's toolchain, invisible to Folio ===\n`,
 )
 for (const r of tier1.sort((a, b) => a.property.localeCompare(b.property))) {
   console.log(`  - ${r.property}  [${r.groups.join(', ')}]`)
 }
 
 console.log(
-  `\n=== Tier 2: theoretical gap — Folio can't parse it, but nothing in this repo's Tailwind build emits it today ===\n`,
+  `\n=== Tier 2: theoretical gap - Folio can't parse it, but nothing in this repo's Tailwind build emits it today ===\n`,
 )
 for (const r of tier2.sort((a, b) => a.property.localeCompare(b.property))) {
   console.log(`  - ${r.property}  [${r.groups.join(', ')}]`)

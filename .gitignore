@@ -18,7 +18,7 @@ firebase.json.local
 # Env & secrets
 .env
 .env.*
-!.env.example
+!.env.sample
 
 # OS / editor
 .DS_Store

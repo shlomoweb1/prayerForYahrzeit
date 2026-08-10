@@ -1,4 +1,4 @@
-# Phase 3 — Sheet Builder
+# Phase 3 - Sheet Builder
 
 Branch: `feat/sheet-builder` · Worktree: `.claude/worktrees/feat-sheet-builder` · Depends on: P1-02 (router), P2 (wasm pipeline), P4 data
 
@@ -9,7 +9,7 @@ Details: `SheetLayout` typed model: target (print/share/both), paper (a4|letter)
 
 ## P3-02 Sections implementation
 Status: done | Owner: agent-d | Started: 2026-08-03 | Deps: P4 data (JSON committed), P3-01
-Details: header (תפילות ולימוד לע"נ … ז"ל), blessing (אשר יצר אתכם בדין — optional <30 days), 7 fixed psalms (לג טז יז עב צא קד קל), אותיות השם + נשמה (Psalm 119 stanzas, 8 verses/letter, final ן/ף→נ/פ), קדיש יתום (nusach variants), משניות per letter, קדיש דרבנן + דאתחדתא, השכבה, closing prayers.
+Details: header (תפילות ולימוד לע"נ … ז"ל), blessing (אשר יצר אתכם בדין - optional <30 days), 7 fixed psalms (לג טז יז עב צא קד קל), אותיות השם + נשמה (Psalm 119 stanzas, 8 verses/letter, final ן/ף→נ/פ), קדיש יתום (nusach variants), משניות per letter, קדיש דרבנן + דאתחדתא, השכבה, closing prayers.
 - [x] each section renders from data (letters resolved from name)
 
 ## P3-03 A4Page flow + pagination

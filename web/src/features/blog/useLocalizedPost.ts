@@ -9,7 +9,7 @@ export const FALLBACK_META: PostMeta = { title: '', date: '', excerpt: '' }
 /**
  * Resolves a post's title, body, dateline and excerpt for the active locale.
  * Hebrew readers get the authored Hebrew content and frontmatter; everyone
- * else (including es/fr) falls back to English — identical convention to
+ * else (including es/fr) falls back to English - identical convention to
  * useLocalizedContent.
  */
 export function useLocalizedPost(post: BlogPost) {

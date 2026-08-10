@@ -23,7 +23,7 @@ interface DocRendererProps {
   compact?: boolean
   /**
    * Optional content rendered at the top of the reading pane, inside the
-   * readable background — used by the blog to show the frontmatter title and
+   * readable background - used by the blog to show the frontmatter title and
    * dateline above the markdown body.
    */
   header?: ReactNode

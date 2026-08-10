@@ -165,8 +165,8 @@ export const he = {
       fontPsalmText: 'טקסט המזמורים',
       fontLetterBadge: 'תגית אות',
       fontLetterText: 'טקסט האותיות',
-      fontKaddishMourner: 'קדיש — אבלים',
-      fontKaddishCongregation: 'קדיש — הקהל',
+      fontKaddishMourner: 'קדיש - אבלים',
+      fontKaddishCongregation: 'קדיש - הקהל',
       fontMishnahBadge: 'תגית משנה',
       fontMishnahText: 'טקסט המשניות',
       fontBlessingText: 'ברכה',
@@ -397,6 +397,6 @@ export const he = {
   },
   blog: {
     title: 'בלוג',
-    tagline: 'פרקים מהסדנה — איך האתר הזה נבנה',
+    tagline: 'פרקים מהסדנה - איך האתר הזה נבנה',
   },
 }

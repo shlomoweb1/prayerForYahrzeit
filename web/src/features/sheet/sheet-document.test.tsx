@@ -29,7 +29,7 @@ const settings = (overrides: Partial<SheetSettings> = {}): SheetSettings => ({
 
 // jsdom doesn't do real layout (clientHeight/offsetTop are always 0), so
 // useSheetPagePlan's measure-and-pack never runs and every item lands on one
-// page — these are smoke tests for markup shape, not real pagination
+// page - these are smoke tests for markup shape, not real pagination
 // (pagination.test.ts and the useSheetPagePlan machinery cover that).
 
 describe('SheetDocument', () => {
@@ -51,7 +51,7 @@ describe('SheetDocument', () => {
         settings={settings({ blessing: 1 })}
       />,
     )
-    // Real output pages only — excludes the hidden measure-stack templates,
+    // Real output pages only - excludes the hidden measure-stack templates,
     // which also carry [data-page] (see renderSheetHTML.tsx for why).
     const pages = Array.from(container.querySelectorAll('[data-page]')).filter(
       (page) => !page.closest('[data-sheet-measure]'),

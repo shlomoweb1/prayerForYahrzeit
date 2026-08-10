@@ -1,22 +1,22 @@
 /**
  * SheetDocument: renders the sheet's pages for the on-screen editor preview
- * (step-5-review.tsx) — pre-paginated into fixed-size `[data-page]` boxes
+ * (step-5-review.tsx) - pre-paginated into fixed-size `[data-page]` boxes
  * via `useSheetPagePlan`'s browser-measurement packing, since a webpage has
  * no native concept of "pages" and has to fake the stacked-page look.
  *
  * The off-screen Folio capture (renderSheetHTML.tsx) does NOT reuse this
- * pre-paginated output — Folio is a real PDF layout engine with its own
+ * pre-paginated output - Folio is a real PDF layout engine with its own
  * pagination (`@page`, `page-break-*`, running headers via margin boxes) and
  * treats a fixed-height `overflow:hidden` div as ordinary content to lay
  * out, not a hard clip; feeding it browser-pre-chunked pages made it
  * re-paginate each one internally (a 3-page preview became a 24-page PDF).
  * Content-shaping (`buildDisplayItems`, `renderPageItem`, `deceasedWord`,
- * exported below) is still shared by both — only the pagination *strategy*
+ * exported below) is still shared by both - only the pagination *strategy*
  * differs, because it fundamentally has to: one measures a browser viewport,
  * the other is real print layout. (A prior version of this file had its own
  * separate, even older per-verse-block rendering that never got the
  * chapter-flowing rewrite this content-shaping logic gave the live preview
- * — that's what originally produced a wildly different, much longer PDF
+ * - that's what originally produced a wildly different, much longer PDF
  * than the on-screen preview. This file replaced that; renderSheetHTML.tsx
  * replaced the fixed-page-chunking approach that replaced it in turn.)
  */
@@ -33,7 +33,7 @@ import { SHEET_ELEMENT_FONTS, type SheetElementFonts, type SheetGender, type She
 import { useSheetPagePlan } from '@/features/sheet/useSheetPagePlan'
 import { hebrewNumeral } from '@/lib/hebrew'
 
-/** A verse tagged with its own (1-based) ordinal — carried through splitting
+/** A verse tagged with its own (1-based) ordinal - carried through splitting
  * so a continuation chunk keeps counting from where the previous one left
  * off, instead of restarting at 1. */
 interface NumberedVerse {
@@ -43,7 +43,7 @@ interface NumberedVerse {
 
 /**
  * A whole psalm chapter (badge + every verse) renders and paginates as one
- * block — verses are plain inline spans inside it, not separate <p>s, so
+ * block - verses are plain inline spans inside it, not separate <p>s, so
  * they run together as continuous wrapping text instead of each forcing its
  * own line. That inline flow is also why the chapter can't be split
  * per-verse anymore: it moves to the next page as a unit, like a prayer
@@ -74,7 +74,7 @@ interface LetterStanzaItem {
 }
 
 /**
- * Heading shown before each letter group (אותיות השם / האב / נשמה) — the
+ * Heading shown before each letter group (אותיות השם / האב / נשמה) - the
  * name group gets the instructional sentence, the others their plain title.
  */
 interface LettersHeadingItem {
@@ -87,7 +87,7 @@ interface LettersHeadingItem {
 /**
  * A whole mishnah (black badge "משנה" + the מסכת/פרק source + the flowing
  * text) renders and paginates as one block, mirroring psalm chapters. The
- * text is pre-split into paragraphs (splitMishnahParagraphs — the data marks
+ * text is pre-split into paragraphs (splitMishnahParagraphs - the data marks
  * paragraphs with "ב. " "ג. " inline letters, not <br>s) so an oversized
  * mishnah can be cut at a paragraph boundary by splitOversizedItem, exactly
  * like a psalm chapter is cut at verse boundaries.
@@ -112,7 +112,7 @@ function nameSectionHeading(gender: SheetGender): string {
   return `כאן אומרים ממזמור תהילים קי"ט פסוקים כשמו של ${deceasedWord(gender)}`
 }
 
-/** Psalm 119 is the only source for every letter stanza — its chapter number never varies. */
+/** Psalm 119 is the only source for every letter stanza - its chapter number never varies. */
 const PSALM_119_CHAPTER = 119
 
 function buildDisplayItems(items: PageItem[], gender: SheetGender, content: SheetBlock[]): DisplayItem[] {
@@ -121,7 +121,7 @@ function buildDisplayItems(items: PageItem[], gender: SheetGender, content: Shee
   let chapterCursor = 0
 
   // Each letters group's stanzas carry the true Psalm 119 verse numbers
-  // (verseIds) — a stanza never starts counting over at 1 (e.g. ב׳ is
+  // (verseIds) - a stanza never starts counting over at 1 (e.g. ב׳ is
   // verses 9-16), so buildPageItems' flattened stanza-verse items (plain
   // text only) aren't enough; go back to the source block for the numbers.
   const stanzasByGroupTitle = new Map(
@@ -169,7 +169,7 @@ function buildDisplayItems(items: PageItem[], gender: SheetGender, content: Shee
 
     if (item.kind === 'section-title' && items[i + 1]?.kind === 'stanza-title') {
       const groupCaption = item.text
-      // Every letter group gets its own heading — without one, consecutive
+      // Every letter group gets its own heading - without one, consecutive
       // groups (name / parent / נשמה) have nothing but a tiny per-badge
       // caption between them and read as one run-on block of letters.
       const headingText = groupCaption === 'אותיות השם' ? nameSectionHeading(gender) : groupCaption
@@ -204,12 +204,12 @@ function buildDisplayItems(items: PageItem[], gender: SheetGender, content: Shee
 
 /**
  * Fallback for a chapter/stanza that's still taller than a whole empty page
- * as one flowing block (e.g. Psalm 104's 35 verses) — pack alone can't fix
+ * as one flowing block (e.g. Psalm 104's 35 verses) - pack alone can't fix
  * that, so cut it into smaller flowing chunks at a verse boundary. Reads
  * each verse span's real rendered position (it's already on-screen in the
  * measurement host) to find where content first exceeds maxHeight, so the
  * cut point accounts for the actual Hebrew text wrapping, not a guess. Only
- * the first chunk keeps the badge — later chunks are a continuation of the
+ * the first chunk keeps the badge - later chunks are a continuation of the
  * same chapter/stanza, not a new one.
  */
 // Cut chunks a bit under the real budget: a continuation chunk re-renders
@@ -262,13 +262,13 @@ function renderPageItem(item: DisplayItem): ReactNode {
     case 'psalm-verse':
       return null
     case 'section-title':
-      // Every chapter badge already carries "תהילים" — the section heading
+      // Every chapter badge already carries "תהילים" - the section heading
       // would just repeat it.
       if (item.text === 'תהילים') return null
       return <h2 data-content="section-title">{item.text}</h2>
     case 'block':
       // data-prayer keys the per-prayer font override in the sheet CSS
-      // (each prayer block renders in its own font unless overridden — see
+      // (each prayer block renders in its own font unless overridden - see
       // SHEET_ELEMENT_FONTS' blessingText / elMalehText / closing* rows).
       // The section title lives inside the same wrapper as the content, so
       // every block is one self-contained div: title first, text after.
@@ -359,13 +359,13 @@ function renderPageItem(item: DisplayItem): ReactNode {
     case 'mishnah-title':
     case 'mishnah-text':
       // Consumed by buildDisplayItems (merged into a single 'mishnah' flow
-      // item above) — never rendered on their own.
+      // item above) - never rendered on their own.
       return null
   }
 }
 
 /**
- * CSS custom properties consumed by preview.css's `div[data-page]` rules —
+ * CSS custom properties consumed by preview.css's `div[data-page]` rules -
  * the one place SheetLayout/SheetElementFonts get translated into a page's
  * inline style. Width/height are also set directly (not left to the
  * `div[data-page="a4"]` CSS selector alone) so a paper size preview.css
@@ -395,7 +395,7 @@ function sheetPageVars(layout: SheetLayout, fonts: SheetElementFonts): CSSProper
     '--izkor-heading-font-size': `${layout.headingFontPx}px`,
     // Base cascade fallback for chrome that isn't one of the 18
     // individually-controllable elements (the page footer, the joint/note
-    // קדיש lines) — the global font, not a hardcoded family.
+    // קדיש lines) - the global font, not a hardcoded family.
     '--izkor-font-default': fontDef(layout.fontId).cssFamily,
     ...vars,
   } as CSSProperties

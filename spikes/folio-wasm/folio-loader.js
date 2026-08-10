@@ -1,4 +1,4 @@
-// folio-loader.js — thin main-thread loader for the Folio WASM worker.
+// folio-loader.js - thin main-thread loader for the Folio WASM worker.
 // Phase 2 spike: ~50 lines, no folio-utils.js (that is Node-oriented).
 //
 // API:

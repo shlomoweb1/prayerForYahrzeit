@@ -58,10 +58,10 @@ function SheetContent({
         className={cn(
           // `transition` (as opposed to `transition-none`) here used to fight
           // the `animate-in`/`animate-out` keyframes for control of
-          // `transform` — both targeted it, so the slide could get stuck
+          // `transform` - both targeted it, so the slide could get stuck
           // mid-animation. `transition-none` leaves the keyframes as the only
           // thing driving `transform`. Enter uses `ease-out` (fast start,
-          // slow settle — reads as a drawer being pulled into place) and
+          // slow settle - reads as a drawer being pulled into place) and
           // exit uses the mirrored `ease-in` (slow start, fast finish).
           'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition-none data-[state=closed]:ease-in data-[state=open]:ease-out data-[state=closed]:duration-400 data-[state=open]:duration-600',
           side === 'top' &&

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// build-tehillim.mjs — normalize all-tehillim.json -> data/tehillim.json
+// build-tehillim.mjs - normalize all-tehillim.json -> data/tehillim.json
 // P4-01. Run from repo root: node scripts/build-tehillim.mjs
 //
 // Source: daily-thielim scraper processed dataset (offline, committed output).
 // Recovery: the scraper's parser dropped verses that break its `^\{` regex:
-//   - verses prefixed with "(פ)" (stanza/section markers) — ch 107 v23, ch 119 v9,17,...,169
-//   - verse 1 embedded in the page title line (missing "{") — ch 56, 83, 99, 129, 132
+//   - verses prefixed with "(פ)" (stanza/section markers) - ch 107 v23, ch 119 v9,17,...,169
+//   - verse 1 embedded in the page title line (missing "{") - ch 56, 83, 99, 129, 132
 //   The index-zip then misaligned translit/en/fr for the title-line chapters.
 //   These 7 chapters are rebuilt from the source site's live pages (fallback:
 //   local scraper HTML cache), which are complete and aligned.

@@ -4,7 +4,7 @@
  * Deliberately separate from index.css: Tailwind here only scans the sheet
  * feature tree (source(none) + explicit @source below), so this file never
  * picks up the rest of the website's utility classes, the a11y toggle
- * classes/print resets, or the app's shadcn-style color-token theme — none
+ * classes/print resets, or the app's shadcn-style color-token theme - none
  * of which the captured [data-page] markup uses (verified: no --color-*,
  * font-sans/font-readable, or a11y-* references anywhere under
  * features/sheet or features/render). Import with Vite's `?inline` suffix

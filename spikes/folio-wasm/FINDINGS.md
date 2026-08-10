@@ -1,4 +1,4 @@
-# Folio WASM spike — findings (Phase 2)
+# Folio WASM spike - findings (Phase 2)
 
 Date: 2026-08-03 · Branch: `feat/folio-spike` · Evidence: `spikes/folio-wasm/out/*.pdf`
 
@@ -11,10 +11,10 @@ and `pdftohtml -xml`, cross-checked against the on-screen Chrome reference measu
 
 | Test | Result |
 |---|---|
-| P2-02 hello render through wasm worker | WORKS — hello.pdf, 1× A4, 595.28×841.89 pt |
-| P2-03 capture pipeline (off-screen mount → wrap → render) | WORKS — sheet.pdf = 2 pages, one per `.page` div |
-| P2-04 decorated words | PARTIAL — see below; flex pattern works, inline-block pattern breaks |
-| P2-05 multi-page + custom size + autoheight | WORKS — 810×1440 pt phone page, continuous autoheight page |
+| P2-02 hello render through wasm worker | WORKS - hello.pdf, 1× A4, 595.28×841.89 pt |
+| P2-03 capture pipeline (off-screen mount → wrap → render) | WORKS - sheet.pdf = 2 pages, one per `.page` div |
+| P2-04 decorated words | PARTIAL - see below; flex pattern works, inline-block pattern breaks |
+| P2-05 multi-page + custom size + autoheight | WORKS - 810×1440 pt phone page, continuous autoheight page |
 
 ## P2-04 decorated-word test (highest risk)
 
@@ -31,9 +31,9 @@ letter above each word, words inline RTL, nikud intact.
 - **`display:inline-block` + block deco child BREAKS**: each `.word` is laid out as a
   full-width block (words stack vertically, ~72 pt apart instead of inline). The deco
   letter lands at the right margin (x≈553-571) while the word body sits centered
-  (x≈279-322) — the deco is NOT above its word. Identical breakage for logical and
+  (x≈279-322) - the deco is NOT above its word. Identical breakage for logical and
   pre-reversed input (`deco-logical.pdf` / `deco-reversed.pdf`, page 1).
-- **`position:absolute` deco (bottom:100%)**: also broken — deco box overlaps the body
+- **`position:absolute` deco (bottom:100%)**: also broken - deco box overlaps the body
   line (deco y 618-669 vs body y 636-663) and is horizontally misaligned (variant 3).
 - **`display:flex` WORKS**: `display:flex;flex-direction:row` wrapper + per-word
   `display:flex;flex-direction:column;align-items:center` gives exactly the target look
@@ -51,46 +51,46 @@ bearing inflates the deco box on the left. Minor; Phase 3 can compensate with
 ### Conclusion for Phase 3
 
 Use **flex columns** for the decorated-word layout (not inline-block). Plain text needs
-no reversal — Folio's bidi is correct for Hebrew paragraphs with `dir="rtl"`.
+no reversal - Folio's bidi is correct for Hebrew paragraphs with `dir="rtl"`.
 `Intl.Segmenter` cluster-splitting for "big first letter" works (first grapheme cluster
 includes its nikud).
 
 ## P2-05 page size / pagination
 
-- **Explicit page breaks**: `page-break-before:always` honored — sheet.pdf = 2 pages for
+- **Explicit page breaks**: `page-break-before:always` honored - sheet.pdf = 2 pages for
   2 `.page` divs. Content overflow also paginates (deco-logical.pdf overflows to page 2).
-- **Custom `@page{size:1080px 1920px}`**: WORKS — phone.pdf is 810×1440 pt exactly
+- **Custom `@page{size:1080px 1920px}`**: WORKS - phone.pdf is 810×1440 pt exactly
   (1080×1920 px @ 0.75 pt/px, 96 dpi), 1 page, overrides `pageSize:"a4"` fallback.
-- **AutoHeight `@page{size:1080px 0}`**: WORKS — autoheight.pdf is a single continuous
+- **AutoHeight `@page{size:1080px 0}`**: WORKS - autoheight.pdf is a single continuous
   page, 810×255.6 pt (height = content). **Quirk**: the JS result object reports
-  `height: 0` for autoheight (width=810 is correct) — the actual PDF page height is fine;
+  `height: 0` for autoheight (width=810 is correct) - the actual PDF page height is fine;
   don't trust `result.height` for autoheight pages in Phase 3.
 
 ## Folio quirks list (feed Phase 3)
 
 1. `display:inline-block` with a block child is rendered as a stacked block (words no
    longer inline; deco detaches to the start edge). Use flex.
-2. `position:absolute` (bottom:100% above an inline/word box) mispositions — overlaps
+2. `position:absolute` (bottom:100% above an inline/word box) mispositions - overlaps
    the next line. Avoid absolute deco; use flex column.
 3. **Font fallback is effectively off for @font-face-only docs**: Latin/digits in a
-   Hebrew-only font render as `.notdef` (blank, zero-gid) — "variant 1" headers in
+   Hebrew-only font render as `.notdef` (blank, zero-gid) - "variant 1" headers in
    `deco-variants.pdf` are invisible. The spike fonts (NotoSerifHebrew Regular/Bold)
    contain 0 Latin glyphs. Phase 3 must either use fonts with Latin coverage or style
    Hebrew and Latin text with separate families, and test mixed lines.
 4. **PDF text extraction is unreliable**: embedded subset fonts have degenerate cmaps
    (ToUnicode maps everything to NUL; subset cmap has 1-7 entries). Folio compensates by
-   emitting `ActualText` spans carrying the logical text — `pdftotext`/copy works via
+   emitting `ActualText` spans carrying the logical text - `pdftotext`/copy works via
    those, but raw glyph extraction does not. If Phase 3 needs searchable/selectable text
    beyond what ActualText provides, verify on real output.
 5. `result.height` = 0 for autoheight pages (see above).
 6. Render latency is excellent: 14-50 ms wall per page-size doc once the wasm instance is
    warm (spans: html-parse ~10-16 ms, total 14-47 ms).
-7. `%PDF-`-only output (`out/test.pdf`, 5 bytes, deleted): a truncated PDF header —
+7. `%PDF-`-only output (`out/test.pdf`, 5 bytes, deleted): a truncated PDF header -
    cause: an interrupted render/save from the earlier session (partial base64 of the PDF
    header only), not an error string and not reproducible through the harness (all named
    tests save complete PDFs). If it recurs, suspect Folio's streaming path
    (`streamingThreshold`) under worker termination.
-8. Font sizes in PDFs are exact CSS px→pt at 96 dpi (37.05 pt = 49.4 px deco, etc.) —
+8. Font sizes in PDFs are exact CSS px→pt at 96 dpi (37.05 pt = 49.4 px deco, etc.) -
    no scaling surprises; poppler's pdf2xml coordinates are ×1.5 of pdfinfo's pt space,
    so don't mix them.
 

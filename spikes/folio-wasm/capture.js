@@ -1,4 +1,4 @@
-// capture.js — off-screen capture pipeline (P2-03) + Hebrew helpers (P2-04).
+// capture.js - off-screen capture pipeline (P2-03) + Hebrew helpers (P2-04).
 //
 // Pipeline (per plans/02-architecture.md render pipeline):
 //   mount off-screen (position:fixed; left:-9999px; width:794px = A4 @96dpi)
@@ -61,7 +61,7 @@ const Capture = (function () {
         const rules = sheet.cssRules;
         for (const rule of rules) parts.push(rule.cssText);
       } catch (err) {
-        // cross-origin sheet — skip (all sheets same-origin in this spike)
+        // cross-origin sheet - skip (all sheets same-origin in this spike)
         console.warn("captureStylesheets: skipped sheet", err);
       }
     }

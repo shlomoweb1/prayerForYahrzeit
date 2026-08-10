@@ -1,10 +1,10 @@
 /**
- * Folio WASM render worker — port of spikes/folio-wasm/render.worker.js.
+ * Folio WASM render worker - port of spikes/folio-wasm/render.worker.js.
  *
  * Loaded as an IIFE classic worker (`?worker`, Vite's default format) so
  * importScripts works. Bootstraps wasm_exec.js + folio.wasm and keeps the Go
  * instance warm between renders. The HTML it receives already has every
- * @font-face source embedded as a base64 data URI (renderSheetHTML.tsx) — the
+ * @font-face source embedded as a base64 data URI (renderSheetHTML.tsx) - the
  * captured document has no URL resolution, so fonts must arrive pre-embedded
  * rather than being fetched here.
  *

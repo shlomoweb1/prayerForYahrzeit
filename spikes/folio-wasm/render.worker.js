@@ -1,4 +1,4 @@
-// render.worker.js — Folio WASM worker (Phase 2 spike).
+// render.worker.js - Folio WASM worker (Phase 2 spike).
 //
 // Bootstraps wasm_exec.js + folio.wasm inside a dedicated Web Worker and
 // implements the message protocol from plans/05-folio-wasm.md:
@@ -10,7 +10,7 @@
 //
 // The Go instance stays warm between renders (go.run() blocks forever).
 // Cancel is handled on the main thread (terminate + respawn, see folio-loader.js).
-// fontBaseDir is Node-only — in the browser, @font-face src must be data URIs
+// fontBaseDir is Node-only - in the browser, @font-face src must be data URIs
 // or relative URLs that this worker rewrites (fetch -> base64), cached in memory.
 
 "use strict";

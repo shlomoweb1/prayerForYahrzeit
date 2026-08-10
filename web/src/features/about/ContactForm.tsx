@@ -28,7 +28,7 @@ export function ContactForm() {
     const form = new FormData(event.currentTarget)
     const honey = form.get('_honey')
     if (typeof honey === 'string' && honey.length > 0) {
-      // Bot-filled honeypot — silently ignore.
+      // Bot-filled honeypot - silently ignore.
       setSending(true)
       setTimeout(() => setSending(false), 1500)
       return

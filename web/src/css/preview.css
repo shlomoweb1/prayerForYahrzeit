@@ -1,4 +1,4 @@
-/* Off-screen measurement stack for sheet pagination — pushed right, not
+/* Off-screen measurement stack for sheet pagination - pushed right, not
  * left, because this app is Hebrew/RTL only (see useSheetPagePlan.ts). */
 [data-sheet-measure] {
   position: absolute;
@@ -10,7 +10,7 @@
 }
 
 /* Small parenthesized inline aside for a קדיש congregational response
- * ("(הקהל: אמן)") folded inline into the mourners' flowing text — same class
+ * ("(הקהל: אמן)") folded inline into the mourners' flowing text - same class
  * name/em convention as sheet-css.ts's .izkor-rubric (Folio pipeline). */
 .izkor-rubric {
   font-size: 0.72em;
@@ -22,14 +22,14 @@
  * (baseFontPx, lineHeight, marginX/Y, titleFontPx, headingFontPx) and the
  * resolved per-element fonts (SheetSettings.fonts, one `--izkor-font-<el>`
  * var per SHEET_ELEMENT_FONTS entry, plus `--izkor-font-default` as the
- * fallback for chrome that isn't individually controllable) — this file only
+ * fallback for chrome that isn't individually controllable) - this file only
  * maps those vars onto the data-content selectors, it never hardcodes a font
  * family or px size that should track a setting. Fallbacks match the print
  * defaults so the block still renders sanely if a var is ever missing.
  *
  * Compact/legible print pass: body copy (chapter-flow / block) gets a touch
  * of letter/word-spacing for contrast at arm's length outdoors, while
- * heading/section margins were trimmed — vertical air that doesn't aid
+ * heading/section margins were trimmed - vertical air that doesn't aid
  * reading is what got cut, not the text itself.
  */
 
@@ -166,7 +166,7 @@ div[data-page="a4"] {
 
 [data-content="kaddish"] {
   @apply text-lg;
-  /* Base for the whole block — covers the joint (יהא שמיה רבא) and note
+  /* Base for the whole block - covers the joint (יהא שמיה רבא) and note
      lines too, which aren't individually font-controllable and read as part
      of the mourner's recitation. */
   font-family: var(--izkor-font-kaddishMourner, inherit), 'Noto Serif Hebrew', 'NotoSerifHebrew', serif;
@@ -183,9 +183,9 @@ div[data-page="a4"] {
       letter-spacing: 0.01em;
       word-spacing: 0.05em;
 
-      /* Printed siddurim set קדיש as one continuous flowing paragraph — the
+      /* Printed siddurim set קדיש as one continuous flowing paragraph - the
          mourner's lines and the congregation's (in parens, smaller) run on
-         together — with a single exception: the line the congregation must
+         together - with a single exception: the line the congregation must
          answer aloud together, יהא שמיה רבא, breaks onto its own emphasized
          row. Chunk roles come from content.ts (KaddishChunkRole), not
          position, since the ashkenaz and sepharadi rites have a different
@@ -193,7 +193,7 @@ div[data-page="a4"] {
       [data-content="kaddish-section-chunk"] {
         @apply inline;
 
-        /* "יהא שמיה רבא..." — the one line set apart, larger and bold, as
+        /* "יהא שמיה רבא..." - the one line set apart, larger and bold, as
            it's presented in print. */
         &[data-chunk="joint"] {
           [data-speaker="joint-cue"]{
@@ -202,13 +202,13 @@ div[data-page="a4"] {
           @apply block text-center font-bold text-2xl my-0.25;
         }
 
-        /* Rubric note (e.g. the three-steps-back reminder) — its own small
+        /* Rubric note (e.g. the three-steps-back reminder) - its own small
            centered row. */
         &[data-chunk="note"] {
           @apply block text-center text-sm font-normal my-1;
         }
 
-        /* "הקהל והאבלים" instruction — its own row above the joint text */
+        /* "הקהל והאבלים" instruction - its own row above the joint text */
         [data-speaker="joint-cue"]{
           @apply block text-xs mb-0.5 font-normal;
         }

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// copy-fonts.mjs — curate fonts into web/public/fonts/ (P4-05).
+// copy-fonts.mjs - curate fonts into web/public/fonts/ (P4-05).
 // Run from repo root: node scripts/copy-fonts.mjs
 //
 // Sources: tziyun-berega font fork + staging, each file must have a row in
@@ -30,7 +30,7 @@ const CULMUS = `${CT}/Culmus Project (GPL+FE)`;
 const TC = `${CULMUS}/Yoram Gnat (GPL+FE)/Taamey-Culmus`;
 const MI = `${CULMUS}/Maxim Iorsh (GPL)`;
 // Shared GPL-2.0 text: several Taamey-Culmus families' own LICENSE files point
-// to "GPL-2.0.txt"/"GNU-GPL" without shipping their own copy — TaameyAshkenaz
+// to "GPL-2.0.txt"/"GNU-GPL" without shipping their own copy - TaameyAshkenaz
 // is the one family in the fork that actually has it, so it's the shared source.
 const GPL2_TEXT = `${TC}/TaameyAshkenaz/GPL-2.0.txt`;
 const FAMILIES = {
@@ -195,7 +195,7 @@ const FAMILIES = {
   // The files also carry a FontCreator trial-version "non-commercial only"
   // watermark in one platform's name records (a known FontCreator-trial
   // artifact, not a deliberate re-license) alongside the legitimate OFL text
-  // in the other platform's records — OFL-license.txt here is built from the
+  // in the other platform's records - OFL-license.txt here is built from the
   // clean (Macintosh-platform) records only.
   Shlomo: {
     category: "cantillation",
@@ -290,7 +290,7 @@ for (const [family, cfg] of Object.entries(FAMILIES)) {
   copyFileSync(licenseSrc, destLicense);
   const licenseFiles = [cfg.licenseFile];
 
-  // GPL families: LICENSE.txt references the full GPL text — copy it alongside
+  // GPL families: LICENSE.txt references the full GPL text - copy it alongside
   if (cfg.gplText) {
     const gplSrc = resolve(FORK_ROOT, cfg.gplText);
     if (!existsSync(gplSrc)) {

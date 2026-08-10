@@ -25,7 +25,7 @@ export type SheetSectionToggle = (typeof SHEET_SECTIONS)[number]
 
 export type SheetPaper = 'a4' | 'letter'
 /** נוסח אשכנז, נוסח ספרד (the Chassidic/Israeli variant of the Ashkenazi
- * rite — resolved to the ashkenaz texts with per-line variant swaps), and
+ * rite - resolved to the ashkenaz texts with per-line variant swaps), and
  * עדות המזרח. */
 export type SheetNusach = 'ashkenaz' | 'ashkenazSefard' | 'sefard'
 export type SheetGender = 'male' | 'female'
@@ -36,12 +36,12 @@ export type HashkavaVariant = 'elMaleh' | 'traditional' | 'both'
  * "(הקהל: ...)", "(עונים: ...)", or unlabeled (the response text still
  * prints, just without the parenthesized cue). */
 export type KaddishResponseLabel = 'congregation' | 'responders' | 'none'
-/** Which wording אל מלא רחמים gives for why the deceased deserves rest —
+/** Which wording אל מלא רחמים gives for why the deceased deserves rest -
  * the traditional "charity was donated in their memory" clause, or a
  * "psalms were recited for the elevation of their soul" alternative. */
 export type ElMalehPhrase = 'charity' | 'psalms'
 
-/** Line-height density presets — the "compact vs airy" control. `normal` is
+/** Line-height density presets - the "compact vs airy" control. `normal` is
  * the tuned print default from the compact-layout pass. */
 export type LineDensity = 'tidy' | 'normal' | 'loose'
 
@@ -84,7 +84,7 @@ export type SheetElementFont = (typeof SHEET_ELEMENT_FONTS)[number]
 /** Every sheet element's resolved font (overrides applied, global fallback). */
 export type SheetElementFonts = Record<SheetElementFont, SheetFontId>
 
-/** All 18 sheet elements set to one font — the default settings/tests start
+/** All 18 sheet elements set to one font - the default settings/tests start
  * from (overrides applied later via the fontXxx query keys). */
 export function defaultElementFonts(font: SheetFontId): SheetElementFonts {
   const fonts = {} as SheetElementFonts
@@ -101,7 +101,7 @@ export interface SheetSettings {
   nusach: SheetNusach
   name?: string
   parent?: string
-  /** Hebrew calendar absolute day (R.D.) of passing — see `WizardQuery.deathDate`. */
+  /** Hebrew calendar absolute day (R.D.) of passing - see `WizardQuery.deathDate`. */
   deathDate?: number
   lineage: SheetLineage
   font: SheetFontId
@@ -158,10 +158,10 @@ export function a4PageSpec(): SheetPageSpec {
     // Not rounded to a whole pixel: this value is also what the exported
     // HTML declares as `[data-page]`'s inline `height`, which Folio (the
     // PDF renderer) lays out content into and then places onto an actual
-    // A4 page of exactly 841.89pt (297mm precisely, no px round-trip —
+    // A4 page of exactly 841.89pt (297mm precisely, no px round-trip -
     // see document.PageSizeA4 in go-html-to-pdf). Rounding 297mm to a
     // whole CSS px first (1123px = 842.25pt) makes the declared page
-    // *taller* than the real page it lands on by ~0.36pt — invisible
+    // *taller* than the real page it lands on by ~0.36pt - invisible
     // for most content, but on a page whose content fills the budget to
     // within a fraction of a point (this app tunes its layout right up
     // to the edge), that 0.36pt is enough to push it onto an extra page
@@ -196,7 +196,7 @@ export function paperPageSpec(paper: SheetPaper): SheetPageSpec {
  * page-burning air between lines that doesn't help reading) while
  * `baseFontPx` was nudged to the top of the allowed pt range and a touch of
  * letter/word-spacing was added in sheet CSS for contrast at arm's length in
- * bright sun — the two changes roughly cancel out on line count but improve
+ * bright sun - the two changes roughly cancel out on line count but improve
  * legibility. `lineHeight` here is the `normal` density; `tidy`/`loose` scale
  * it via `LINE_DENSITY_MULTIPLIER`.
  */

@@ -3,19 +3,19 @@
  *
  * Folio's CSS engine doesn't support nested selectors / native CSS nesting
  * the way a browser does (see renderSheetHTML.tsx's var()-inlining note for
- * another Folio CSS-engine gap), so the Tailwind-compiled output — which
- * Tailwind v4 emits using native nesting/@layer — has to be flattened before
+ * another Folio CSS-engine gap), so the Tailwind-compiled output - which
+ * Tailwind v4 emits using native nesting/@layer - has to be flattened before
  * it's usable. Pipeline, run as a single generate() step:
  *
- *   1. `tailwindcss -i _pdf.css -o pdf.css`   — resolves @import/@source/@apply
- *   2. `lightningcss --targets "chrome 100" pdf.css -o pdf.css` — flattens
+ *   1. `tailwindcss -i _pdf.css -o pdf.css`   - resolves @import/@source/@apply
+ *   2. `lightningcss --targets "chrome 100" pdf.css -o pdf.css` - flattens
  *      nesting/@layer down to plain flat rules Folio can parse
  *
  * Runs once at buildStart (so `vite build` always has a fresh pdf.css to
  * bundle) and again on every dev-server change to _pdf.css, the files it
  * @imports (preview.css, generated/sheet-fonts.css), or anything under the
  * feature trees its `@source` directives scan (features/sheet,
- * features/render) — all of which can change what Tailwind emits.
+ * features/render) - all of which can change what Tailwind emits.
  */
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
@@ -32,16 +32,16 @@ const WATCH_PREFIXES = [
 
 /**
  * Folio's CSS engine (html/properties.go `parseDisplay`) only recognizes
- * these `display` values — anything else silently falls back to `block`.
+ * these `display` values - anything else silently falls back to `block`.
  * That's not a parse error, so a typo'd `inline-flex` doesn't fail loudly:
  * it quietly turns a small inline badge into a full-width block, which then
  * corrupts pagination (page-break math is driven by measured element
- * heights). Caught this the hard way once already — this check exists so
+ * heights). Caught this the hard way once already - this check exists so
  * the next one fails the build instead of a printed PDF.
  *
  * `inline-flex`/`inline-grid` were added to Folio's own whitelist (and given
  * real flex/grid inner layout, not just inline-participation) in the
- * go-html-to-pdf fork's `dev` branch — keep this list in sync with
+ * go-html-to-pdf fork's `dev` branch - keep this list in sync with
  * `html/properties.go`'s `parseDisplay` if that ever changes again.
  */
 const FOLIO_DISPLAY_VALUES = new Set([
@@ -64,7 +64,7 @@ const FOLIO_DISPLAY_VALUES = new Set([
  * support needed since pdf.css is already flattened). Folio discards `@`
  * rules other than `@font-face`/`@page`/`@supports`/`@media print` wholesale
  * (html/css.go), and virtually all of Tailwind's own reset/utility output
- * lives inside `@layer` — without stripping it first, this check would flag
+ * lives inside `@layer` - without stripping it first, this check would flag
  * dozens of display values in CSS Folio never actually sees.
  */
 function stripLayerBlocks(css: string): string {
@@ -103,7 +103,7 @@ function stripLayerBlocks(css: string): string {
 /**
  * Heuristic, not a full CSS parser: matches `selector { ...no-nested-braces... }`
  * pairs, which is safe here because pdf.css is post-flatten (no nesting) and
- * `@layer` — the one wrapper that would confuse a brace-naive scan — was
+ * `@layer` - the one wrapper that would confuse a brace-naive scan - was
  * already stripped above. Throws with every offending selector at once
  * rather than one-at-a-time, since these tend to come in batches.
  */
@@ -121,7 +121,7 @@ function assertFolioCompatibleDisplay(css: string, filePath: string): void {
   }
   if (violations.length > 0) {
     throw new Error(
-      `${filePath}: display value(s) not supported by Folio's CSS engine — ` +
+      `${filePath}: display value(s) not supported by Folio's CSS engine - ` +
         `Folio only understands ${[...FOLIO_DISPLAY_VALUES].join(', ')}; anything ` +
         `else silently becomes "block" and corrupts pagination. Fix:\n${violations.join('\n')}`,
     )

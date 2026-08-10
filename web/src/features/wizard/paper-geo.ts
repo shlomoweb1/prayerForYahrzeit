@@ -1,12 +1,12 @@
 /**
- * Best-effort default paper size from the visitor's IP-derived country —
+ * Best-effort default paper size from the visitor's IP-derived country -
  * not their UI locale, which says nothing about where they're printing
  * from (a Hebrew-reading user in the US still needs Letter, not A4).
  *
  * ISO 216 (A4) is the paper standard almost everywhere; the short list
  * below is the practical set of countries where Letter/similar cut sizes
  * are the default. A4 is the safe fallback on any lookup failure, timeout,
- * or unrecognized country — it's correct for the overwhelming majority of
+ * or unrecognized country - it's correct for the overwhelming majority of
  * the world, so failing closed to it never surprises most visitors.
  */
 

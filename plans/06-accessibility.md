@@ -1,16 +1,16 @@
-# 06 — Accessibility
+# 06 - Accessibility
 
-Baseline: **IS 5568 (Israeli standard, aligned to WCAG 2.0 AA)** — legal requirement under the Equal Rights for Persons with Disabilities Act (Israel). Skill reference: `israeli-accessibility-compliance`.
+Baseline: **IS 5568 (Israeli standard, aligned to WCAG 2.0 AA)** - legal requirement under the Equal Rights for Persons with Disabilities Act (Israel). Skill reference: `israeli-accessibility-compliance`.
 
 ## Non-negotiables
 
 - Skip link, positioned with `inset-inline-start` (RTL-safe)
 - One `fieldset`/`legend` per wizard step; `aria-live` regions for dynamic feedback; focus management per step transition
-- Contrast ≥ 4.5:1 (text) / 3:1 (UI) — enforced by axe in CI
+- Contrast ≥ 4.5:1 (text) / 3:1 (UI) - enforced by axe in CI
 - All labels/errors in Hebrew (default locale)
-- Logical CSS properties everywhere (RTL-safe); **no hard px** — rem tokens (100–150% text scaling must not break layout)
+- Logical CSS properties everywhere (RTL-safe); **no hard px** - rem tokens (100–150% text scaling must not break layout)
 
-## Reg-35 preferences widget (not a mock overlay — real classes)
+## Reg-35 preferences widget (not a mock overlay - real classes)
 
 Real implementation classes the user's device preferences; versioned localStorage key (device preference → **not** in URL).
 
@@ -22,7 +22,7 @@ Real implementation classes the user's device preferences; versioned localStorag
 
 ## Accessibility statement page (`/accessibility`, mandatory)
 
-Conformance (IS 5568/WCAG 2.0 AA), features provided (incl. widget), **honest known limitations** (e.g. PDF accessibility status — screen-reader support in generated PDFs is limited; NVDA-tested), feedback channel, last audit date, date of statement. Footer link from every page.
+Conformance (IS 5568/WCAG 2.0 AA), features provided (incl. widget), **honest known limitations** (e.g. PDF accessibility status - screen-reader support in generated PDFs is limited; NVDA-tested), feedback channel, last audit date, date of statement. Footer link from every page.
 
 ## PDF accessibility
 

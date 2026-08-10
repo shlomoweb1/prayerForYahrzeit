@@ -1,6 +1,6 @@
 /**
  * Cache-busting version for a static file under public/, derived from its
- * content (sha256, not mtime — a rewrite that doesn't change the bytes, e.g.
+ * content (sha256, not mtime - a rewrite that doesn't change the bytes, e.g.
  * git checkout or an unrelated re-copy, must not bump the version). Files
  * under public/ are copied verbatim (no content hash), so a URL that doesn't
  * include this stays cached indefinitely in both the browser's HTTP cache

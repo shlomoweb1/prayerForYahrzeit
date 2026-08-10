@@ -15,7 +15,7 @@ export const SECTIONS = [
 
 export const DIALOGS = ['print', 'settings', 'kaddish'] as const
 
-/** Default section set: the עלייה לקבר (graveside) sheet — the format most
+/** Default section set: the עלייה לקבר (graveside) sheet - the format most
  * people printing from this app actually need. Everything else (mishnayot,
  * closing prayers) stays available but opt-in. */
 export const DEFAULT_SECTIONS = ['psalms', 'neshama', 'kaddish', 'hashkava'] as const
@@ -33,7 +33,7 @@ export const WizardQuery = z.object({
   gender: z.enum(['male', 'female']).default('male').catch('male'),
   /**
    * Top-level עדה choice. Ashkenaz has a further נוסח sub-choice
-   * (`nusachAshkenaz`); Mizrahi doesn't — it maps straight to the
+   * (`nusachAshkenaz`); Mizrahi doesn't - it maps straight to the
    * `sefard` liturgy set. See `NusachSelection` below for the validity
    * rule that combines the two, and `deriveSheetNusach` in
    * features/sheet/from-query.ts for the mapping down to `SheetNusach`.
@@ -46,12 +46,12 @@ export const WizardQuery = z.object({
   lineage: z.enum(['none', 'kohen', 'levi']).default('none').catch('none'),
   /**
    * Hebrew date of passing, stored as the Hebrew calendar's absolute day
-   * count (R.D. — see `HDate.abs()`/`new HDate(rd)` in @hebcal/core), not
+   * count (R.D. - see `HDate.abs()`/`new HDate(rd)` in @hebcal/core), not
    * as separate day/month/year fields: one integer round-trips losslessly
    * through `HDate` (leap-year Adar I/II and all), and already bakes in
-   * the before/after-sunset adjustment made on step 4. Optional — the step
+   * the before/after-sunset adjustment made on step 4. Optional - the step
    * is skippable like the rest of the wizard. Rejects (falls back to
-   * unset, not an error — same `.catch()` policy as every other field)
+   * unset, not an error - same `.catch()` policy as every other field)
    * any value in the future: a hand-edited URL can't be used to print a
    * date of death that hasn't happened, matching the day/month/year
    * pickers' own future-date guard on step 4.
@@ -99,7 +99,7 @@ export const WizardQuery = z.object({
   /**
    * Hidden dev flag: forces the step-5 preview pane into the live HTML
    * editor-preview instead of the default Folio-rendered PDF viewer.
-   * Deliberately has no UI affordance (no toggle, no label, no i18n key) —
+   * Deliberately has no UI affordance (no toggle, no label, no i18n key) -
    * `?editor=1` only.
    */
   editor: z.coerce.number().int().min(0).max(1).catch(0).default(0),
@@ -123,7 +123,7 @@ export type WizardDialog = z.infer<typeof WizardQuery>['dialog']
 /**
  * Validity rule for the two-level עדה/נוסח choice, kept as an actual
  * union (rather than a loose "is nusachAshkenaz set" check) so a Mizrahi
- * selection can never be read as requiring — or wrongly carrying — an
+ * selection can never be read as requiring - or wrongly carrying - an
  * Ashkenaz נוסח. Gates step 2's Next button via `canAdvance` in
  * step-registry.tsx.
  */

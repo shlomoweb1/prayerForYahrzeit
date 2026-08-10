@@ -1,7 +1,7 @@
 /**
- * KaddishSection: one kaddish exchange — the mourners' line plus the
+ * KaddishSection: one kaddish exchange - the mourners' line plus the
  * congregation's response it ends in (or the standalone joint line
- * "הקהל והאבלים: יהא שמה רבא") — as its own self-contained component.
+ * "הקהל והאבלים: יהא שמה רבא") - as its own self-contained component.
  *
  * The whole קדיש יתום block is one [data-content="kaddish"] container
  * (rendered by sheet-document.tsx); each exchange inside it is this
@@ -9,7 +9,7 @@
  * (data/liturgy.json → content.ts) carries only the speaker role
  * (KaddishSpeaker) and the text; this component re-adds the traditional
  * printed labels at render time. Each line is a single inline span keyed by
- * data-speaker (label + text folded into the same element — no nested
+ * data-speaker (label + text folded into the same element - no nested
  * wrapper), so the layout CSS (preview.css / pdf.css) can drive everything
  * via [data-content] / [data-speaker] selectors. The one exception is the
  * joint line (הקהל והאבלים): its instruction renders as its own
@@ -25,7 +25,7 @@ import type { KaddishSpeaker } from '@/lib/liturgy'
 
 /**
  * Printed cue word for the congregation's response, per `KaddishResponseLabel`
- * — "none" prints the response text itself unlabeled (no parens either).
+ * - "none" prints the response text itself unlabeled (no parens either).
  */
 const KADDISH_RESPONSE_CUE: Record<Exclude<KaddishResponseLabel, 'none'>, string> = {
   congregation: 'הקהל',
@@ -33,7 +33,7 @@ const KADDISH_RESPONSE_CUE: Record<Exclude<KaddishResponseLabel, 'none'>, string
 }
 
 /** Printed prefix/suffix around a congregation response line, e.g.
- * "(הקהל: " / ")" — mourners' lines and the joint/note lines never get a
+ * "(הקהל: " / ")" - mourners' lines and the joint/note lines never get a
  * label, regardless of `responseLabel`. */
 function speakerPrefix(speaker: KaddishSpeaker, responseLabel: KaddishResponseLabel): string {
   if (speaker !== 'congregation' || responseLabel === 'none') return ''
@@ -54,7 +54,7 @@ export interface KaddishSectionProps {
  * onto their own full-width rows via the CSS. `data-chunk` carries the
  * chunk's role (lead/wide/joint/note/plain, computed in content.ts) so the
  * layout CSS can target it without relying on nusach-specific nth-child
- * positions — the ashkenaz and sepharadi rites have a different number of
+ * positions - the ashkenaz and sepharadi rites have a different number of
  * exchanges before the joint line. */
 export function KaddishSection({ chunk, responseLabel }: KaddishSectionProps): ReactNode {
   return (

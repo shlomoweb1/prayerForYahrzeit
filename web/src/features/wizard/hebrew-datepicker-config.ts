@@ -1,17 +1,17 @@
 /**
  * A `DatepickerConfig` for `headless-datetimepicker` (the library only
  * ships the rendering "what goes in each grid cell" side of a calendar
- * system as a config object — the same seam its own Jalali calendar uses)
+ * system as a config object - the same seam its own Jalali calendar uses)
  * that swaps the default Gregorian grid for the Hebrew one, via
  * `@hebcal/core`'s `HDate`.
  *
  * Known gap: the library's own `next`/`prev` day-mode navigation assumes a
  * fixed 12-months-per-year calendar (`(month % 12) + 1`), which breaks on
- * Hebrew leap years (13 months — Adar I/Adar II). Step 4's own prev/next
+ * Hebrew leap years (13 months - Adar I/Adar II). Step 4's own prev/next
  * month buttons therefore do NOT use `<Datepicker.Button action="next">`;
  * they dispatch `{type:'select', payload:{item: {type:'month'|'year', ...}}}`
  * directly (see step-4-death-date.tsx), which the library's reducer applies
- * as a plain assignment with no modulo math — safe for any month count.
+ * as a plain assignment with no modulo math - safe for any month count.
  */
 
 import { HDate, Locale, gematriya } from '@hebcal/core'
@@ -25,7 +25,7 @@ function mod(value: number, n: number): number {
   return ((value % n) + n) % n
 }
 
-/** `HDate.getMonthName()` returns the English transliteration ("Av") —
+/** `HDate.getMonthName()` returns the English transliteration ("Av") -
  * this is the Hebrew-script name ("אב"), no niqud, for calendar UI labels. */
 export function hebrewMonthName(month: number, year: number): string {
   return Locale.gettext(new HDate(1, month, year).getMonthName(), 'he-x-NoNikud')
@@ -34,10 +34,10 @@ export function hebrewMonthName(month: number, year: number): string {
 /**
  * Chronological month order within a Hebrew calendar year, as `HDate`
  * numbers it: Nisan=1 ... Adar(II)=12/13, but the *year number* itself
- * rolls over at Tishrei (7), not at Nisan (1) — so Tishrei..Adar comes
+ * rolls over at Tishrei (7), not at Nisan (1) - so Tishrei..Adar comes
  * first within a given year value, then Nisan..Elul finishes it out
  * (verified against `HDate(1, m, year).abs()`; e.g. for year 5786, month
- * 7/Tishrei is Sept 2025 while month 1/Nisan is March 2026 — later in the
+ * 7/Tishrei is Sept 2025 while month 1/Nisan is March 2026 - later in the
  * same numbered year, not earlier). `stepHebrewMonth` below is the one
  * safe way to move by a month: the library's own `next`/`prev` day-mode
  * actions hardcode `(month % 12) + 1`, which is simply wrong here.
@@ -61,7 +61,7 @@ export function stepHebrewMonth(
   return { month: order[nextIndex]!, year }
 }
 
-/** Hebrew calendar year `state.year`/`state.month` operate in — Nisan=1
+/** Hebrew calendar year `state.year`/`state.month` operate in - Nisan=1
  * through Adar(=12, or Adar II=13 in a leap year), per `HDate`'s own
  * numbering (see `HDate.monthsInYear`/`getMonth`). */
 export const hebrewDatepickerConfig: DatepickerConfig = {
@@ -156,7 +156,7 @@ export const hebrewDatepickerConfig: DatepickerConfig = {
     })
   },
 
-  // Not used — step 4 never opens the hour/minute pickers.
+  // Not used - step 4 never opens the hour/minute pickers.
   hours: () => [],
   minutes: () => [],
 }

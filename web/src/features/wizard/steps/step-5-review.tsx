@@ -21,19 +21,19 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { cn } from '@/lib/utils'
 
 /** Below 1050px the side menu collapses into an overlay instead of sharing
- * the row with the preview — at narrower widths there isn't room for both
+ * the row with the preview - at narrower widths there isn't room for both
  * without forcing the A4 preview to shrink into illegibility. Tailwind's
  * arbitrary breakpoint `min-[1050px]:` is used inline (not via a template
  * literal) so its JIT scanner can pick up the literal class names. */
 
 /**
- * Fixed edge-tab that opens the settings panel — the one "expand" trigger
+ * Fixed edge-tab that opens the settings panel - the one "expand" trigger
  * shared by both layouts: below 1050px it opens the drawer, at/above it
  * re-expands the collapsed inline panel (whose own "hide" control lives in
  * its footer instead). A half-circle bulge on the screen's inline-start
  * edge, vertically centered and pinned through scroll. The two 14px corner
  * squares carve the "reverse" (concave) curve where the bulge meets the flat
- * edge — a notch, not a rounded corner — by painting a quarter-circle in the
+ * edge - a notch, not a rounded corner - by painting a quarter-circle in the
  * preview pane's own background color (Tailwind gray-200) over the tab's
  * straight edge. `:dir()` picks which physical corner is concave since the
  * app is bidi (Hebrew RTL + LTR locales) and `inset-inline-start` alone
@@ -72,7 +72,7 @@ const MENU_FAB_CSS = `
 `
 
 /** Wait this long after the last settings change settles before kicking off
- * a Folio re-render — covers mid-typing in the name/parent fields, not just
+ * a Folio re-render - covers mid-typing in the name/parent fields, not just
  * discrete toggles, so rapid consecutive edits only trigger one render. */
 const PDF_RENDER_DEBOUNCE_MS = 650
 
@@ -81,13 +81,13 @@ const PDF_RENDER_DEBOUNCE_MS = 650
  * (non-editor) mode. Renders `search` to a PDF blob via the existing
  * `renderPdf()` glue, swaps it in as an object URL, and revokes the previous
  * URL right when it's superseded (plus on unmount) so repeated edits don't
- * leak blobs. `enabled=false` (editor mode) skips all of this entirely — no
+ * leak blobs. `enabled=false` (editor mode) skips all of this entirely - no
  * pending timers, no wasted renders.
  *
  * Renders can resolve out of order (a render started earlier isn't
  * guaranteed to finish first), so a monotonically increasing `tokenRef` is
  * stamped on each render *as it actually starts* (i.e. once its debounce
- * window has elapsed without being superseded — see the effect below) and
+ * window has elapsed without being superseded - see the effect below) and
  * compared against the latest token when it resolves; a result whose token
  * has since been superseded is dropped instead of overwriting the `<embed>`
  * with stale content. `mountedRef` additionally guards against touching
@@ -95,14 +95,14 @@ const PDF_RENDER_DEBOUNCE_MS = 650
  *
  * On a render failure `failed` flips to true and stays there: the caller
  * uses it to fall back to the live editor-preview instead of leaving a
- * blank/broken pane. This is a safety net, not a retry loop — a genuinely
+ * blank/broken pane. This is a safety net, not a retry loop - a genuinely
  * broken Folio pipeline shouldn't keep re-attempting on every keystroke.
  */
 function usePdfPreview(search: WizardQuery, enabled: boolean) {
   const [url, setUrl] = useState<string | null>(null)
   const [blob, setBlob] = useState<Blob | null>(null)
   const [failed, setFailed] = useState(false)
-  // The searchKey that `url` was actually rendered from — `loading` is
+  // The searchKey that `url` was actually rendered from - `loading` is
   // derived by comparing this against the current searchKey below, instead
   // of a separate state flag toggled imperatively (which needed an
   // effect-body `setState` call the linter correctly flags as cascade-prone:
@@ -112,13 +112,13 @@ function usePdfPreview(search: WizardQuery, enabled: boolean) {
   const tokenRef = useRef(0)
   const mountedRef = useRef(true)
 
-  // Refs must not be written during render (react-hooks/refs) — mirror `url`
+  // Refs must not be written during render (react-hooks/refs) - mirror `url`
   // into the ref from an effect instead.
   useEffect(() => {
     urlRef.current = url
   }, [url])
 
-  // Revoke whatever's still live on unmount — mid-life swaps already revoke
+  // Revoke whatever's still live on unmount - mid-life swaps already revoke
   // their predecessor inline, right after the replacement takes over.
   useEffect(() => {
     mountedRef.current = true
@@ -136,7 +136,7 @@ function usePdfPreview(search: WizardQuery, enabled: boolean) {
       // Stamped here, not when the effect was scheduled: `search` in this
       // closure is whatever was current when THIS timer was set, and the
       // timer only ever fires if no newer change re-ran the effect and
-      // cleared it (see the cleanup below) — so it's always the settled,
+      // cleared it (see the cleanup below) - so it's always the settled,
       // current value at the moment the render actually starts.
       const token = ++tokenRef.current
       const renderedKey = searchKey
@@ -169,7 +169,7 @@ function usePdfPreview(search: WizardQuery, enabled: boolean) {
 
 /**
  * Non-blocking overlay for the case where the PDF itself rendered fine but
- * this browser can't display it inline (see pdf-support.ts) — the editor
+ * this browser can't display it inline (see pdf-support.ts) - the editor
  * preview fills the pane underneath so the user isn't left staring at a
  * blank/broken embed, and this floats a compact banner over its bottom edge
  * with a `<Download>` button for whatever the latest render produced.
@@ -210,7 +210,7 @@ export function Step5Review({ search, setSearch }: StepProps) {
   const [menuOpen, setMenuOpen] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   // Drives which of the two layouts the shared edge-tab acts on (expand the
-  // inline panel vs. open the drawer) — read once at mount, kept in sync by
+  // inline panel vs. open the drawer) - read once at mount, kept in sync by
   // the matchMedia listener below since Tailwind's breakpoint alone doesn't
   // tell the click handler which mode is currently active.
   const [isDesktopMenu, setIsDesktopMenu] = useState(
@@ -233,9 +233,9 @@ export function Step5Review({ search, setSearch }: StepProps) {
   const sheetData = useSheetDraft(search)
   const content = buildSheetContent(sheetData.settings)
 
-  // WASM support doesn't change mid-session — checked once, synchronously.
+  // WASM support doesn't change mid-session - checked once, synchronously.
   const [wasmSupported] = useState(() => supportsWasm())
-  // PDF-viewer support needs an async probe (see pdf-support.ts) — optimistic
+  // PDF-viewer support needs an async probe (see pdf-support.ts) - optimistic
   // `true` default so the common case (a real working viewer) never flashes
   // the editor preview first; flips to false if the probe comes back
   // negative, at which point `pdfModeRequested` below drops out and the
@@ -252,21 +252,21 @@ export function Step5Review({ search, setSearch }: StepProps) {
   }, [])
   // `?editor=1` is a hidden dev flag (no UI affordance) forcing the old live
   // HTML preview; devices without real WASM support skip rendering
-  // entirely — there's nothing to show or download either way. Rendering
+  // entirely - there's nothing to show or download either way. Rendering
   // itself, though, only depends on WASM: it still runs even when
   // `pdfViewerSupported` is false, since that PDF is exactly what the
   // download banner below offers on browsers that can't display it inline.
   const renderEnabled = search.editor !== 1 && wasmSupported
   // The ~16MB Folio WASM starts downloading the moment THIS step mounts (the
   // first time the PDF is actually within reach), not when the wizard was
-  // entered — so entering the wizard stays light. Warm-up is fire-and-forget
+  // entered - so entering the wizard stays light. Warm-up is fire-and-forget
   // and overlapped with the review time; renderPdf() below works whether or
   // not the warm-up finished. Skipped in editor mode (`?editor=1`, no render
   // will ever run) and on devices with no real WASM support.
   useEffect(() => {
     if (!renderEnabled) return
     folioClient.warm().catch(() => {
-      // Non-fatal: the first real render re-attempts regardless — a failed
+      // Non-fatal: the first real render re-attempts regardless - a failed
       // warm just means that render didn't have a head start.
     })
   }, [renderEnabled])
@@ -281,7 +281,7 @@ export function Step5Review({ search, setSearch }: StepProps) {
   // live editor-preview rather than leaving a blank/broken pane.
   const showEditor = !pdfModeRequested || pdfFailed
   // Only when the PDF itself is fine and this browser just can't display it
-  // inline — a render failure means there's nothing to download either.
+  // inline - a render failure means there's nothing to download either.
   const showPreviewUnavailableBanner = renderEnabled && !pdfViewerSupported && !pdfFailed
 
   return (

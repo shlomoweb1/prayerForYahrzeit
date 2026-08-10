@@ -36,7 +36,7 @@ export function applyLocale(locale: SupportedLocale): void {
   try {
     window.localStorage.setItem(LOCALE_STORAGE_KEY, locale)
   } catch {
-    // storage unavailable — locale still applies for the session
+    // storage unavailable - locale still applies for the session
   }
 }
 

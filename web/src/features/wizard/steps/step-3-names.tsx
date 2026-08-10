@@ -15,8 +15,8 @@ interface StepProps {
 }
 
 /**
- * Material-style floating label: invisible at rest — the real placeholder
- * shows through in its normal spot — and fades in at the top-end corner
+ * Material-style floating label: invisible at rest - the real placeholder
+ * shows through in its normal spot - and fades in at the top-end corner
  * once focused or filled, so it never overlaps the placeholder text.
  * `text-align` itself can't be animated (the browser owns text layout
  * inside a native `<input>`), so animating this separate `<label>` sibling

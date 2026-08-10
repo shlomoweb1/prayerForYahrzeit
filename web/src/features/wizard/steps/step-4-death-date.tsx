@@ -30,7 +30,7 @@ const SUNSET_ANSWERS: SunsetAnswer[] = ['before', 'after', 'unsure']
 const YEAR_PAGE_SIZE = 12
 
 /** month/year select items only carry a `value` through the reducer (see
- * hebrew-datepicker-config.ts's doc comment) — the rest of the fields are
+ * hebrew-datepicker-config.ts's doc comment) - the rest of the fields are
  * unused by that code path, so a minimal stub is enough. */
 function navItem(type: 'month' | 'year', value: number): DateItemType {
   return {
@@ -47,7 +47,7 @@ function navItem(type: 'month' | 'year', value: number): DateItemType {
 
 /**
  * A jump target that may need to move month AND year together (e.g. from
- * Adar II — only valid in a leap year — to a plain year, which has no
+ * Adar II - only valid in a leap year - to a plain year, which has no
  * month 13). Renders as two real, visually hidden `Datepicker.Item`s
  * (the one exported primitive whose click *does* reach the reducer's
  * exact, non-modulo `month`/`year` assignment) and clicks both when
@@ -103,7 +103,7 @@ function JumpButton({
 }
 
 /**
- * Single dropdown reached by the pencil after the month+year label — a
+ * Single dropdown reached by the pencil after the month+year label - a
  * year pager/grid on top, a month grid (for whichever year is currently
  * showing) below. Picking a year re-centres the month grid on it without
  * closing the popover, so a far jump ("that Adar three years ago") is one
@@ -123,7 +123,7 @@ function MonthYearPopover({
   const [open, setOpen] = useState(false)
   const [yearPageStart, setYearPageStart] = useState(year - Math.floor(YEAR_PAGE_SIZE / 2))
 
-  // Re-centre the year page on the live year each time the popover opens —
+  // Re-centre the year page on the live year each time the popover opens -
   // simpler to reason about than remembering the last scroll position. Done
   // in the open handler rather than an effect (the year can't change from
   // outside while the popover is open).
@@ -257,7 +257,7 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
   const [pendingDate, setPendingDate] = useState<Date | null>(null)
   const [mode, setMode] = useState<CalendarMode>('hebrew')
   // Bumped whenever the calendar needs a clean slate (back-to-calendar,
-  // change) — the picker library tracks its own internal "selected day"
+  // change) - the picker library tracks its own internal "selected day"
   // separately from our pendingDate/deathDate state, so clearing our state
   // alone leaves its old selection highlighted and can even swallow a
   // re-click on that same day (no value change → no onChange). Folding
@@ -291,15 +291,15 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
     ? new Intl.DateTimeFormat(i18n.language, { dateStyle: 'long' }).format(pendingDate)
     : ''
   // A day is "chosen" the moment it's tapped, not only once the sunset
-  // question is answered too — the calendar-mode toggle, instructions, and
+  // question is answered too - the calendar-mode toggle, instructions, and
   // skip link are all stale from that point on, not just once confirmed.
   const dateChosen = Boolean(pendingDate || confirmedHDate)
 
   // Overlays share this box's size, so the sunset question and the
-  // confirmed-date summary never resize the step — only their
+  // confirmed-date summary never resize the step - only their
   // opacity/pointer-events toggle. See debug notes: the Hebrew calendar
   // always renders 6 day-rows, but Gregorian months swing between 5 and 7
-  // (verified live: 168px–240px) — `min-h-60` (240px) reserves for the
+  // (verified live: 168px–240px) - `min-h-60` (240px) reserves for the
   // worst case in both modes.
   return (
     <StepShell
@@ -308,7 +308,7 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
       descriptionKey="wizard.steps.4.description"
     >
       <div className="flex flex-col gap-4">
-        {/* Stale from the moment a day is tapped, not just once confirmed —
+        {/* Stale from the moment a day is tapped, not just once confirmed -
          * faded out (not unmounted) so this row still reserves its height
          * and the container stays the same size. */}
         <div
@@ -410,7 +410,7 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
               {/* Plain buttons, not a RadioGroup: picking an answer commits
                * immediately (chooseSunset fades this overlay out right
                * away), so a radio dot never has time to register as
-               * "checked" — it only added visual noise, and Radix's
+               * "checked" - it only added visual noise, and Radix's
                * RadioGroup defaults to `dir="ltr"` unless told otherwise,
                * which flipped the dot to the wrong side under Hebrew. */}
               <div role="group" aria-label={t('wizard.deathDate.sunsetQuestion')} className="grid grid-cols-1 gap-2">
@@ -438,7 +438,7 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
             </div>
           </div>
 
-          {/* Confirmed date: same box, same size — "שנה" just fades this
+          {/* Confirmed date: same box, same size - "שנה" just fades this
            * back out, it doesn't unmount/remount the calendar underneath. */}
           <div
             className={cn(

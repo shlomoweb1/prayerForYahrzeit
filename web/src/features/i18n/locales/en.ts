@@ -53,22 +53,22 @@ export const en = {
   landing: {
     title: 'Create a printable yahrzeit sheet',
     subtitle:
-      'Enter a name and the site builds a beautifully designed memorial prayer sheet with psalms, kaddish and mishnayot — to print, bring to the graveside, and recite in memory of a loved one.',
+      'Enter a name and the site builds a beautifully designed memorial prayer sheet with psalms, kaddish and mishnayot - to print, bring to the graveside, and recite in memory of a loved one.',
     ctaStart: 'Get started',
     ctaLookInside: 'See an example',
     howItWorksTitle: 'A printable prayer, ready for the graveside',
     howItWorksIntro:
-      'In a few minutes you can create a beautiful prayer sheet to print and bring to the cemetery — to recite by the grave and honour your loved one’s memory.',
+      'In a few minutes you can create a beautiful prayer sheet to print and bring to the cemetery - to recite by the grave and honour your loved one’s memory.',
     memorialTitle: 'Honour across generations',
     memorialText:
-      'Every sheet is set with print-house precision, in a format that honours tradition — and lets you share the memory with the whole family.',
+      'Every sheet is set with print-house precision, in a format that honours tradition - and lets you share the memory with the whole family.',
     heroPick: 'Background:',
     featureItems: {
-      simple: 'Hebrew name, gender and prayer rite — the sheet builds itself',
+      simple: 'Hebrew name, gender and prayer rite - the sheet builds itself',
 
       preview: 'Every line is set with print-house precision, exactly as it will print',
 
-      pdf: 'A polished PDF to print at home or at a print shop — ready for the cemetery',
+      pdf: 'A polished PDF to print at home or at a print shop - ready for the cemetery',
 
       share: 'Send the same prayer to relatives, so they can recite it too',
     },
@@ -85,9 +85,9 @@ export const en = {
     dialogDescription: 'Choose the mood of the page: colours, brightness and background image.',
     themeGroup: 'Theme',
     themes: {
-      dusk: 'Dusk — candlelight',
-      parchment: 'Parchment — antique paper',
-      stone: 'Stone — Mount of Olives',
+      dusk: 'Dusk - candlelight',
+      parchment: 'Parchment - antique paper',
+      stone: 'Stone - Mount of Olives',
     },
     mode: {
       light: 'Light mode',
@@ -124,7 +124,7 @@ export const en = {
       '4': {
         title: 'Date of death',
         description:
-          "Enter the Hebrew date of passing — or pick the Gregorian date and we'll work out the Hebrew date for you.",
+          "Enter the Hebrew date of passing - or pick the Gregorian date and we'll work out the Hebrew date for you.",
       },
       '5': {
         title: 'Edit and download',
@@ -168,16 +168,16 @@ export const en = {
       fontPsalmText: 'Psalm text',
       fontLetterBadge: 'Letter badge',
       fontLetterText: 'Letter text',
-      fontKaddishMourner: 'Kaddish — mourners',
-      fontKaddishCongregation: 'Kaddish — congregation',
+      fontKaddishMourner: 'Kaddish - mourners',
+      fontKaddishCongregation: 'Kaddish - congregation',
       fontMishnahBadge: 'Mishnah badge',
       fontMishnahText: 'Mishnah text',
       fontBlessingText: 'Blessing',
       fontElMalehText: 'El Malei Rachamim',
       fontHashkavaText: 'Hashkava',
-      fontClosingDryBones: 'Closing — dry bones',
-      fontClosingAvHaRachamim: 'Closing — Av HaRachamim',
-      fontClosingParting: 'Closing — parting prayer',
+      fontClosingDryBones: 'Closing - dry bones',
+      fontClosingAvHaRachamim: 'Closing - Av HaRachamim',
+      fontClosingParting: 'Closing - parting prayer',
     },
     groups: {
       design: 'Design & layout',
@@ -297,7 +297,7 @@ export const en = {
       letter: '215.9 × 279.4 mm',
     },
     deathDate: {
-      instructions: 'Tap the day of passing on the calendar below — Hebrew dates are shown on every day.',
+      instructions: 'Tap the day of passing on the calendar below - Hebrew dates are shown on every day.',
       dateSelected: 'You selected {{hebrew}} ({{gregorian}}, civil calendar).',
       sunsetQuestion: 'Did the passing happen before or after sunset (nightfall)?',
       pickAnotherDay: 'Back to the calendar',
@@ -306,12 +306,12 @@ export const en = {
       after: 'After sunset (nightfall)',
       afterHint: 'The Jewish day begins at nightfall, so the Hebrew date moves forward by one day.',
       unsure: 'Not sure',
-      unsureHint: "We'll use the Hebrew date for that day — you can always correct this later.",
+      unsureHint: "We'll use the Hebrew date for that day - you can always correct this later.",
       confirmedLabel: 'Hebrew date of passing',
       nextStepHint: 'Next: a personalized Hebrew prayer sheet will be generated for you automatically as a printable PDF.',
       continueToSheet: 'Continue to your prayer sheet',
       change: 'Choose a different date',
-      skip: "Skip — I don't have this yet",
+      skip: "Skip - I don't have this yet",
       editMonthYear: 'Choose a different month or year',
       chooseMonth: 'Month',
       chooseYear: 'Year',
@@ -360,7 +360,7 @@ export const en = {
       'This site aims to meet the requirements of Israeli Standard IS 5568, based on WCAG 2.0 Level AA, under the Equal Rights for Persons with Disabilities Law, 1998.',
     featuresTitle: 'Features provided',
     featuresItems: {
-      widget: 'Accessibility preferences widget (Reg-35) — open with Alt+A from any page',
+      widget: 'Accessibility preferences widget (Reg-35) - open with Alt+A from any page',
 
       keyboard: 'Full keyboard navigation, including skip-to-content',
 
@@ -374,7 +374,7 @@ export const en = {
     },
     limitationsTitle: 'Known limitations',
     limitationsItems: {
-      pdf: 'Screen-reader support in generated PDF files is being tested and is planned to be completed in phase 7 — the current version includes an accessible HTML view as a fallback.',
+      pdf: 'Screen-reader support in generated PDF files is being tested and is planned to be completed in phase 7 - the current version includes an accessible HTML view as a fallback.',
 
       srMatrix:
         'Some professional tests (NVDA, JAWS, VoiceOver, TalkBack) have not yet been fully performed.',
@@ -402,6 +402,6 @@ export const en = {
   },
   blog: {
     title: 'Blog',
-    tagline: 'Notes from the workshop — how this site is built',
+    tagline: 'Notes from the workshop - how this site is built',
   },
 } satisfies typeof he

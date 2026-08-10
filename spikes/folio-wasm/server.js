@@ -1,4 +1,4 @@
-// server.js — static file server + POST /save for the folio-wasm spike.
+// server.js - static file server + POST /save for the folio-wasm spike.
 // Serves folio.wasm with the correct MIME type (required by
 // WebAssembly.instantiateStreaming). POST /save {name, base64} writes
 // decoded bytes into out/.

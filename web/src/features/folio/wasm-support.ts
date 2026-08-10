@@ -1,7 +1,7 @@
 /**
  * WebAssembly feature detection for the Folio PDF pipeline.
  *
- * The Folio worker loads a ~16MB WASM binary — on old/partial polyfills the
+ * The Folio worker loads a ~16MB WASM binary - on old/partial polyfills the
  * `typeof WebAssembly` check alone can pass while actual instantiation still
  * fails, so this also runs `WebAssembly.validate()` against the minimal
  * valid module header (the standard MDN feature-detection pattern). When

@@ -1,12 +1,12 @@
 /**
  * Parses go-html-to-pdf's generated docs/CSS_SUPPORT.md into a lookup table.
  * That file is regenerated from html/css_props.go by `go generate
- * ./html/...` — the single source of truth for what Folio's HTML converter
+ * ./html/...` - the single source of truth for what Folio's HTML converter
  * actually applies. Nothing in this toolkit hand-maintains its own copy.
  */
 import { readFileSync } from 'node:fs'
 
-// `content` is intentionally excluded from the css_props.go registry — it's
+// `content` is intentionally excluded from the css_props.go registry - it's
 // intercepted separately in pseudo-element generation (parsePseudoContent),
 // not a registry gap. See that file's own comment.
 export const SPECIAL_CASES = {
@@ -31,7 +31,7 @@ export function parseSupportRegistry(mdPath) {
     if (category === 'Value-form glossary') continue
 
     // The "Logical Properties" section (converter_logical.go, dispatched
-    // outside the cssProperties registry — see support-registry.mjs's own
+    // outside the cssProperties registry - see support-registry.mjs's own
     // module doc) uses a 3-column table with every property name for a row
     // packed into one cell (e.g. "`margin-block-start`, `margin-block-end`"),
     // not the registry's one-name-per-row 4-column format below. Every
@@ -45,17 +45,17 @@ export function parseSupportRegistry(mdPath) {
       continue
     }
 
-    // Per-property rows look like: | `name` | `alias1`, `alias2` or — | ... | ... |
+    // Per-property rows look like: | `name` | `alias1`, `alias2` or - | ... | ... |
     const row = line.match(/^\|\s*`([a-zA-Z-]+)`\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*$/)
     if (!row) continue
     const [, name, aliasesRaw, valuesRaw, notesRaw] = row
     const aliases =
-      aliasesRaw === '—' ? [] : Array.from(aliasesRaw.matchAll(/`([^`]+)`/g)).map((m) => m[1])
+      aliasesRaw === '-' ? [] : Array.from(aliasesRaw.matchAll(/`([^`]+)`/g)).map((m) => m[1])
     byName.set(name, {
       category,
       aliases,
       values: valuesRaw,
-      notes: notesRaw === '—' ? '' : notesRaw,
+      notes: notesRaw === '-' ? '' : notesRaw,
     })
     for (const alias of aliases) aliasToCanonical.set(alias, name)
   }

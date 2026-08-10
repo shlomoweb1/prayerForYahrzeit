@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * css-support-matrix.mjs answers "which CSS *properties* does Folio
- * silently drop" — but a property can be fully supported and still never
+ * silently drop" - but a property can be fully supported and still never
  * take effect for two other reasons:
  *
  *   1. The SELECTOR that would have applied it doesn't match anything,
  *      because Folio's selector engine doesn't understand it (e.g. `:has()`
- *      — the whole rule silently never fires, even though every property
+ *      - the whole rule silently never fires, even though every property
  *      inside it is otherwise fine).
  *   2. A FUNCTION inside the value fails to parse (e.g. `color-mix()`),
  *      dropping that whole declaration even for a supported property.
@@ -17,18 +17,18 @@
  * css-support-matrix.mjs: MDN's own registries (`mdn-data`'s
  * selectors.json / at-rules.json / functions.json) as the canonical "what
  * exists" list, filtered to what's printable-relevant (see
- * mdn-css-properties.mjs's isPrintable — same reasoning, plus a selector-
+ * mdn-css-properties.mjs's isPrintable - same reasoning, plus a selector-
  * specific PRINTABLE exclusion below for interaction/shadow-DOM/media-
  * playback pseudo-classes that have no equivalent in a static document).
  *
  * Folio's side is NOT auto-derived from a generated doc the way properties
  * are (go-html-to-pdf has no equivalent of css_props.go's registry for
- * selectors/at-rules/functions) — it's transcribed here from
+ * selectors/at-rules/functions) - it's transcribed here from
  * go-html-to-pdf/html/doc.go's own "Selectors:"/"@-rules:"/"Values:"
  * package-doc summary (the closest thing to an authoritative list) plus
  * corroborating grep hits in html/css_selectors.go, html/css.go,
  * html/converter_style_parsers.go, html/grid.go, html/page.go. If Folio's
- * doc.go summary is ever updated, this list needs a manual re-sync —
+ * doc.go summary is ever updated, this list needs a manual re-sync -
  * flagged here so a future agent knows to check doc.go first.
  */
 import { createRequire } from 'node:module'
@@ -55,7 +55,7 @@ function parseArgs(argv) {
 // (calc/min/max/clamp). Basic structural selectors (type, .class, #id, *,
 // combinators, [attr] forms) are not individually listed in MDN's
 // selectors.json as discrete entries the way pseudo-classes are, so they're
-// not part of this matrix — doc.go confirms all of them are supported.
+// not part of this matrix - doc.go confirms all of them are supported.
 const FOLIO_SELECTORS = new Set([
   ':first-child', ':last-child', ':nth-child()', ':nth-of-type()',
   ':nth-last-child()', ':nth-last-of-type()', ':first-of-type', ':last-of-type',
@@ -70,7 +70,7 @@ const FOLIO_AT_RULES = new Set(['@page', '@font-face', '@media', '@supports'])
 // registry entries; var() in converter_style.go; counter()/counters() in
 // converter_style.go + doc.go ("CSS counters via counter-reset,
 // counter-increment, counter()."); attr() in bookmark.go (bookmark-label
-// only, not general content — see note below); transform functions in
+// only, not general content - see note below); transform functions in
 // layout/transform_test.go + css_props.go's `transform` entry; repeat()/
 // minmax() in grid.go.
 const FOLIO_FUNCTIONS = new Set([
@@ -83,13 +83,13 @@ const FOLIO_FUNCTIONS = new Set([
   'repeat()', 'minmax()',
 ])
 // Explicitly NOT supported despite appearing in Go source (parsed only to
-// be rejected) — see css_props.go's `color` registry entry Notes field:
+// be rejected) - see css_props.go's `color` registry entry Notes field:
 // "sRGB only. oklch() and color-mix() are not supported."
 const FOLIO_EXPLICITLY_UNSUPPORTED_FUNCTIONS = new Set(['oklch()', 'oklab()', 'color-mix()'])
 
 // attr() is real in Folio, but scoped: bookmark.go's resolveBookmarkLabel
 // implements it only for the Folio-specific PDF `bookmark-label` property.
-// The general CSS path — `content: attr(data-x)` on ::before/::after —
+// The general CSS path - `content: attr(data-x)` on ::before/::after -
 // goes through converter_style.go's resolveContentValue, which has no
 // attr() branch at all (only quoted strings, counter(), counters()). A
 // very common real-world ::before pattern is silently dropped.
@@ -98,7 +98,7 @@ const FOLIO_PARTIALLY_SUPPORTED_FUNCTIONS = {
 }
 
 // Interaction-state, media-playback, shadow-DOM, or view-transition
-// pseudo-classes/elements — structurally impossible to express in a
+// pseudo-classes/elements - structurally impossible to express in a
 // captured, already-rendered static HTML snapshot (no history, no hover,
 // no shadow DOM in Folio's plain-HTML converter, no elapsed time). Kept
 // separate from EXCLUDED_GROUPS since MDN tags nearly all pseudo-classes
@@ -111,7 +111,7 @@ const NON_PRINTABLE_SELECTORS = new Set([
   ':muted', ':paused', ':picture-in-picture', ':playing', ':seeking', ':stalled', ':volume-locked', ':buffering',
   ':popover-open', ':modal', ':autofill', ':indeterminate', ':xr-overlay', ':scope', ':fullscreen',
   '::view-transition', '::view-transition-group()', '::view-transition-image-pair()', '::view-transition-new()', '::view-transition-old()',
-  '::cue', '::cue()', '::cue-region', '::cue-region()', // WebVTT captions — video-only
+  '::cue', '::cue()', '::cue-region', '::cue-region()', // WebVTT captions - video-only
   '::picker-icon', '::picker()', '::checkmark', // new <select> customization, interaction-only widget parts
 ])
 
@@ -174,7 +174,7 @@ function report(label, rows) {
   console.log(`\n${label}: ${rows.length} known, ${printable.length} printable-relevant, ${gaps.length} NOT supported by Folio`)
   for (const g of gaps.sort((a, b) => a.name.localeCompare(b.name))) {
     const note = g.explicitlyUnsupported
-      ? '  (parsed then explicitly rejected — see css_props.go notes)'
+      ? '  (parsed then explicitly rejected - see css_props.go notes)'
       : g.partialNote
         ? `  (${g.partialNote})`
         : ''

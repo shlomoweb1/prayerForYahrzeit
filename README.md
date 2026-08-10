@@ -1,12 +1,12 @@
 # izkor (יזכור)
 
-Generate a printable yahrzeit sheet (יזכור) from a deceased person's Hebrew name — psalms, liturgy, and prayers per Jewish tradition — rendered to PDF entirely in the browser (Go → WASM via folio.wasm).
+Generate a printable yahrzeit sheet (יזכור) from a deceased person's Hebrew name - psalms, liturgy, and prayers per Jewish tradition - rendered to PDF entirely in the browser (Go → WASM via folio.wasm).
 
 ## Repo map
 
-- [`plans/`](plans/) — the full project plan (single source of truth, all decisions persisted here)
-- [`todo/`](todo/) — multi-agent task tracking (fast-changing; commits go straight to `main`)
-- `web/` — Vite + React + TS application (Phases 1+; not yet scaffolded)
+- [`plans/`](plans/) - the full project plan (single source of truth, all decisions persisted here)
+- [`todo/`](todo/) - multi-agent task tracking (fast-changing; commits go straight to `main`)
+- `web/` - Vite + React + TS application (Phases 1+; not yet scaffolded)
 
 ## Conventions
 

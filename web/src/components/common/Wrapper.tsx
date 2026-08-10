@@ -17,11 +17,11 @@ export default function WrapperComponent() {
     location.pathname === '/wizard' && (location.search as { step?: number })?.step === STEP_MAX
   // The blog post pages get the same pinned treatment: header and footer stay
   // on screen, the article scrolls in its own region. The /blog index keeps
-  // the trailing slash so it scrolls normally like the landing page — a bare
+  // the trailing slash so it scrolls normally like the landing page - a bare
   // prefix match keeps this true for any future post route without a route
   // file edit.
   const isPinnedPage = location.pathname.startsWith('/blog/')
-  // The floating CTA's job is to route people into the wizard — hide it once
+  // The floating CTA's job is to route people into the wizard - hide it once
   // they're already inside the creation flow.
   const inWizard = location.pathname.startsWith('/wizard')
 
@@ -43,8 +43,8 @@ export default function WrapperComponent() {
       {/* `contain-layout` (not just overflow-hidden) is load-bearing: the
           deeply-nested `overflow-y-auto` scroll panels inside the step-5
           editor (settings sidebar + A4 preview) still leak their intrinsic
-          content height into <html>'s own scrollable overflow on desktop —
-          overflow-hidden alone doesn't stop it — which made the whole page
+          content height into <html>'s own scrollable overflow on desktop -
+          overflow-hidden alone doesn't stop it - which made the whole page
           scroll instead of just the inner panels. Layout containment cuts
           that propagation off here. */}
       <main id="main" className={cn('flex w-full flex-1', isAppShell || isPinnedPage ? 'min-h-0 overflow-hidden contain-layout' : undefined)}>

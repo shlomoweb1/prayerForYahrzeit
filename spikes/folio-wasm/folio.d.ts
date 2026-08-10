@@ -3,7 +3,7 @@
 //////////
 // source: types.go
 /*
-Package main — types.go holds the public API types for the folio WASM module.
+Package main - types.go holds the public API types for the folio WASM module.
 This file has no build constraint so that tygo can generate TypeScript
 definitions from it without requiring GOOS=js GOARCH=wasm.
 */
@@ -39,7 +39,7 @@ export interface RenderSettings {
   /**
    * FontBaseDir is a filesystem directory path. When set (Node.js only),
    * the HTML converter resolves @font-face url() paths relative to this
-   * directory — no base64 encoding needed. Ignored in browser environments.
+   * directory - no base64 encoding needed. Ignored in browser environments.
    */
   fontBaseDir?: string;
 }

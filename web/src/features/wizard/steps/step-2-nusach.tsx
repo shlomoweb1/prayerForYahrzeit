@@ -48,7 +48,7 @@ export function Step2Nusach({ search, setSearch }: StepProps) {
       >
         {/* Ashkenaz's נוסח sub-choice lives as a backdrop that slides down
          * over the card on hover (desktop) or tap (mobile, via
-         * nusachMenuOpen) — the card itself never grows, so picking it
+         * nusachMenuOpen) - the card itself never grows, so picking it
          * never shifts the page. */}
         <RadioGroupPrimitive.Item value="ashkenaz" asChild>
           <div
@@ -70,7 +70,7 @@ export function Step2Nusach({ search, setSearch }: StepProps) {
 
             {/* Rendered before the caption bar so plain DOM/paint order (no
              * z-index needed) keeps the caption on top of it once it slides
-             * down — the caption must stay legible the whole time. */}
+             * down - the caption must stay legible the whole time. */}
             <div
               className={cn(
                 'absolute inset-0 flex items-center justify-center bg-black/75 backdrop-blur-sm',
@@ -106,7 +106,7 @@ export function Step2Nusach({ search, setSearch }: StepProps) {
 
             <div className="group-data-[state=checked]:text-light relative mt-auto flex flex-col gap-0.5 bg-black/35 p-3 text-white backdrop-blur-md">
               {/* Sits at the caption's own top-left, physical `left` so it
-               * doesn't flip sides under RTL — faded out while the נוסח
+               * doesn't flip sides under RTL - faded out while the נוסח
                * backdrop is open (hover or tap) since it'd be redundant
                * with the picker itself. */}
               {search.nusachAshkenaz ? (

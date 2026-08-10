@@ -115,8 +115,8 @@ describe('buildSheetContent', () => {
     )
     expect(kaddish).toBeDefined()
     const chunks = kaddish!.sections
-    // 8 sections: 7 exchanges — every exchange opens with the mourners' line
-    // and ends in a response line (the אמן etc. it was leading to) — plus the
+    // 8 sections: 7 exchanges - every exchange opens with the mourners' line
+    // and ends in a response line (the אמן etc. it was leading to) - plus the
     // joint line (יהא שמה רבא) as a section of its own, and one standalone
     // rubric note (the three-steps-back reminder) right before the final
     // exchange.
@@ -131,7 +131,7 @@ describe('buildSheetContent', () => {
     // their own roles; everything after the joint line is "plain".
     expect(chunks[0]!.role).toBe('lead')
     expect(chunks[1]!.role).toBe('wide')
-    // The joint line (יהא שמה רבא) opens a section of its own — it is not
+    // The joint line (יהא שמה רבא) opens a section of its own - it is not
     // bundled with the mourner exchange that preceded it, so the layout can
     // put it on its own row.
     const jointChunk = chunks.find((chunk) => chunk.lines[0]?.speaker === 'joint')
@@ -152,12 +152,12 @@ describe('buildSheetContent', () => {
       expect(chunk.role).toBe('plain')
     }
     const allLines = chunks.flatMap((chunk) => chunk.lines)
-    // The harvest's bare "קהל:" (missing ה) is classified as congregation —
+    // The harvest's bare "קהל:" (missing ה) is classified as congregation -
     // the response "בריך הוא." (the mourner line before it also contains
     // "בריך הוא" mid-text, so match the exact response).
     const bareCue = allLines.find((line) => line.html === 'בריך הוא.')
     expect(bareCue).toMatchObject({ speaker: 'congregation' })
-    // Lines carry the role and the text only — no speaker cues survive into
+    // Lines carry the role and the text only - no speaker cues survive into
     // the rendered html (labels are re-added at render time).
     for (const line of allLines) {
       expect(line.html).not.toMatch(/[\u0591-\u05C7]/)

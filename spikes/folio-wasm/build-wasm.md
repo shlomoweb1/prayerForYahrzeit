@@ -11,13 +11,13 @@ Artifacts committed here (in `spikes/folio-wasm/`):
 ## Source
 
 Fork: `/home/shlomo-framowitz/Developments/tziyun-berega/go-html-to-pdf` (separate
-git repo — build artifacts are produced there but NEVER committed there; the
+git repo - build artifacts are produced there but NEVER committed there; the
 fork's `.bin/` is gitignored).
 
 ## Prerequisites
 
 - Go 1.26.3 linux/amd64 (`/usr/local/go/bin/go`). The fork's `Makefile` defaults
-  `GO ?= /usr/local/bin/go` which does NOT exist on this machine — always pass
+  `GO ?= /usr/local/bin/go` which does NOT exist on this machine - always pass
   `GO=/usr/local/go/bin/go`.
 - Network access (first run installs `tygo` for `wasm-types`).
 - Node v24.18.0 (not needed to build, only to run node-side tests).
@@ -30,14 +30,14 @@ make wasm GO=/usr/local/go/bin/go
 ```
 
 This runs (in order):
-1. `wasm-exec` — copies `wasm_exec.js` + `wasm_exec_node.js` from
+1. `wasm-exec` - copies `wasm_exec.js` + `wasm_exec_node.js` from
    `$(go env GOROOT)/lib/wasm/` of the active toolchain.
-2. `wasm-types` — `tygo generate` → `cmd/wasm/.bin/folio.d.ts`.
+2. `wasm-types` - `tygo generate` → `cmd/wasm/.bin/folio.d.ts`.
 3. `GOOS=js GOARCH=wasm go build -o ./cmd/wasm/.bin/folio.wasm ./cmd/wasm/`
    → `folio.wasm` (~16 MB, 15,937,152 bytes as built 2026-08-02).
 
 If `tygo` install fails (no network), the type file is unchanged (types.go is
-stable) — the wasm build itself can be run standalone:
+stable) - the wasm build itself can be run standalone:
 
 ```bash
 GOOS=js GOARCH=wasm /usr/local/go/bin/go build -o ./cmd/wasm/.bin/folio.wasm ./cmd/wasm/
@@ -54,7 +54,7 @@ sha256sum spikes/folio-wasm/folio.wasm spikes/folio-wasm/wasm_exec.js
 
 ## Serving (important)
 
-`folio.wasm` is fetched with `WebAssembly.instantiateStreaming` — the MIME type
+`folio.wasm` is fetched with `WebAssembly.instantiateStreaming` - the MIME type
 must be `application/wasm` and the page must be served over HTTP. `file://`
 will fail. Use the included server:
 

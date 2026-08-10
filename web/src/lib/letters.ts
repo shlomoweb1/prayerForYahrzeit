@@ -50,9 +50,9 @@ const SOFIT_MAP: Record<string, string> = {
 }
 
 export interface NameLetter {
-  /** Letter as it actually appears in the name — final forms kept as-is. */
+  /** Letter as it actually appears in the name - final forms kept as-is. */
   display: string
-  /** Regular-form letter to look up psalm-119 stanzas / mishnayot by — the
+  /** Regular-form letter to look up psalm-119 stanzas / mishnayot by - the
    * data is only keyed by the 22 regular letters, never final forms. */
   lookup: string
 }
@@ -60,7 +60,7 @@ export interface NameLetter {
 /**
  * Letters of a Hebrew name: nikud and non-Hebrew characters (spaces between
  * given names, etc.) stripped. Every letter position is kept in order,
- * repeats included — the traditional custom recites a Psalm-119 verse-set
+ * repeats included - the traditional custom recites a Psalm-119 verse-set
  * per letter of the full name, not per distinct letter.
  */
 export function resolveNameLetters(name: string): NameLetter[] {

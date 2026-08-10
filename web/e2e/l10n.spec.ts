@@ -34,7 +34,7 @@ async function setLocale(page: Page, code: string): Promise<void> {
   }, code)
 }
 
-/** Step 4 renders the sheet preview with embedded data-URI fonts — wait for them. */
+/** Step 4 renders the sheet preview with embedded data-URI fonts - wait for them. */
 async function waitForFonts(page: Page): Promise<void> {
   await page.evaluate(() => document.fonts.ready.then(() => true))
 }

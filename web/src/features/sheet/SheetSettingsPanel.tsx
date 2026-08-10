@@ -6,7 +6,7 @@
  * immediately reflected in the live preview and survives a reload.
  *
  * Simple / advanced mode: a local (non-URL) toggle gates a second tier of
- * controls — the per-element font list and line density — that only make
+ * controls - the per-element font list and line density - that only make
  * sense once someone wants finer control; simple mode keeps the original
  * one-font, one-density surface. The per-element list covers every sheet
  * element (SHEET_ELEMENT_FONTS), grouped under the same headings the sheet
@@ -45,7 +45,7 @@ export interface SheetSettingsPanelProps {
 /**
  * Every sheet element that can carry its own font, grouped under the
  * headings the sheet itself uses (header, psalms, letters, kaddish,
- * mishnayot, blessing & closing) — the order SHEET_ELEMENT_FONTS lists them
+ * mishnayot, blessing & closing) - the order SHEET_ELEMENT_FONTS lists them
  * in, split where the sheet visually splits. Each element's row reads/writes
  * its own `fontXxx` query key via elementFontQueryKey.
  */
@@ -58,7 +58,7 @@ const FONT_GROUPS: { groupKey: 'fontHeader' | 'fontPsalms' | 'fontLetters' | 'fo
   { groupKey: 'fontPrayers', elements: ['blessingText', 'elMalehText', 'hashkavaText', 'closingDryBones', 'closingAvHaRachamim', 'closingParting'] },
 ]
 
-/** A labeled group of controls, visually separated from the next one — the
+/** A labeled group of controls, visually separated from the next one - the
  * drawer reads as a handful of clear sections instead of one flat list. */
 function SettingsGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -350,10 +350,10 @@ function SheetSettingsControls({ search, setSearch, idPrefix }: SheetSettingsPan
 
 /**
  * Dev-only debug tools: a toggle for the hidden `?editor=1` preview flag
- * (step-5-review.tsx — forces the live HTML editor-preview instead of the
+ * (step-5-review.tsx - forces the live HTML editor-preview instead of the
  * Folio-rendered PDF viewer) and a button that downloads the exact
  * standalone HTML document (compiled CSS, embedded fonts, paginated pages)
- * `renderPdf` hands to the Folio wasm worker — the same source
+ * `renderPdf` hands to the Folio wasm worker - the same source
  * `renderSheetHTML` already stashes on `window.__lastSheetHtml`, but as a
  * real file so it can be opened directly or diffed/debugged with Node
  * instead of pasted out of devtools.

@@ -38,7 +38,7 @@ export interface StanzaBlock {
   label: string
   verses: string[]
   /** Global verse numbers within Psalm 119 (e.g. א׳ is verses 1-8, ב׳ is
-   * 9-16, ...) — a stanza never starts counting over at 1, so this is the
+   * 9-16, ...) - a stanza never starts counting over at 1, so this is the
    * true pasuk numbering, not the stanza's own local verse index. */
   verseIds: number[]
 }
@@ -75,8 +75,8 @@ export type SheetBlock =
 /**
  * One rendered kaddish line inside a section: the speaker role (which drives
  * the layout's per-speaker styling and the printed label) plus the processed
- * html. Sections are the exchange granularity — a mourner line followed by
- * the response lines it ends in (אמן etc.), or a standalone rubric note —
+ * html. Sections are the exchange granularity - a mourner line followed by
+ * the response lines it ends in (אמן etc.), or a standalone rubric note -
  * and each renders as its own flex container, so a section is never split
  * across pages or lines.
  */
@@ -87,7 +87,7 @@ export interface KaddishSectionLine {
 
 /**
  * Which visual treatment a kaddish exchange gets, computed once here instead
- * of guessed from position in CSS (:nth-child) — the ashkenaz and sepharadi
+ * of guessed from position in CSS (:nth-child) - the ashkenaz and sepharadi
  * rites have a different number of exchanges before the יהא שמיה רבא line
  * (sepharad splits בעלמא... into two, ashkenaz keeps it in one), so a fixed
  * nth-child index in CSS would point at the wrong chunk depending on nusach.
@@ -106,7 +106,7 @@ export interface KaddishSectionChunk {
 
 export const HEADER_PREFIX = 'לע״נ'
 
-/** "בן" for male, "בת" for female — the word linking a name to its parent's. */
+/** "בן" for male, "בת" for female - the word linking a name to its parent's. */
 export function filialWord(gender: SheetSettings['gender']): 'בן' | 'בת' {
   return gender === 'female' ? 'בת' : 'בן'
 }
@@ -138,7 +138,7 @@ export function sheetHeaderLine(settings: SheetSettings): string {
 /**
  * "נפטר/ה <יום> <חודש> ה<שנה>" (e.g. נפטר י׳ אב התשפ״ו) from the Hebrew
  * calendar date stored on step 4 (`SheetSettings.deathDate`, an R.D. day
- * count — see `WizardQuery.deathDate`). `undefined` when the step was
+ * count - see `WizardQuery.deathDate`). `undefined` when the step was
  * skipped, so callers can omit the phrase entirely rather than print a
  * placeholder.
  */
@@ -153,7 +153,7 @@ export function sheetDeathDateLine(settings: SheetSettings): string | undefined 
 }
 
 /** Name phrase for the middle of a prayer (e.g. אל מלא רחמים, השכבה), e.g.
- * "יונתן יוסף בן צבי מרדכי הלוי" — no לע״נ prefix or ז״ל suffix. */
+ * "יונתן יוסף בן צבי מרדכי הלוי" - no לע״נ prefix or ז״ל suffix. */
 export function deceasedNamePhrase(settings: SheetSettings): string {
   const genderWord = filialWord(settings.gender)
   const name = settings.name?.trim() ?? ''
@@ -169,7 +169,7 @@ export function deceasedNamePhrase(settings: SheetSettings): string {
   return normalizePunctuation(parts.join(' '))
 }
 
-/** Letters that are already in regular form (e.g. נשמה) — display === lookup. */
+/** Letters that are already in regular form (e.g. נשמה) - display === lookup. */
 function identityLetters(letters: readonly string[]): NameLetter[] {
   return letters.map((letter) => ({ display: letter, lookup: letter }))
 }
@@ -189,7 +189,7 @@ function acrosticLettersFor(settings: SheetSettings): { title: string; letters: 
   return groups
 }
 
-/** letters: display/lookup pairs — display (final forms kept) drives the
+/** letters: display/lookup pairs - display (final forms kept) drives the
  * label, lookup (regular form) finds the psalm-119 stanza. */
 function buildLettersBlock(title: string, letters: NameLetter[], nikud: boolean): SheetBlock {
   const stanzas: StanzaBlock[] = []
@@ -250,7 +250,7 @@ function closingChunkPrayer(index: number): SheetPrayerChunk {
 }
 
 /**
- * Split a mishnah's text at its inline paragraph markers — the harvested data
+ * Split a mishnah's text at its inline paragraph markers - the harvested data
  * marks each mishnah paragraph with a Hebrew letter + period ("ב. ", "ג. ",
  * ...) instead of <br> tags, and the sheet renders them as one flowing block.
  * Splitting here turns each paragraph into a `data-type="psalm"` span, which
@@ -281,7 +281,7 @@ export function buildPageItems(content: SheetBlock[]): PageItem[] {
       case 'kaddish':
         // The whole קדיש יתום block is one page item: title + every exchange
         // in a single container (it fits a page, and it keeps the section a
-        // self-contained unit to restyle — see [data-content="kaddish"]).
+        // self-contained unit to restyle - see [data-content="kaddish"]).
         items.push({ id: nextItemId(), kind: 'kaddish', title: block.title, sections: block.sections, nusach: block.nusach, responseLabel: block.responseLabel })
         break
       case 'psalms': {
@@ -382,7 +382,7 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
     blocks.push(buildLettersBlock('אותיות נשמה', identityLetters(NESHAMA_LETTERS), nikud))
   }
 
-  // Only קדיש יתום — the one recited at the graveside itself. קדיש דרבנן
+  // Only קדיש יתום - the one recited at the graveside itself. קדיש דרבנן
   // (after learning mishnayot) belongs to the shiva/mourning-house visit,
   // not this sheet; a future "shiva" sheet edition can add it back.
   if (settings.sections.includes('kaddish')) {
@@ -392,7 +392,7 @@ export function buildSheetContent(settings: SheetSettings): SheetBlock[] {
       // Every section opens with the mourners' line; the congregation's
       // response (הקהל) that ends in it belongs to the same section. The
       // joint line (הקהל והאבלים: יהא שמה רבא) and the rubric notes open
-      // sections of their own — the layout CSS styles the joint line as its
+      // sections of their own - the layout CSS styles the joint line as its
       // own row ([data-content="kaddish-section-chunk"]:nth-child(3)).
       if (line.speaker !== 'congregation' && current.length > 0) {
         sections.push(current)

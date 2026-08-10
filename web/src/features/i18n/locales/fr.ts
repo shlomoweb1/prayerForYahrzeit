@@ -53,23 +53,23 @@ export const fr = {
   landing: {
     title: 'Créez une feuille commémorative imprimable',
     subtitle:
-      'Saisissez un nom et le site crée une belle feuille de prière ornée de psaumes, de kaddish et de mishnayot — à imprimer, à apporter au cimetière et à réciter à la mémoire d’un proche.',
+      'Saisissez un nom et le site crée une belle feuille de prière ornée de psaumes, de kaddish et de mishnayot - à imprimer, à apporter au cimetière et à réciter à la mémoire d’un proche.',
     ctaStart: 'Commencer',
     ctaLookInside: 'Voir un exemple',
     howItWorksTitle: 'Une prière imprimable, prête pour le cimetière',
     howItWorksIntro:
-      'En quelques minutes, créez une belle feuille de prière à imprimer et à apporter au cimetière — pour la réciter près de la tombe et honorer la mémoire de votre proche.',
+      'En quelques minutes, créez une belle feuille de prière à imprimer et à apporter au cimetière - pour la réciter près de la tombe et honorer la mémoire de votre proche.',
     memorialTitle: 'Honneur à travers les générations',
     memorialText:
-      'Chaque feuille est composée avec une précision d’imprimerie, dans un format qui honore la tradition — et vous permet de partager le souvenir avec toute la famille.',
+      'Chaque feuille est composée avec une précision d’imprimerie, dans un format qui honore la tradition - et vous permet de partager le souvenir avec toute la famille.',
     heroPick: 'Fond :',
     featureItems: {
-      simple: 'Nom hébraïque, genre et rite de prière — la feuille se compose d’elle-même',
+      simple: 'Nom hébraïque, genre et rite de prière - la feuille se compose d’elle-même',
 
       preview:
         'Chaque ligne est composée avec une précision d’imprimerie, telle qu’elle sera imprimée',
 
-      pdf: 'Un PDF soigné, à imprimer chez soi ou chez un imprimeur — prêt pour le cimetière',
+      pdf: 'Un PDF soigné, à imprimer chez soi ou chez un imprimeur - prêt pour le cimetière',
 
       share: 'Envoyez la même prière à vos proches, pour qu’ils la récitent aussi',
     },
@@ -86,9 +86,9 @@ export const fr = {
     dialogDescription: 'Choisissez l’ambiance de la page : couleurs, luminosité et image de fond.',
     themeGroup: 'Thème',
     themes: {
-      dusk: 'Crépuscule — lumière de bougie',
-      parchment: 'Parchemin — papier ancien',
-      stone: 'Pierre — Mont des Oliviers',
+      dusk: 'Crépuscule - lumière de bougie',
+      parchment: 'Parchemin - papier ancien',
+      stone: 'Pierre - Mont des Oliviers',
     },
     mode: {
       light: 'Mode clair',
@@ -169,16 +169,16 @@ export const fr = {
       fontPsalmText: 'Texte des psaumes',
       fontLetterBadge: 'Badge de lettre',
       fontLetterText: 'Texte des lettres',
-      fontKaddishMourner: 'Kaddish — endeuillés',
-      fontKaddishCongregation: 'Kaddish — assemblée',
+      fontKaddishMourner: 'Kaddish - endeuillés',
+      fontKaddishCongregation: 'Kaddish - assemblée',
       fontMishnahBadge: 'Badge de mishna',
       fontMishnahText: 'Texte des mishnayot',
       fontBlessingText: 'Bénédiction',
       fontElMalehText: 'El Malei Rahamim',
       fontHashkavaText: 'Hashkava',
-      fontClosingDryBones: 'Clôture — ossements desséchés',
-      fontClosingAvHaRachamim: 'Clôture — Av HaRahamim',
-      fontClosingParting: "Clôture — prière d'adieu",
+      fontClosingDryBones: 'Clôture - ossements desséchés',
+      fontClosingAvHaRachamim: 'Clôture - Av HaRahamim',
+      fontClosingParting: "Clôture - prière d'adieu",
     },
     groups: {
       design: 'Mise en page',
@@ -300,7 +300,7 @@ export const fr = {
     },
     deathDate: {
       instructions:
-        'Touchez le jour du décès sur le calendrier ci-dessous — la date hébraïque est indiquée chaque jour.',
+        'Touchez le jour du décès sur le calendrier ci-dessous - la date hébraïque est indiquée chaque jour.',
       dateSelected: 'Vous avez sélectionné le {{hebrew}} ({{gregorian}}, calendrier civil).',
       sunsetQuestion: 'Le décès a-t-il eu lieu avant ou après le coucher du soleil (la tombée de la nuit) ?',
       pickAnotherDay: 'Retour au calendrier',
@@ -309,12 +309,12 @@ export const fr = {
       after: 'Après le coucher du soleil (tombée de la nuit)',
       afterHint: 'Le jour juif commence à la tombée de la nuit, la date hébraïque avance donc d’un jour.',
       unsure: 'Je ne suis pas sûr(e)',
-      unsureHint: 'Nous utiliserons la date hébraïque de ce jour — vous pourrez toujours la corriger plus tard.',
+      unsureHint: 'Nous utiliserons la date hébraïque de ce jour - vous pourrez toujours la corriger plus tard.',
       confirmedLabel: 'Date hébraïque du décès',
       nextStepHint: 'Étape suivante : une feuille de prière hébraïque personnalisée sera générée automatiquement pour vous sous forme de PDF imprimable.',
       continueToSheet: 'Continuer vers la feuille de prière',
       change: 'Choisir une autre date',
-      skip: 'Passer — je n’ai pas encore cette information',
+      skip: 'Passer - je n’ai pas encore cette information',
       editMonthYear: 'Choisir un autre mois ou une autre année',
       chooseMonth: 'Mois',
       chooseYear: 'Année',
@@ -366,7 +366,7 @@ export const fr = {
     featuresTitle: 'Fonctionnalités offertes',
     featuresItems: {
       widget:
-        'Widget de préférences d’accessibilité (Reg-35) — ouvrir avec Alt+A depuis n’importe quelle page',
+        'Widget de préférences d’accessibilité (Reg-35) - ouvrir avec Alt+A depuis n’importe quelle page',
 
       keyboard: 'Navigation complète au clavier, y compris l’accès direct au contenu',
 
@@ -381,7 +381,7 @@ export const fr = {
     },
     limitationsTitle: 'Limitations connues',
     limitationsItems: {
-      pdf: 'La prise en charge des lecteurs d’écran dans les fichiers PDF générés est en cours de test et devrait être achevée à la phase 7 — la version actuelle propose une vue HTML accessible en alternative.',
+      pdf: 'La prise en charge des lecteurs d’écran dans les fichiers PDF générés est en cours de test et devrait être achevée à la phase 7 - la version actuelle propose une vue HTML accessible en alternative.',
 
       srMatrix:
         'Certains tests professionnels (NVDA, JAWS, VoiceOver, TalkBack) n’ont pas encore été entièrement réalisés.',
@@ -410,6 +410,6 @@ export const fr = {
   },
   blog: {
     title: 'Blog',
-    tagline: 'Notes de l’atelier — comment ce site est construit',
+    tagline: 'Notes de l’atelier - comment ce site est construit',
   },
 } satisfies typeof he

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-// build-letters.mjs — generate data/letter-index.json from data/tehillim.json.
+// build-letters.mjs - generate data/letter-index.json from data/tehillim.json.
 // P4-03. Run from repo root: node scripts/build-letters.mjs
 //
 // Per Hebrew letter (final forms mapped to their regular form):
 //   - psalm119 stanza: the 8-verse acrostic stanza of psalm 119 that starts
 //     with that letter (verse ids reference data/tehillim.json ch 119)
 //   - psalmStarters: psalms whose first verse begins with that letter
-//     (verified map from plans/03; empty for letters with no psalm starters —
+//     (verified map from plans/03; empty for letters with no psalm starters -
 //     psalm 119 covers them)
 // Stanzas are verified by stripping nikud ([\\u0591-\\u05C7]) from the first
 // verse and asserting its first letter; stanza text is cross-checked against
@@ -45,7 +45,7 @@ const SOFIT_MAP = {
 // verified psalm-starter map (plans/03): the traditional per-letter psalm list
 // (from the yahrzeit-sheet custom). Note: psalm titles mean the first verse of
 // a starter psalm need not begin with the letter itself (e.g. 83 "שיר מזמור
-// לאסף" is listed under א) — this is curated data, not a computed relation.
+// לאסף" is listed under א) - this is curated data, not a computed relation.
 const PSALM_STARTERS = {
   "\u05d0": [1, 83, 94, 116, 119, 132],
   "\u05d1": [71, 104, 114],
@@ -152,7 +152,7 @@ const out = {
         stanzas: "letter -> { letter, chapter, verseIds, firstVerseId } (ids reference data/tehillim.json chapters[119].verses)",
       },
       psalmStarters:
-        "letter -> chapter numbers whose first verse starts with that letter (empty for letters without psalm starters — psalm 119 covers them)",
+        "letter -> chapter numbers whose first verse starts with that letter (empty for letters without psalm starters - psalm 119 covers them)",
       stripNikud: "regular expression [\\u0591-\\u05C7] strips nikud/cantillation",
     },
   },

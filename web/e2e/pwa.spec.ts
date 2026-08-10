@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test'
  * P6-03 PWA checks against the production build (webServer = preview of dist):
  * manifest present, service worker registers and precaches the app shell,
  * the app shell survives going offline. folio.wasm (16 MB) is deliberately
- * NOT precached — the first PDF render fetches it over the network and the
+ * NOT precached - the first PDF render fetches it over the network and the
  * runtime-cache rule keeps it for later offline renders.
  */
 

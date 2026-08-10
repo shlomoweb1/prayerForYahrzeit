@@ -42,7 +42,7 @@ export default function WizardPage() {
   }, [search.step])
 
   // One-time smart default: nobody explicitly asked for a paper size in the
-  // URL, so guess Letter for the handful of countries that use it — A4
+  // URL, so guess Letter for the handful of countries that use it - A4
   // (zod's static default) is already showing and stays put unless the
   // IP lookup positively identifies a Letter country.
   useEffect(() => {

@@ -15,7 +15,7 @@ export default function Footer() {
           {/* <p className="font-display text-lg text-gold">{t('common.brand')}</p>
           <p className="text-sm text-muted-foreground">{t('common.tagline')}</p> */}
           <p className="mt-2 text-sm text-muted-foreground">
-            © {new Date().getFullYear()} {t('common.brand')} — {t('common.footer.rights')}
+            © {new Date().getFullYear()} {t('common.brand')} - {t('common.footer.rights')}
           </p>
         </div>
 

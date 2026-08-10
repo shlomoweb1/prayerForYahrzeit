@@ -1,4 +1,4 @@
-// harness.js — drives the Phase 2 spike tests in the browser.
+// harness.js - drives the Phase 2 spike tests in the browser.
 // Run tests with buttons, or auto-run via ?test=<name> (or ?test=all).
 
 "use strict";
@@ -78,7 +78,7 @@ const Harness = (function () {
       '<style>' + sheetCss() + "</style>" +
       '<div class="page">' +
       buildDecoBlock({}) +
-      '<p class="plain">עמוד ראשון — דף זיכרון לדוגמה.</p>' +
+      '<p class="plain">עמוד ראשון - דף זיכרון לדוגמה.</p>' +
       "</div>" +
       '<div class="page" style="page-break-before:always;">' +
       '<div class="sheet"><div class="head">עמוד שני</div>' +
@@ -91,7 +91,7 @@ const Harness = (function () {
       pageCss: "@page{size:210mm 297mm;margin:0;}",
       styles: pageCss + "\n" + sheetCss(),
       fonts: fontsArr,
-      title: "Folio spike — capture pipeline",
+      title: "Folio spike - capture pipeline",
       bodyHtml: captured.pages.map((p) => '<div class="page">' + p + "</div>").join("\n"),
     });
 
@@ -114,7 +114,7 @@ const Harness = (function () {
       pageCss: "@page{size:210mm 297mm;margin:0;}",
       styles: sheetCss(),
       fonts: fontsArr,
-      title: "Folio spike — decorated words (" + name + ")",
+      title: "Folio spike - decorated words (" + name + ")",
       bodyHtml: buildDecoBlock({ reversed }),
     });
     const settings = Object.assign({}, SETTINGS, { pdfTitle: "Folio deco " + name });
@@ -126,7 +126,7 @@ const Harness = (function () {
 
   // ---- decoration variant tests (P2-04 exploration) -------------------------
 
-  // Row 1: inline-block + block deco (current approach — expected to break in folio)
+  // Row 1: inline-block + block deco (current approach - expected to break in folio)
   // Row 2: inline-block deco, vertical-align:text-top (big initial beside the word)
   // Row 3: position:relative word + position:absolute deco above (target look)
   function buildVariantCss() {

@@ -1,14 +1,14 @@
-# 02 — Architecture
+# 02 - Architecture
 
 ## Stack
 
 - Vite + React 19 + TypeScript (strict)
-- TanStack Router (file-based) — all wizard state in URL query via `validateSearch` + zod
-- TanStack Query — data fetching/caching
+- TanStack Router (file-based) - all wizard state in URL query via `validateSearch` + zod
+- TanStack Query - data fetching/caching
 - Tailwind CSS v4 (CSS-first config, `@theme`, logical utilities) + shadcn/ui components cloned into `web/src/components/ui/`
 - lucide-react icons
 - zod (URL schema, settings schema)
-- react-i18next — locales: `he` (default), `en`, `es`, `fr`
+- react-i18next - locales: `he` (default), `en`, `es`, `fr`
 - vitest + Testing Library (unit), Playwright (E2E/snapshots)
 - PWA (workbox/vite-plugin-pwa)
 - Firebase CLI + web SDKs
@@ -51,10 +51,10 @@ izkor/
 ```
 
 - Modals = `dialog=` param; closing/back just removes the param.
-- A11y preferences are **not** in the URL (device preference, not sheet content) — localStorage, versioned key.
+- A11y preferences are **not** in the URL (device preference, not sheet content) - localStorage, versioned key.
 - Wizard = 7 steps, one question/screen: 1) target (print / share / both) + paper size when print, 2) gender (בן/בת), 3) nusach (אשכנז/ספרד), 4) name (live letter preview), 5) parent name, 6) **split editor**, 7) review → הדפסה/הורדה/שיתוף/שמירה.
 
-## Step 6 — split editor (ExamPreview pattern)
+## Step 6 - split editor (ExamPreview pattern)
 
 - Desktop: settings panel + **mm-accurate scaled A4 preview** (`SheetPreview` + `PreviewScaleWrapper` scale-to-fit).
 - Mobile-first: accordion settings groups above preview + sticky bottom action bar.
@@ -62,8 +62,8 @@ izkor/
 
 ## Render pipeline (main thread capture → worker wasm)
 
-1. `features/render/renderSheetHTML.ts` — mount `SheetPreview` off-screen (`position:fixed; left:-9999px; width:794px` — A4@96dpi); wait `document.fonts.ready` → forced reflow → 3-frame wait (16ms timer shim for background tabs); read `innerHTML` of explicit 297×210mm page divs; capture stylesheet (`document.styleSheets → cssRules → cssText`); assemble wrapped document (`wrapExamHTML` port: `@page{size:…;margin:0}` + inline `<style>` + `dir="rtl" lang="he"`).
-2. `features/folio/folio.worker.ts` — lazy init: `wasm_exec.js` + `instantiateStreaming(folio.wasm)` + `go.run()`; rewrites `@font-face src` → data URIs (worker fetches TTFs; static fonts cached persistently — Cache API/IndexedDB — fetched once); calls `folioRender(html, settings)`; posts `{pdf base64, pages, size}` back.
+1. `features/render/renderSheetHTML.ts` - mount `SheetPreview` off-screen (`position:fixed; left:-9999px; width:794px` - A4@96dpi); wait `document.fonts.ready` → forced reflow → 3-frame wait (16ms timer shim for background tabs); read `innerHTML` of explicit 297×210mm page divs; capture stylesheet (`document.styleSheets → cssRules → cssText`); assemble wrapped document (`wrapExamHTML` port: `@page{size:…;margin:0}` + inline `<style>` + `dir="rtl" lang="he"`).
+2. `features/folio/folio.worker.ts` - lazy init: `wasm_exec.js` + `instantiateStreaming(folio.wasm)` + `go.run()`; rewrites `@font-face src` → data URIs (worker fetches TTFs; static fonts cached persistently - Cache API/IndexedDB - fetched once); calls `folioRender(html, settings)`; posts `{pdf base64, pages, size}` back.
 3. Main thread: base64 → Blob → download / `window.print()` / Firebase Storage upload for share.
 
 Message protocol:
@@ -75,7 +75,7 @@ worker → main:  {type:"ack", id} | {type:"progress", id, phase:"fonts"|"render
 ```
 
 - One render at a time (main-thread queue); cancel = `terminate()` + respawn; warm instance between renders.
-- **No OMR/positions** (unlike tziyun-berega): pure HTML capture — no layout merge step.
+- **No OMR/positions** (unlike tziyun-berega): pure HTML capture - no layout merge step.
 
 ## Mobile-first & RTL mandates
 

@@ -31,7 +31,7 @@ const FRONT_MATTER_CLOSE = '\n---'
 
 /**
  * Splits a markdown string on `---` YAML front-matter delimiters and parses
- * the block with js-yaml — the same YAML engine gray-matter delegates to,
+ * the block with js-yaml - the same YAML engine gray-matter delegates to,
  * without gray-matter's Node-only `Buffer` dependency (unavailable in the
  * browser). Unquoted `date: 2026-08-10` is parsed as a Date by YAML, so quote
  * dates in the file; values are coerced to strings defensively here.
@@ -52,7 +52,7 @@ function parseFrontMatter(raw: string): { data: Record<string, unknown>; content
 }
 
 /**
- * Reads a post file's YAML frontmatter (title, date, excerpt — edited directly
+ * Reads a post file's YAML frontmatter (title, date, excerpt - edited directly
  * in the markdown) and returns the body without it.
  */
 function parsePost(raw: string): ParsedPost {

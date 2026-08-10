@@ -1,7 +1,7 @@
 /**
  * P6-04 Download / print actions for the wizard (final step + dialogs).
  *
- * No Firebase here — Phase 5 is skipped. Account saving stays a stub
+ * No Firebase here - Phase 5 is skipped. Account saving stays a stub
  * elsewhere (TODO(phase-5)).
  */
 
@@ -16,7 +16,7 @@ import type { WizardQuery } from '@/features/wizard/wizard-query'
  *
  * The name is the Hebrew name exactly as the user typed it (normalized,
  * punctuation stripped). Choice: Hebrew filenames are well supported on
- * Windows/macOS/iOS/Android, and we have no offline transliteration source —
+ * Windows/macOS/iOS/Android, and we have no offline transliteration source -
  * transliterating would invent a name the user never wrote.
  */
 export function sheetFilename(search: WizardQuery): string {
@@ -61,7 +61,7 @@ export async function renderPdf(search: WizardQuery): Promise<{ blob: Blob; file
 
 /**
  * Dev-only debug export: the exact standalone HTML document handed to the
- * Folio worker (same capture as `renderPdf`, minus the wasm render step) —
+ * Folio worker (same capture as `renderPdf`, minus the wasm render step) -
  * open it directly in Node/a browser to debug pagination or CSS issues
  * without going through wasm.
  */
@@ -76,7 +76,7 @@ export async function exportSheetHtml(search: WizardQuery): Promise<{ blob: Blob
   return { blob, filename }
 }
 
-/** Plain `<a download>` — no need for the save-file-picker ceremony for a debug artifact. */
+/** Plain `<a download>` - no need for the save-file-picker ceremony for a debug artifact. */
 export function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')

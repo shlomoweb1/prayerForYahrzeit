@@ -17,10 +17,10 @@ export interface PrayersBeforeBlock {
 /**
  * Who speaks a kaddish line, as labeled in the harvest's speaker cues
  * (האבלים / הקהל / הקהל והאבלים). The labels themselves are a rendering
- * concern — the data only carries the role, so the layout can style and
+ * concern - the data only carries the role, so the layout can style and
  * label each speaker independently (see the kaddish-section rendering).
- * `note` is a printing rubric — e.g. "(האומרים קדיש פוסעים שלוש פסיעות
- * לאחור)" — rendered before the exchange it annotates.
+ * `note` is a printing rubric - e.g. "(האומרים קדיש פוסעים שלוש פסיעות
+ * לאחור)" - rendered before the exchange it annotates.
  */
 export type KaddishSpeaker = 'mourner' | 'congregation' | 'joint' | 'note'
 
@@ -28,7 +28,7 @@ export type KaddishSpeaker = 'mourner' | 'congregation' | 'joint' | 'note'
 export interface KaddishLine {
   speaker: KaddishSpeaker
   text: string
-  /** Alternate text for the נוסח ספרד variant of the ashkenaz rite — carried
+  /** Alternate text for the נוסח ספרד variant of the ashkenaz rite - carried
    * only by the lines that differ (the בעלמא line's פורקנא/משיחא insertion). */
   sefardVariant?: string
 }
@@ -51,7 +51,7 @@ export interface LiturgyData {
   sofitMap: Record<string, string>
   nusach: Record<'ashkenaz' | 'sepharad', NusachTextsData>
   /** `male`/`female` carry a `[בעבור]` placeholder in place of the "why the
-   * deceased deserves rest" clause — `reasonPhrases` supplies the wording
+   * deceased deserves rest" clause - `reasonPhrases` supplies the wording
    * for each `ElMalehPhrase` option, per gender. */
   elMaleRachamim: {
     male: string
@@ -70,7 +70,7 @@ export const NESHAMA_LETTERS: readonly string[] = liturgyData.neshamaLetters
 
 /** Map nusach keys to the data keys. נוסח ספרד ('ashkenazSefard') is the
  * ashkenaz rite with its per-line variant texts (KaddishLine.sefardVariant)
- * swapped in — the two share everything else. */
+ * swapped in - the two share everything else. */
 export function nusachTexts(nusach: SheetNusach): NusachTextsData {
   if (nusach === 'sefard') return liturgyData.nusach.sepharad
   const base = liturgyData.nusach.ashkenaz
@@ -132,7 +132,7 @@ export function elMaleRachamimText(gender: SheetGender, namePhrase: string, phra
 /**
  * Traditional השכבה text: the itim harvest concatenates a shared short
  * blessing, both a male and a female full version, and a closing custom note
- * as one string — this picks the matching gender's full version and
+ * as one string - this picks the matching gender's full version and
  * substitutes its name placeholder instead of printing both versions with
  * the placeholder still literal.
  */
@@ -142,7 +142,7 @@ export function hashkavaTraditionalText(nusach: SheetNusach, gender: SheetGender
   )
   const shortResolved = (short ?? '')
     .replace('(פב"פ)', namePhrase)
-    // "תניחנו (לאשה - תניחנה)" — pick the word matching gender, drop the annotation.
+    // "תניחנו (לאשה - תניחנה)" - pick the word matching gender, drop the annotation.
     .replace(/(\S+)\s*\(לאשה\s*-\s*(\S+)\)/, gender === 'female' ? '$2' : '$1')
   const fullResolved = (gender === 'female' ? femaleFull : maleFull)
     ?.replace(gender === 'female' ? '(פלונית)' : '(פלוני)', namePhrase)

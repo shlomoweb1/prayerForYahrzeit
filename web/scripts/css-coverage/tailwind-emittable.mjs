@@ -1,6 +1,6 @@
 /**
  * Tailwind v4's utility-generation logic lives in bundled JS
- * (node_modules/tailwindcss/dist/*.mjs), not a human-readable source tree —
+ * (node_modules/tailwindcss/dist/*.mjs), not a human-readable source tree -
  * there is no JSON/API export of "every property we might emit". But the
  * bundle is minified, not obfuscated: every literal CSS property name the
  * engine can produce still appears verbatim as a quoted string somewhere in
@@ -9,7 +9,7 @@
  * both real CSS properties and unrelated tokens (class-name fragments like
  * "inline-flex", keyword values, internal identifiers); intersecting that
  * superset against MDN's own CSS property registry (`mdn-data`) filters it
- * down to exactly the CSS properties Tailwind can genuinely emit — no
+ * down to exactly the CSS properties Tailwind can genuinely emit - no
  * hand-maintained property list, no dependency on Tailwind publishing one.
  */
 import { readFileSync, readdirSync } from 'node:fs'
@@ -33,7 +33,7 @@ export function tailwindEmittableProperties(tailwindDir, mdnPropertyNames) {
   }
 
   // Static CSS files (preflight.css, theme.css, index.css) are always-real
-  // CSS, not JIT-generated — parse declared property names directly rather
+  // CSS, not JIT-generated - parse declared property names directly rather
   // than relying on the string-literal heuristic, since these aren't
   // produced by the same on-demand utility engine.
   const declPattern = /([a-zA-Z-]+)\s*:\s*[^;{}]+;/g

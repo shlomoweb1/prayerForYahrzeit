@@ -8,7 +8,7 @@ import { useLocalizedPost } from './useLocalizedPost'
 
 /**
  * The blog's front page: a small editorial masthead over a dated list of
- * posts. Kept deliberately light — one ornament, one column, no cards — so
+ * posts. Kept deliberately light - one ornament, one column, no cards - so
  * it reads like a journal rather than a dashboard. The date is localized via
  * Intl (Hebrew shows a Hebrew dateline, LTR locales their own).
  */

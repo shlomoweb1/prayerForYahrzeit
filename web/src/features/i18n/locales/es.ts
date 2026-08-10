@@ -53,22 +53,22 @@ export const es = {
   landing: {
     title: 'Crea una hoja conmemorativa imprimible',
     subtitle:
-      'Introduce un nombre y el sitio creará una hermosa hoja de oración con salmos, kadish y mishnayot — para imprimir, llevar al cementerio y recitar en memoria de un ser querido.',
+      'Introduce un nombre y el sitio creará una hermosa hoja de oración con salmos, kadish y mishnayot - para imprimir, llevar al cementerio y recitar en memoria de un ser querido.',
     ctaStart: 'Empezar',
     ctaLookInside: 'Ver un ejemplo',
     howItWorksTitle: 'Una oración imprimible, lista para el cementerio',
     howItWorksIntro:
-      'En unos minutos crearás una hermosa hoja de oración para imprimir y llevar al cementerio — para recitarla junto a la tumba y honrar la memoria de tu ser querido.',
+      'En unos minutos crearás una hermosa hoja de oración para imprimir y llevar al cementerio - para recitarla junto a la tumba y honrar la memoria de tu ser querido.',
     memorialTitle: 'Honor a través de las generaciones',
     memorialText:
-      'Cada hoja se compone con precisión de imprenta, en un formato que honra la tradición — y te permite compartir el recuerdo con toda la familia.',
+      'Cada hoja se compone con precisión de imprenta, en un formato que honra la tradición - y te permite compartir el recuerdo con toda la familia.',
     heroPick: 'Fondo:',
     featureItems: {
-      simple: 'Nombre hebreo, género y rito de oración — la hoja se compone sola',
+      simple: 'Nombre hebreo, género y rito de oración - la hoja se compone sola',
 
       preview: 'Cada línea está compuesta con precisión de imprenta, tal como se imprimirá',
 
-      pdf: 'Un PDF pulido, para imprimir en casa o en una imprenta — listo para el cementerio',
+      pdf: 'Un PDF pulido, para imprimir en casa o en una imprenta - listo para el cementerio',
 
       share: 'Envía la misma oración a tus allegados, para que también la reciten',
     },
@@ -85,9 +85,9 @@ export const es = {
     dialogDescription: 'Elige el ambiente de la página: colores, luminosidad e imagen de fondo.',
     themeGroup: 'Tema',
     themes: {
-      dusk: 'Crepúsculo — luz de vela',
-      parchment: 'Pergamino — papel antiguo',
-      stone: 'Piedra — Monte de los Olivos',
+      dusk: 'Crepúsculo - luz de vela',
+      parchment: 'Pergamino - papel antiguo',
+      stone: 'Piedra - Monte de los Olivos',
     },
     mode: {
       light: 'Modo claro',
@@ -168,16 +168,16 @@ export const es = {
       fontPsalmText: 'Texto de los salmos',
       fontLetterBadge: 'Insignia de letra',
       fontLetterText: 'Texto de las letras',
-      fontKaddishMourner: 'Kadish — dolientes',
-      fontKaddishCongregation: 'Kadish — congregación',
+      fontKaddishMourner: 'Kadish - dolientes',
+      fontKaddishCongregation: 'Kadish - congregación',
       fontMishnahBadge: 'Insignia de mishná',
       fontMishnahText: 'Texto de las mishnayot',
       fontBlessingText: 'Bendición',
       fontElMalehText: 'El Malei Rajamim',
       fontHashkavaText: 'Hashkavá',
-      fontClosingDryBones: 'Cierre — huesos secos',
-      fontClosingAvHaRachamim: 'Cierre — Av HaRajamim',
-      fontClosingParting: 'Cierre — oración de despedida',
+      fontClosingDryBones: 'Cierre - huesos secos',
+      fontClosingAvHaRachamim: 'Cierre - Av HaRajamim',
+      fontClosingParting: 'Cierre - oración de despedida',
     },
     groups: {
       design: 'Diseño y maquetación',
@@ -308,12 +308,12 @@ export const es = {
       after: 'Después de la puesta de sol (anochecer)',
       afterHint: 'El día judío comienza al anochecer, por lo que la fecha hebrea avanza un día.',
       unsure: 'No estoy seguro/a',
-      unsureHint: 'Usaremos la fecha hebrea de ese día — siempre puede corregirlo más adelante.',
+      unsureHint: 'Usaremos la fecha hebrea de ese día - siempre puede corregirlo más adelante.',
       confirmedLabel: 'Fecha hebrea de fallecimiento',
       nextStepHint: 'Siguiente: se generará automáticamente una hoja de oración en hebreo personalizada como PDF para imprimir.',
       continueToSheet: 'Continuar a la hoja de oración',
       change: 'Elegir otra fecha',
-      skip: 'Omitir — aún no tengo este dato',
+      skip: 'Omitir - aún no tengo este dato',
       editMonthYear: 'Elegir otro mes o año',
       chooseMonth: 'Mes',
       chooseYear: 'Año',
@@ -364,7 +364,7 @@ export const es = {
     featuresTitle: 'Funciones ofrecidas',
     featuresItems: {
       widget:
-        'Widget de preferencias de accesibilidad (Reg-35) — abrir con Alt+A desde cualquier página',
+        'Widget de preferencias de accesibilidad (Reg-35) - abrir con Alt+A desde cualquier página',
 
       keyboard: 'Navegación completa por teclado, incluido saltar al contenido',
 
@@ -379,7 +379,7 @@ export const es = {
     },
     limitationsTitle: 'Limitaciones conocidas',
     limitationsItems: {
-      pdf: 'El soporte de lectores de pantalla en los archivos PDF generados está en fase de prueba y está previsto que se complete en la fase 7 — la versión actual incluye una vista HTML accesible como alternativa.',
+      pdf: 'El soporte de lectores de pantalla en los archivos PDF generados está en fase de prueba y está previsto que se complete en la fase 7 - la versión actual incluye una vista HTML accesible como alternativa.',
 
       srMatrix:
         'Algunas pruebas profesionales (NVDA, JAWS, VoiceOver, TalkBack) aún no se han realizado por completo.',

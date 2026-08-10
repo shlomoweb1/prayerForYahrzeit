@@ -1,6 +1,6 @@
-# Phase 4 — Data + Fonts
+# Phase 4 - Data + Fonts
 
-Branch: `feat/data-and-fonts` · Worktree: `.claude/worktrees/feat-data-and-fonts` · Depends on: —
+Branch: `feat/data-and-fonts` · Worktree: `.claude/worktrees/feat-data-and-fonts` · Depends on: -
 
 Sources:
 - Tehillim: `/home/shlomo-framowitz/Developments/daily-thielim/utils/scraper/data/processed/all-tehillim.json`
@@ -8,22 +8,22 @@ Sources:
 - Fonts: `/home/shlomo-framowitz/Developments/tziyun-berega/verify-legal-fonts/tmp/fonts-staging/system/` (+ provenance.tsv, seed-fonts.sh)
 
 ## P4-01 build-tehillim script → data/tehillim.json
-Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: —
+Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: -
 Details: normalize all-tehillim.json (drop unused fields, index by chapter; keep hebrew w/ nikud, transliteration, english, french). Output committed. 150 chapters / 2527 verses; recovered scraper-dropped verses (56,83,99,107,119,129,132) from live pages + cache fallback.
 - [x] data/tehillim.json generated + schema doc
 
 ## P4-02 itim harvest script → liturgy data
-Status: in-progress | Owner: agent-c | Started: 2026-08-02 | Deps: —
+Status: in-progress | Owner: agent-c | Started: 2026-08-02 | Deps: -
 Details: Playwright scrape of itim sheet → `data/liturgy.json` (fixed psalms, blessing, kaddish nusach variants, closing prayers, השכבה), `data/mishnayot-map.json` (letter → tractate/chapter). Handle page-layout drift; commit outputs (runtime fully offline).
 - [ ] structured liturgy.json + mishnayot map verified against itim page
 
 ## P4-03 build-letters script → letter index
-Status: pending | Owner: — | Started: — | Deps: P4-01
+Status: pending | Owner: - | Started: - | Deps: P4-01
 Details: `data/letter-index.json`: per letter → psalm-119 stanza verses (8 verses) + psalm-starter fallback list (verified map: א:[1,83,94,116,119,132] ב:[71,104,114] ה:15 ח:[56] י:[91,93,97,99] ל:73 מ:21 ע:[137] ר:[33,129] ש:19 ת:[17,86,90,102,145]). Nikud strip regex `[\u0591-\u05C7]` in lib.
 - [ ] letter index generated + psalm-119 stanza extraction tested
 
 ## P4-04 Font curation
-Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: —
+Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: -
 Details: shortlist ~6 families (display + body-with-nikud, regular+bold) from staging/fork (Noto Serif/Sans/Rashi Hebrew, FrankRuhlLibre, TaameyFrankCLM, KeterYG, GveretLevin, DavidLibre); verify glyph coverage: 22 letters + nikud + cantillation.
 - [x] families chosen + coverage verified
 - [x] fonts committed to web/public/fonts/ with LICENSE files
@@ -32,4 +32,4 @@ Details: shortlist ~6 families (display + body-with-nikud, regular+bold) from st
 Status: done | Owner: agent-c | Started: 2026-08-02 | Deps: P4-04
 Details: script copies from staging/fork, verifies provenance.tsv tags (license, nikud/cantillation/letters-only); fails CI on unlicensed/untagged files. GPL families carry LICENSE.txt + GNU-GPL.txt. Data-URI @font-face embedding check deferred to phase 5 (folio wasm render not in this worktree yet).
 - [x] script + CI step
-- [x] embedding in wasm render verified (data-URI @font-face) — deferred to phase 5: folio render
+- [x] embedding in wasm render verified (data-URI @font-face) - deferred to phase 5: folio render

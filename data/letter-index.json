@@ -9,7 +9,7 @@
         "stanzaSize": "8 verses per letter stanza",
         "stanzas": "letter -> { letter, chapter, verseIds, firstVerseId } (ids reference data/tehillim.json chapters[119].verses)"
       },
-      "psalmStarters": "letter -> chapter numbers whose first verse starts with that letter (empty for letters without psalm starters — psalm 119 covers them)",
+      "psalmStarters": "letter -> chapter numbers whose first verse starts with that letter (empty for letters without psalm starters - psalm 119 covers them)",
       "stripNikud": "regular expression [\\u0591-\\u05C7] strips nikud/cantillation"
     }
   },

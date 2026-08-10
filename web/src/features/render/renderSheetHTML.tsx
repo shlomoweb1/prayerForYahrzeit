@@ -1,15 +1,15 @@
 /**
  * Render pipeline: mount the same `<SheetDocument>` the live preview uses
  * off-screen, capture its already browser-paginated `[data-page]` boxes
- * as-is (real classNames, no flattening), pair it with `@/css/pdf.css` — a
+ * as-is (real classNames, no flattening), pair it with `@/css/pdf.css` - a
  * standalone stylesheet (Tailwind scoped to just the sheet/render feature
  * tree, no site-wide theme/a11y junk, see pdf.css's own header) pulled in
- * via Vite's `?inline` import as a precompiled string — and hand Folio one
+ * via Vite's `?inline` import as a precompiled string - and hand Folio one
  * page per `[data-page]` div joined by explicit `page-break-before:always`
- * markers — the same joiner the fork's own `FolioRenderer.render()` uses
+ * markers - the same joiner the fork's own `FolioRenderer.render()` uses
  * for `copies`. Each div is already sized/packed to fit exactly one
  * printed page (useSheetPagePlan's browser measurement), so Folio never
- * has to decide where a page break goes — it only has to draw what's
+ * has to decide where a page break goes - it only has to draw what's
  * already been decided.
  *
  * Folio's CSS engine has no `var()` support at all, so every custom
@@ -17,11 +17,11 @@
  * step-5-review.tsx from the live SheetLayout) is resolved to its literal
  * value via `getComputedStyle` on the actual captured `[data-page]`
  * element before handing the CSS to Folio. `box-shadow` declarations are
- * also stripped — `div[data-page]`'s shadow is a screen-only "floating
+ * also stripped - `div[data-page]`'s shadow is a screen-only "floating
  * page" affordance (nothing casts a shadow on a real printed page) and was
  * a confirmed Folio rendering gap in testing. Fonts are embedded as base64
  * data URIs since Folio has no ability to resolve a relative `/fonts/...`
- * URL itself in the browser (`fontBaseDir` in folio.d.ts is Node-only) —
+ * URL itself in the browser (`fontBaseDir` in folio.d.ts is Node-only) -
  * the data URIs themselves come from `loadFontFaceData` (fonts.ts), which
  * lazy-loads a per-font module precomputed at build time by
  * vite-plugins/sheet-fonts.ts, rather than fetching + base64-encoding the
@@ -50,7 +50,7 @@ export interface RenderSheetOptions {
  * 3 frames with a 16ms timer shim so background tabs still advance.
  *
  * That shim used to be `setTimeout(() => requestAnimationFrame(resolve),
- * 16)` — the `setTimeout` was meant to keep this ticking on a backgrounded
+ * 16)` - the `setTimeout` was meant to keep this ticking on a backgrounded
  * tab, but Chrome (and others) fully suspend `requestAnimationFrame`
  * callbacks for a hidden document rather than merely throttling them, so the
  * inner rAF still never fires and the whole render hangs forever. That's no
@@ -78,10 +78,10 @@ function forceReflow(element: HTMLElement): void {
 /**
  * `index.css` has a real `@media print { ... }` block resetting a11y toggle
  * classes (large text, high contrast, mono, etc.) so they don't leak into a
- * printed/PDF copy — but that media query only ever matches during an
+ * printed/PDF copy - but that media query only ever matches during an
  * actual browser print action. This capture runs in an ordinary tab, so the
- * `@media print` rule never applies here even though its intent — a11y
- * settings must not leak into the PDF — still does. This reproduces that
+ * `@media print` rule never applies here even though its intent - a11y
+ * settings must not leak into the PDF - still does. This reproduces that
  * intent directly: strip every a11y-* class from <html> before rendering,
  * restore the user's actual preference afterward.
  */
@@ -96,20 +96,20 @@ async function withA11yClassesSuppressed<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
-/** Screen-only "floating page" shadow on `div[data-page]` — meaningless for a printed page and a confirmed Folio corruption source. */
+/** Screen-only "floating page" shadow on `div[data-page]` - meaningless for a printed page and a confirmed Folio corruption source. */
 function stripBoxShadow(css: string): string {
   return css.replace(/box-shadow\s*:[^;]+;/gi, '')
 }
 
 /**
  * `pdf.css` (the flattened Tailwind output) still carries the sheet-fonts.ts
- * `@font-face` rules pointing at `url('/fonts/...')` — correct for the live
+ * `@font-face` rules pointing at `url('/fonts/...')` - correct for the live
  * preview, useless here since the Folio worker has no origin to resolve a
  * relative URL against and no `fetchURL` hook is wired up. Those rules are
  * fully superseded by `fontFacesFor`'s base64-embedded ones, which are
  * prepended to the final stylesheet, so the relative-URL originals are only
  * dead weight (best case) or a conflicting duplicate declaration Folio
- * resolves unpredictably (worst case) — strip them outright.
+ * resolves unpredictably (worst case) - strip them outright.
  */
 function stripRelativeUrlFontFaces(css: string): string {
   return css.replace(/@font-face\s*\{[^}]*\}/gi, (rule) => (/url\(['"]?\/fonts\//i.test(rule) ? '' : rule))
@@ -118,12 +118,12 @@ function stripRelativeUrlFontFaces(css: string): string {
 const CSS_VAR_USAGE = /var\((--[a-z0-9-]+)\s*(?:,\s*([^()]*(?:\([^()]*\)[^()]*)*))?\)/gi
 
 /**
- * Inlines every `var(--*, fallback)` usage to its literal value — Folio has
+ * Inlines every `var(--*, fallback)` usage to its literal value - Folio has
  * no `var()` support at all. `sourceEl` must be a mounted element carrying
  * the real cascade (the captured `[data-page]` div works: it has the
  * `--izkor-*` vars set inline by step-5-review.tsx), so `getComputedStyle`
  * resolves multi-level `var(--a, var(--b))` chains to their terminal value
- * in one pass — no manual chain-walking needed.
+ * in one pass - no manual chain-walking needed.
  */
 function resolveCssVars(css: string, sourceEl: Element): string {
   const computed = getComputedStyle(sourceEl)
@@ -158,7 +158,7 @@ async function fontFacesFor(fontIds: SheetFontId[]): Promise<string> {
 
 /**
  * Folio's CSS tokenizer cannot handle family names with spaces (they appear
- * unquoted in serialized inline styles) — the family is renamed to its
+ * unquoted in serialized inline styles) - the family is renamed to its
  * space-free form in the captured CSS and in the page markup, and the
  * @font-face family is renamed to match.
  */
@@ -206,7 +206,7 @@ export async function renderSheetHTML(options: RenderSheetOptions): Promise<stri
       )
       const pdfBody = pages.map((page) => page.outerHTML).join(PAGE_BREAK)
 
-      // Exactly the fonts this render uses — the resolved per-element fonts,
+      // Exactly the fonts this render uses - the resolved per-element fonts,
       // deduped (typically just the ones the user overrode + the global).
       const familiesInUse = [...new Set(Object.values(settings.fonts))]
 
@@ -237,7 +237,7 @@ export async function renderSheetHTML(options: RenderSheetOptions): Promise<stri
         pdfBodyHtml +
         '\n</body>\n</html>'
 
-      // Dev-only hook for inspecting exactly what Folio receives — open it
+      // Dev-only hook for inspecting exactly what Folio receives - open it
       // as a standalone .html file to confirm it renders correctly with no
       // dependency on the app's stylesheets (same convention as
       // folio-client.ts's `__folioClient`).

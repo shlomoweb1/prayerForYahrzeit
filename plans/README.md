@@ -18,14 +18,14 @@ The single source of truth for the izkor project. Every architectural and produc
 
 ## Status vocabulary
 
-- **draft** — being written, not yet approved
-- **approved** — reviewed and locked; changes require a deliberate edit + status bump
-- **implemented** — built and verified; the code is now the truth, doc kept for history
-- **superseded** — replaced by a newer doc; kept for the record
+- **draft** - being written, not yet approved
+- **approved** - reviewed and locked; changes require a deliberate edit + status bump
+- **implemented** - built and verified; the code is now the truth, doc kept for history
+- **superseded** - replaced by a newer doc; kept for the record
 
 ## How to contribute
 
-1. Keep docs terse and factual — decisions, not prose.
+1. Keep docs terse and factual - decisions, not prose.
 2. Update the index table when adding/renaming a doc.
 3. `todo/` tracks *doing*; `plans/` tracks *decided*. Don't duplicate.
 4. Doc changes commit directly to `main` (`docs:` conventional prefix).

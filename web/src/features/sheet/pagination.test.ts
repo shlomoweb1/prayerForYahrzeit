@@ -99,7 +99,7 @@ describe('paginate', () => {
   it('demotes the last item on a page when its own trailing margin (trapped by overflow:hidden) would overflow', () => {
     // Reproduces a real captured page: heightOf's delta-based measurement
     // (gap-before-item) landed the packed total 8px short of the content
-    // box's true scrollHeight — exactly the last item's own margin-bottom,
+    // box's true scrollHeight - exactly the last item's own margin-bottom,
     // which only shows up via the gap to a *following* item that isn't on
     // this page. Numbers are the real measured values (px) from that page.
     interface MarginItem extends PageableItem {
@@ -109,7 +109,7 @@ describe('paginate', () => {
     const mi = (id: string, h: number, mb: number): MarginItem => ({ id, h, mb })
     // heightOf is delta-based in the real app (each item's own box plus the
     // collapsed gap *before* it, revealed by the previous item's own
-    // trailing margin) — not a bare box height. Values below fold that in,
+    // trailing margin) - not a bare box height. Values below fold that in,
     // matching how useSheetPagePlan actually measures items.
     const items = [
       mi('long-psalm', 322.25, 8.085), // first item: no gap-before to fold in
@@ -130,7 +130,7 @@ describe('paginate', () => {
     })
     // Without the fix, all 10 items pack onto one page (heightOf sums to
     // 946, under maxHeight) even though the true rendered total (946 +
-    // short-8's own trapped 8.085px margin) is 954.085 — over budget.
+    // short-8's own trapped 8.085px margin) is 954.085 - over budget.
     expect(pages[0]!.map((it) => it.id)).not.toContain('short-8')
     expect(pages.flatMap((p) => p.map((it) => it.id))).toEqual(items.map((it) => it.id))
   })

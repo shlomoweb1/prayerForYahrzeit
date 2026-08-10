@@ -2,13 +2,13 @@
  * Shelf-packing pagination for sheet content, ported from tziyun-berga's
  * useExamLayout. Two separate hidden templates, each single-purpose:
  *
- *  - `emptyContentRef` is a real page's content column with NOTHING in it —
+ *  - `emptyContentRef` is a real page's content column with NOTHING in it -
  *    its clientHeight is the fixed per-page budget. It must stay empty: a
  *    flex-grow box's min-height defaults to `auto`, so if it held content
  *    taller than its share, it would grow to fit that content instead of
  *    reporting the real budget (that's what "items rendered inside the same
  *    box used for the height budget" breaks).
- *  - `itemsHostRef` is a second page's content column holding every item —
+ *  - `itemsHostRef` is a second page's content column holding every item -
  *    only used to read each item's real wrapped-line height at the exact
  *    real content width (measuring items at any other width silently gives
  *    wrong heights, since Hebrew text wraps differently).
@@ -18,13 +18,13 @@
  *
  * `splitOversized` (optional) is the fallback for an item that's still
  * taller than a whole empty page (e.g. one unusually long psalm chapter
- * rendered as a single flowing block) — pack alone can't fix that, an item
+ * rendered as a single flowing block) - pack alone can't fix that, an item
  * either fits on a page or it doesn't. When a measured item exceeds
  * maxHeight, this callback gets the item's own rendered element and must
  * return 2+ replacement items (e.g. the same chapter cut into smaller
  * flowing chunks at a verse boundary) or null if it can't be split. The
- * replacements go back through another real measure+pack pass — same as
- * every other item, not an estimate — so pass counts and chunk heights stay
+ * replacements go back through another real measure+pack pass - same as
+ * every other item, not an estimate - so pass counts and chunk heights stay
  * correct automatically.
  */
 import { useLayoutEffect, useState } from 'react'
@@ -41,8 +41,8 @@ const MAX_SPLIT_PASSES = 3
 // documented, small residual gap between the two engines' page-content
 // budgets, left as an explicit out-of-scope policy question there). The
 // browser's own `overflow: hidden` silently clips a sub-pixel sliver of
-// content when a page is packed flush against its exact measured budget —
-// invisible in the live preview — but Folio can't silently drop content, so
+// content when a page is packed flush against its exact measured budget -
+// invisible in the live preview - but Folio can't silently drop content, so
 // that same sliver forces a whole extra near-blank page (and can visually
 // drop the last-fitting item's own inline content, like a chapter badge,
 // depending on exactly where the cut lands). Packing pages a few px under
@@ -51,7 +51,7 @@ const PAGINATION_SAFETY_MARGIN_PX = 8
 
 export interface SheetPagePlan<T> {
   plan: T[][]
-  /** The item list actually measured/packed — differs from the input once an oversized item has been split. */
+  /** The item list actually measured/packed - differs from the input once an oversized item has been split. */
   measuredItems: T[]
 }
 
@@ -66,7 +66,7 @@ export function useSheetPagePlan<T extends PageableItem>(
   const [splitPass, setSplitPass] = useState(0)
   // Tracks the last `items` value seen, so the state reset below only runs
   // once per external change (React's sanctioned "adjust state during render
-  // when a prop changes" pattern — cheaper than an extra effect + render).
+  // when a prop changes" pattern - cheaper than an extra effect + render).
   const [prevItems, setPrevItems] = useState(items)
   if (prevItems !== items) {
     setPrevItems(items)
@@ -94,7 +94,7 @@ export function useSheetPagePlan<T extends PageableItem>(
         if (id) {
           heightsById.set(id, Math.max(0, bottom - lastBottom))
           elsById.set(id, el)
-          // The wrapper div itself never carries CSS margin — renderPageItem
+          // The wrapper div itself never carries CSS margin - renderPageItem
           // puts it on the actual rendered element (the <p>/<h2>/<div>
           // inside). Needed by paginate()'s marginBottomOf: see its doc
           // comment for why the item that ends up last on a page needs its

@@ -21,7 +21,7 @@ export interface StepDefinition {
   component: ComponentType<StepProps>
   /** Final step needs the full viewport width for the editor/preview tabs. */
   fullWidth?: boolean
-  /** Gates the Next button — undefined means always advanceable. Steps
+  /** Gates the Next button - undefined means always advanceable. Steps
    * with a meaningful "skip" affordance of their own (step 4's date of
    * death) use this instead of silently letting Next carry an unset value
    * forward; the skip action itself still moves to the next step. */

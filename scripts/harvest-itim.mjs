@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// harvest-itim.mjs — harvest the itim.org.il yahrzeit sheet into liturgy data.
+// harvest-itim.mjs - harvest the itim.org.il yahrzeit sheet into liturgy data.
 // P4-02. Run from repo root: node scripts/harvest-itim.mjs
 //
 // The sheet's full content (prayers, kaddish variants, psalm-119 stanzas,
@@ -293,7 +293,7 @@ const validate = (liturgy, mishnayot, domText) => {
     for (const t of expected)
       if (!domText.includes(t)) problems.push(`rendered DOM missing section "${t}"`);
   } else {
-    console.warn("no rendered DOM captured (fetch path) — DOM cross-check skipped");
+    console.warn("no rendered DOM captured (fetch path) - DOM cross-check skipped");
   }
 
   if (problems.length) {

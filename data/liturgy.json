@@ -8,7 +8,7 @@
       "neshamaLetters": "letters of נשמה used for the second acrostic block",
       "sofitMap": "final forms -> regular letter mapping (ך→כ, ם→מ, ן→נ, ף→פ, ץ→צ)",
       "nusach": "per-nusach prayer texts: prayersBefore (blessing, grave prayer, 7 psalms), kaddishYatom, kaddishDerabanan (incl. kaddishDeAtchadta for ashkenaz), hashkava, closingPrayers",
-      "elMaleRachamim": "אל מלא רחמים — hand-authored (not from the itim harvest), nusach-independent. male/female variants; [פלוני בן פלוני]/[פלונית בת פלוני] is the name placeholder substituted at render time."
+      "elMaleRachamim": "אל מלא רחמים - hand-authored (not from the itim harvest), nusach-independent. male/female variants; [פלוני בן פלוני]/[פלונית בת פלוני] is the name placeholder substituted at render time."
     }
   },
   "metadata": {

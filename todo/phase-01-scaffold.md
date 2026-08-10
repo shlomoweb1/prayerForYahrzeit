@@ -1,9 +1,9 @@
-# Phase 1 — Web Scaffold
+# Phase 1 - Web Scaffold
 
 Branch: `feat/web-scaffold` · Worktree: `.claude/worktrees/feat-web-scaffold` · Depends on: docs (committed)
 
 ## P1-01 Vite + React + TS scaffold
-Status: done | Owner: agent-a | Started: 2026-08-02 | Deps: —
+Status: done | Owner: agent-a | Started: 2026-08-02 | Deps: -
 Details: Vite (react-ts template), strict TS, eslint+prettier, vitest configured, npm scripts (dev/build/test/lint/typecheck). CI workflow committed.
 - [x] create web/ app
 - [x] CI workflow (lint, typecheck, test, build)
@@ -21,7 +21,7 @@ Details: Tailwind v4 CSS-first (@theme, rem tokens). Clone shadcn (Tailwind-4 ve
 - [x] clone base shadcn set (button, input, select, radio, checkbox, accordion, field, label, card, sheet, dialog, toast)
 - [x] eslint rule enforcing logical props (fails CI)
 
-## P1-04 i18n (react-i18next) — he/en/es/fr
+## P1-04 i18n (react-i18next) - he/en/es/fr
 Status: done | Owner: agent-a | Started: 2026-08-02 | Deps: P1-01
 Details: he default; en, es, fr skeleton dictionaries; locale picker in UI; RTL `dir` handling per locale (he only). Spanish = UI-only (no Spanish Tanakh).
 - [x] i18n setup + resource modules
@@ -37,7 +37,7 @@ Details: real classes (contrast/high-invert/mono, text 100–150%, spacing, read
 
 ## P1-06 Accessibility statement page
 Status: done | Owner: agent-a | Started: 2026-08-02 | Deps: P1-01
-Details: `/accessibility` — conformance (IS 5568/WCAG 2.0 AA), features, honest known limitations (PDF SR status placeholder), feedback, last audit date. Footer link on all pages.
+Details: `/accessibility` - conformance (IS 5568/WCAG 2.0 AA), features, honest known limitations (PDF SR status placeholder), feedback, last audit date. Footer link on all pages.
 - [x] page content (he/en/es/fr strings)
 - [x] footer link
 
@@ -50,6 +50,6 @@ Details: @axe-core/playwright ≥0 violations; Lighthouse ≥95 (a11y, best prac
 
 ## P1-08 Firebase project init
 Status: blocked | Owner: agent-a | Started: 2026-08-02 | Deps: P1-01
-Details: create Firebase project (name TBD), `firebase init hosting`, connect web SDKs (env vars via .env.example), deploy placeholder. BLOCKED on user credentials — `firebase login` is interactive; no project created. Completed offline parts: `web/firebase.json` hosting config (SPA rewrite + cache headers for /assets/*, wasm, fonts), `.env.example` placeholders, `features/firebase` init stub that no-ops gracefully when env vars absent. Unblocked by: user runs `firebase login` and creates project (Phase 5).
+Details: create Firebase project (name TBD), `firebase init hosting`, connect web SDKs (env vars via .env.example), deploy placeholder. BLOCKED on user credentials - `firebase login` is interactive; no project created. Completed offline parts: `web/firebase.json` hosting config (SPA rewrite + cache headers for /assets/*, wasm, fonts), `.env.example` placeholders, `features/firebase` init stub that no-ops gracefully when env vars absent. Unblocked by: user runs `firebase login` and creates project (Phase 5).
 - [ ] project created + hosting init (blocked)
 - [x] .env.example + SDK wiring (stub)
