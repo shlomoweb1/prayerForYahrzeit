@@ -6,7 +6,7 @@ import { Step3Names } from '@/features/wizard/steps/step-3-names'
 import { Step4DeathDate } from '@/features/wizard/steps/step-4-death-date'
 import { Step5Review } from './steps/step-5-review'
 // import { Step5Split } from '@/features/wizard/steps/step-5-split'
-import { STEP_MAX, STEP_MIN, type WizardQuery } from '@/features/wizard/wizard-query'
+import { isNusachSelectionValid, STEP_MAX, STEP_MIN, type WizardQuery } from '@/features/wizard/wizard-query'
 
 import type { StepTitleKey } from '@/features/wizard/steps/step-shell'
 
@@ -30,7 +30,12 @@ export interface StepDefinition {
 
 export const stepRegistry: StepDefinition[] = [
   { number: 1, titleKey: 'wizard.steps.1.title', component: Step1Gender },
-  { number: 2, titleKey: 'wizard.steps.2.title', component: Step2Nusach },
+  {
+    number: 2,
+    titleKey: 'wizard.steps.2.title',
+    component: Step2Nusach,
+    canAdvance: (search) => isNusachSelectionValid(search),
+  },
   { number: 3, titleKey: 'wizard.steps.3.title', component: Step3Names },
   {
     number: 4,

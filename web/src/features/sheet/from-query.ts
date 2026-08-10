@@ -40,13 +40,21 @@ function elementFontsFromQuery(search: WizardQuery, font: SheetFontId): SheetEle
   return fonts
 }
 
+/** Maps the wizard's two-level עדה/נוסח choice down to the single
+ * `SheetNusach` the content/liturgy layer works with. Mizrahi has no
+ * נוסח sub-choice and maps straight to the `sefard` liturgy set. */
+export function deriveSheetNusach(search: Pick<WizardQuery, 'edah' | 'nusachAshkenaz'>): SheetNusach {
+  if (search.edah === 'mizrahi') return 'sefard'
+  return search.nusachAshkenaz === 'sefard' ? 'ashkenazSefard' : 'ashkenaz'
+}
+
 /** Build the sheet settings for a wizard query (in-memory every call). */
 export function sheetSettingsFromQuery(search: WizardQuery): SheetSettings {
   const font = isSheetFontId(search.font) ? search.font : 'noto-serif'
   return {
     paper: search.paper,
     gender: search.gender,
-    nusach: search.nusach as SheetNusach,
+    nusach: deriveSheetNusach(search),
     name: search.name || undefined,
     parent: search.parent || undefined,
     deathDate: search.deathDate,

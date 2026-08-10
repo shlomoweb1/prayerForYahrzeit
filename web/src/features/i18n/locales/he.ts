@@ -134,7 +134,8 @@ export const he = {
     labels: {
       paper: 'גודל נייר',
       gender: 'מגדר',
-      nusach: 'נוסח',
+      edah: 'עדה',
+      nusachAshkenaz: 'נוסח',
       name_male: 'שם הנפטר',
       name_female: 'שם המנוחה',
       parent: 'שם האב',
@@ -218,10 +219,13 @@ export const he = {
         male: 'זכר',
         female: 'נקבה',
       },
-      nusach: {
-        ashkenaz: 'אשכנז',
-        ashkenazSefard: 'נוסח ספרד',
-        sefard: 'בני עדות המזרח',
+      edah: {
+        ashkenaz: 'עדת אשכנז',
+        mizrahi: 'עדות המזרח',
+      },
+      nusachAshkenaz: {
+        ashkenaz: 'נוסח אשכנז',
+        sefard: 'נוסח ספרד',
       },
       acrostic: {
         both: 'שם הנפטר ושם האב',
@@ -269,10 +273,13 @@ export const he = {
         male: 'הנוסח בדף יתאים לזכר.',
         female: 'הנוסח בדף יתאים לנקבה.',
       },
-      nusach: {
+      edah: {
+        ashkenaz: 'קהילות אשכנז, עם בחירת נוסח תפילה בהמשך.',
+        mizrahi: 'נוסח התפילה המקובל בקרב בני עדות המזרח.',
+      },
+      nusachAshkenaz: {
         ashkenaz: 'נוסח התפילה המקובל בקהילות אשכנז.',
-        ashkenazSefard: 'נוסח התפילה החסידי, המקובל בקהילות הספרדים-אשכנזים.',
-        sefard: 'נוסח התפילה המקובל בקרב בני עדות המזרח.',
+        sefard: 'נוסח התפילה החסידי, המקובל בקהילות הספרדים-אשכנזים.',
       },
       lineage: {
         kohen: 'מוסיף את התואר "הכהן" לפני ז״ל.',
@@ -286,8 +293,9 @@ export const he = {
     },
     deathDate: {
       instructions: 'הקישו על יום הפטירה בלוח השנה שלמטה - התאריך העברי מוצג בכל יום.',
-      gregorianSelected: 'בחרתם ב-{{date}}.',
+      dateSelected: 'בחרתם ב־{{hebrew}} ({{gregorian}} למניינם).',
       sunsetQuestion: 'האם הפטירה אירעה לפני השקיעה או אחריה (בין השמשות)?',
+      pickAnotherDay: 'חזרה ללוח השנה',
       before: 'לפני השקיעה',
       beforeHint: 'התאריך העברי המוצג נכון כפי שהוא.',
       after: 'אחרי השקיעה (בין השמשות)',
@@ -295,6 +303,8 @@ export const he = {
       unsure: 'לא בטוח/ה',
       unsureHint: 'נשתמש בתאריך העברי של אותו יום - תמיד אפשר לתקן זאת מאוחר יותר.',
       confirmedLabel: 'תאריך פטירה עברי',
+      nextStepHint: 'השלב הבא: דף תפילה בעברית ייווצר עבורכם אוטומטית כקובץ PDF להדפסה.',
+      continueToSheet: 'המשך ליצירת דף התפילה',
       change: 'בחירת תאריך אחר',
       skip: 'דילוג - עדיין אין לי את הפרט הזה',
       editMonthYear: 'בחירת חודש או שנה אחרים',

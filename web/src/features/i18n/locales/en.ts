@@ -137,7 +137,8 @@ export const en = {
     labels: {
       paper: 'Paper size',
       gender: 'Gender',
-      nusach: 'Nusach',
+      edah: 'Edah',
+      nusachAshkenaz: 'Nusach',
       name_male: 'Deceased name',
       name_female: 'Deceased name',
       parent: "Father's name",
@@ -221,10 +222,13 @@ export const en = {
         male: 'Male',
         female: 'Female',
       },
-      nusach: {
-        ashkenaz: 'Ashkenaz',
-        ashkenazSefard: 'Nusach Sefard',
-        sefard: 'Sephardic (Mizrahi)',
+      edah: {
+        ashkenaz: 'Ashkenazi',
+        mizrahi: 'Sephardic (Mizrahi)',
+      },
+      nusachAshkenaz: {
+        ashkenaz: 'Nusach Ashkenaz',
+        sefard: 'Nusach Sefard',
       },
       acrostic: {
         both: 'Deceased and parent names',
@@ -272,10 +276,13 @@ export const en = {
         male: "Matches the sheet's wording to the male form.",
         female: "Matches the sheet's wording to the female form.",
       },
-      nusach: {
+      edah: {
+        ashkenaz: 'Ashkenazi communities, with a nusach choice next.',
+        mizrahi: 'The prayer text used in Sephardic and Mizrahi communities.',
+      },
+      nusachAshkenaz: {
         ashkenaz: 'The prayer text used in Ashkenazi communities.',
-        ashkenazSefard: 'The Chassidic prayer text, used in Nusach Sefard (Ashkenazi-Chassidic) communities.',
-        sefard: 'The prayer text used in Sephardic and Mizrahi communities.',
+        sefard: 'The Chassidic prayer text, used in Nusach Sefard (Ashkenazi-Chassidic) communities.',
       },
       lineage: {
         kohen: 'Adds the title "HaKohen" before ז״ל.',
@@ -289,8 +296,9 @@ export const en = {
     },
     deathDate: {
       instructions: 'Tap the day of passing on the calendar below — Hebrew dates are shown on every day.',
-      gregorianSelected: 'You selected {{date}}.',
+      dateSelected: 'You selected {{hebrew}} ({{gregorian}}, civil calendar).',
       sunsetQuestion: 'Did the passing happen before or after sunset (nightfall)?',
+      pickAnotherDay: 'Back to the calendar',
       before: 'Before sunset',
       beforeHint: 'The Hebrew date shown is correct as is.',
       after: 'After sunset (nightfall)',
@@ -298,6 +306,8 @@ export const en = {
       unsure: 'Not sure',
       unsureHint: "We'll use the Hebrew date for that day — you can always correct this later.",
       confirmedLabel: 'Hebrew date of passing',
+      nextStepHint: 'Next: a personalized Hebrew prayer sheet will be generated for you automatically as a printable PDF.',
+      continueToSheet: 'Continue to your prayer sheet',
       change: 'Choose a different date',
       skip: "Skip — I don't have this yet",
       editMonthYear: 'Choose a different month or year',

@@ -13,7 +13,7 @@ interface OptionCardProps {
   className?: string
 }
 
-function CheckBadge({ className }: { className?: string }) {
+export function CheckBadge({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 2200 2200"

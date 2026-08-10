@@ -8,8 +8,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   gregorianCalendarAdapter,
   hebrewCalendarAdapter,
@@ -255,6 +253,13 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
   const { t, i18n } = useTranslation()
   const [pendingDate, setPendingDate] = useState<Date | null>(null)
   const [mode, setMode] = useState<CalendarMode>('hebrew')
+  // Bumped whenever the calendar needs a clean slate (back-to-calendar,
+  // change) — the picker library tracks its own internal "selected day"
+  // separately from our pendingDate/deathDate state, so clearing our state
+  // alone leaves its old selection highlighted and can even swallow a
+  // re-click on that same day (no value change → no onChange). Folding
+  // this into the `key` forces a full remount instead.
+  const [calendarResetToken, setCalendarResetToken] = useState(0)
 
   const confirmedHDate = search.deathDate ? new HDate(search.deathDate) : undefined
   const adapter = mode === 'hebrew' ? hebrewCalendarAdapter : gregorianCalendarAdapter(i18n.language)
@@ -267,52 +272,65 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
     setPendingDate(null)
   }
 
+  const backToCalendar = () => {
+    setPendingDate(null)
+    setCalendarResetToken((n) => n + 1)
+  }
+
   const startOver = () => {
     setPendingDate(null)
     setSearch({ deathDate: undefined })
+    setCalendarResetToken((n) => n + 1)
   }
 
+  const pendingHDate = pendingDate ? new HDate(pendingDate) : undefined
   const gregorianLabel = pendingDate
     ? new Intl.DateTimeFormat(i18n.language, { dateStyle: 'long' }).format(pendingDate)
     : ''
+  // A day is "chosen" the moment it's tapped, not only once the sunset
+  // question is answered too — the calendar-mode toggle, instructions, and
+  // skip link are all stale from that point on, not just once confirmed.
+  const dateChosen = Boolean(pendingDate || confirmedHDate)
 
+  // Overlays share this box's size, so the sunset question and the
+  // confirmed-date summary never resize the step — only their
+  // opacity/pointer-events toggle. See debug notes: the Hebrew calendar
+  // always renders 6 day-rows, but Gregorian months swing between 5 and 7
+  // (verified live: 168px–240px) — `min-h-60` (240px) reserves for the
+  // worst case in both modes.
   return (
     <StepShell
       stepNumber={4}
       titleKey="wizard.steps.4.title"
       descriptionKey="wizard.steps.4.description"
     >
-      {confirmedHDate ? (
-        <div className="flex flex-col items-center gap-3 rounded-xl border bg-card p-6 text-center shadow-sm">
-          <span className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-            {t('wizard.deathDate.confirmedLabel')}
-          </span>
-          <span dir="rtl" lang="he" className="font-display text-2xl">
-            {confirmedHDate.renderGematriya()}
-          </span>
-          <Button variant="outline" size="sm" onClick={startOver}>
-            {t('wizard.deathDate.change')}
+      <div className="flex flex-col gap-4">
+        {/* Stale from the moment a day is tapped, not just once confirmed —
+         * faded out (not unmounted) so this row still reserves its height
+         * and the container stays the same size. */}
+        <div
+          className={cn(
+            'flex items-center justify-between gap-2 transition-opacity',
+            dateChosen ? 'pointer-events-none opacity-0' : 'opacity-100',
+          )}
+        >
+          <p className="text-muted-foreground text-sm">{t('wizard.deathDate.instructions')}</p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="shrink-0"
+            onClick={() => setMode((m) => (m === 'hebrew' ? 'gregorian' : 'hebrew'))}
+          >
+            {mode === 'hebrew'
+              ? t('wizard.deathDate.switchToGregorian')
+              : t('wizard.deathDate.switchToHebrew')}
           </Button>
         </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-muted-foreground text-sm">{t('wizard.deathDate.instructions')}</p>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="shrink-0"
-              onClick={() => setMode((m) => (m === 'hebrew' ? 'gregorian' : 'hebrew'))}
-            >
-              {mode === 'hebrew'
-                ? t('wizard.deathDate.switchToGregorian')
-                : t('wizard.deathDate.switchToHebrew')}
-            </Button>
-          </div>
 
+        <div className="relative">
           <Datepicker
-            key={mode}
+            key={`${mode}-${calendarResetToken}`}
             as="div"
             config={activeConfig}
             startOfWeek={0}
@@ -330,7 +348,7 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
                   <CalendarNav month={slot.month} year={slot.year} adapter={adapter} />
                   <Datepicker.Items type="day">
                     {({ items }) => (
-                      <div dir={i18n.dir()} className="grid grid-cols-7 gap-1">
+                      <div dir={i18n.dir()} className="grid min-h-60 grid-cols-7 content-start gap-1">
                         {items.map((item) => {
                           if (item.isHeader) {
                             return (
@@ -370,45 +388,99 @@ export function Step4DeathDate({ search, setSearch }: StepProps) {
             </Datepicker.Picker>
           </Datepicker>
 
-          {pendingDate ? (
-            <div className="flex flex-col gap-3 rounded-xl border bg-card p-4 shadow-sm">
+          {/* Sunset question: overlays the (still-visible, blurred) calendar
+           * instead of pushing a new block below it. */}
+          <div
+            className={cn(
+              'absolute inset-0 flex items-center justify-center rounded-xl bg-card/95 p-4 backdrop-blur-sm transition-opacity duration-200',
+              pendingDate && !confirmedHDate ? 'opacity-100' : 'pointer-events-none opacity-0',
+            )}
+          >
+            <div className="flex w-full max-w-sm flex-col gap-3 text-center">
               <p className="text-sm">
-                {t('wizard.deathDate.gregorianSelected', { date: gregorianLabel })}
+                {t('wizard.deathDate.dateSelected', {
+                  hebrew: pendingHDate?.renderGematriya() ?? '',
+                  gregorian: gregorianLabel,
+                })}
               </p>
               <span className="text-sm font-medium">{t('wizard.deathDate.sunsetQuestion')}</span>
-              <RadioGroup
-                value=""
-                onValueChange={(value) => chooseSunset(value as SunsetAnswer)}
-                className="grid grid-cols-1 gap-2 sm:grid-cols-3"
-              >
+              {/* Plain buttons, not a RadioGroup: picking an answer commits
+               * immediately (chooseSunset fades this overlay out right
+               * away), so a radio dot never has time to register as
+               * "checked" — it only added visual noise, and Radix's
+               * RadioGroup defaults to `dir="ltr"` unless told otherwise,
+               * which flipped the dot to the wrong side under Hebrew. */}
+              <div role="group" aria-label={t('wizard.deathDate.sunsetQuestion')} className="grid grid-cols-1 gap-2">
                 {SUNSET_ANSWERS.map((answer) => (
-                  <Label
+                  <button
                     key={answer}
-                    htmlFor={`death-sunset-${answer}`}
-                    className="hover:border-primary/50 flex cursor-pointer flex-col gap-1 rounded-md border p-3 text-sm font-medium"
+                    type="button"
+                    onClick={() => chooseSunset(answer)}
+                    className="hover:border-primary/50 flex cursor-pointer flex-col gap-1 rounded-md border bg-card p-3 text-start text-sm font-medium transition-colors"
                   >
-                    <span className="flex items-center gap-2">
-                      <RadioGroupItem id={`death-sunset-${answer}`} value={answer} />
-                      {t(`wizard.deathDate.${answer}`)}
-                    </span>
+                    <span>{t(`wizard.deathDate.${answer}`)}</span>
                     <span className="text-muted-foreground text-xs font-normal">
                       {t(`wizard.deathDate.${answer}Hint`)}
                     </span>
-                  </Label>
+                  </button>
                 ))}
-              </RadioGroup>
+              </div>
+              <button
+                type="button"
+                className="text-muted-foreground self-center text-xs underline underline-offset-4"
+                onClick={backToCalendar}
+              >
+                {t('wizard.deathDate.pickAnotherDay')}
+              </button>
             </div>
-          ) : null}
+          </div>
 
-          <button
-            type="button"
-            className="text-muted-foreground self-start text-sm underline underline-offset-4"
-            onClick={() => setSearch({ deathDate: undefined, step: search.step + 1 })}
+          {/* Confirmed date: same box, same size — "שנה" just fades this
+           * back out, it doesn't unmount/remount the calendar underneath. */}
+          <div
+            className={cn(
+              'absolute inset-0 flex items-center justify-center rounded-xl bg-card/95 p-4 backdrop-blur-sm transition-opacity duration-200',
+              confirmedHDate ? 'opacity-100' : 'pointer-events-none opacity-0',
+            )}
           >
-            {t('wizard.deathDate.skip')}
-          </button>
+            <div className="flex flex-col items-center gap-3 text-center">
+              <span className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                {t('wizard.deathDate.confirmedLabel')}
+              </span>
+              <span dir="rtl" lang="he" className="font-display text-2xl">
+                {confirmedHDate?.renderGematriya()}
+              </span>
+              <p className="text-muted-foreground max-w-xs text-xs">
+                {t('wizard.deathDate.nextStepHint')}
+              </p>
+              <div className="mt-1 flex flex-col items-center gap-2">
+                <Button onClick={() => setSearch({ step: search.step + 1 })}>
+                  {t('wizard.deathDate.continueToSheet')}
+                  {i18n.dir() === 'rtl' ? (
+                    <ChevronLeft className="size-4" />
+                  ) : (
+                    <ChevronRight className="size-4" />
+                  )}
+                </Button>
+                <Button variant="outline" size="sm" onClick={startOver}>
+                  {t('wizard.deathDate.change')}
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+
+        <button
+          type="button"
+          className={cn(
+            'text-muted-foreground self-start text-sm underline underline-offset-4 transition-opacity',
+            dateChosen ? 'pointer-events-none opacity-0' : 'opacity-100',
+          )}
+          onClick={() => setSearch({ deathDate: undefined, step: search.step + 1 })}
+        >
+          {t('wizard.deathDate.skip')}
+        </button>
+      </div>
     </StepShell>
   )
 }

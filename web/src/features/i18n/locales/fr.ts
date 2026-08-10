@@ -138,7 +138,8 @@ export const fr = {
     labels: {
       paper: 'Format du papier',
       gender: 'Genre',
-      nusach: 'Nusach',
+      edah: 'Communauté',
+      nusachAshkenaz: 'Noussah',
       name_male: 'Nom du défunt',
       name_female: 'Nom de la défunte',
       parent: 'Nom du père',
@@ -223,10 +224,13 @@ export const fr = {
         male: 'Masculin',
         female: 'Féminin',
       },
-      nusach: {
+      edah: {
         ashkenaz: 'Ashkénaze',
-        ashkenazSefard: 'Noussah Sefarad',
-        sefard: 'Séfarade (Mizrahi)',
+        mizrahi: 'Séfarade (Mizrahi)',
+      },
+      nusachAshkenaz: {
+        ashkenaz: 'Noussah Ashkenaz',
+        sefard: 'Noussah Sefarad',
       },
       acrostic: {
         both: 'Noms du défunt et du père',
@@ -274,10 +278,13 @@ export const fr = {
         male: 'Adapte le texte de la feuille à la forme masculine.',
         female: 'Adapte le texte de la feuille à la forme féminine.',
       },
-      nusach: {
+      edah: {
+        ashkenaz: 'Communautés ashkénazes, avec un choix de noussah ensuite.',
+        mizrahi: 'Le texte de prière utilisé dans les communautés séfarades et mizrahi.',
+      },
+      nusachAshkenaz: {
         ashkenaz: 'Le texte de prière utilisé dans les communautés ashkénazes.',
-        ashkenazSefard: 'Le texte de prière hassidique, utilisé dans les communautés noussah Sefarad (ashkénazes-hassidiques).',
-        sefard: 'Le texte de prière utilisé dans les communautés séfarades et mizrahi.',
+        sefard: 'Le texte de prière hassidique, utilisé dans les communautés noussah Sefarad (ashkénazes-hassidiques).',
       },
       lineage: {
         kohen: 'Ajoute le titre « HaCohen » avant ז״ל.',
@@ -292,8 +299,9 @@ export const fr = {
     deathDate: {
       instructions:
         'Touchez le jour du décès sur le calendrier ci-dessous — la date hébraïque est indiquée chaque jour.',
-      gregorianSelected: 'Vous avez sélectionné le {{date}}.',
+      dateSelected: 'Vous avez sélectionné le {{hebrew}} ({{gregorian}}, calendrier civil).',
       sunsetQuestion: 'Le décès a-t-il eu lieu avant ou après le coucher du soleil (la tombée de la nuit) ?',
+      pickAnotherDay: 'Retour au calendrier',
       before: 'Avant le coucher du soleil',
       beforeHint: 'La date hébraïque affichée est correcte telle quelle.',
       after: 'Après le coucher du soleil (tombée de la nuit)',
@@ -301,6 +309,8 @@ export const fr = {
       unsure: 'Je ne suis pas sûr(e)',
       unsureHint: 'Nous utiliserons la date hébraïque de ce jour — vous pourrez toujours la corriger plus tard.',
       confirmedLabel: 'Date hébraïque du décès',
+      nextStepHint: 'Étape suivante : une feuille de prière hébraïque personnalisée sera générée automatiquement pour vous sous forme de PDF imprimable.',
+      continueToSheet: 'Continuer vers la feuille de prière',
       change: 'Choisir une autre date',
       skip: 'Passer — je n’ai pas encore cette information',
       editMonthYear: 'Choisir un autre mois ou une autre année',

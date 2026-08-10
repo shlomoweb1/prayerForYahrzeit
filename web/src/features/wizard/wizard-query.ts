@@ -31,7 +31,16 @@ export const WizardQuery = z.object({
     .default(STEP_MIN),
   paper: z.enum(['a4', 'letter']).default('a4').catch('a4'),
   gender: z.enum(['male', 'female']).default('male').catch('male'),
-  nusach: z.enum(['ashkenaz', 'ashkenazSefard', 'sefard']).default('ashkenaz').catch('ashkenaz'),
+  /**
+   * Top-level עדה choice. Ashkenaz has a further נוסח sub-choice
+   * (`nusachAshkenaz`); Mizrahi doesn't — it maps straight to the
+   * `sefard` liturgy set. See `NusachSelection` below for the validity
+   * rule that combines the two, and `deriveSheetNusach` in
+   * features/sheet/from-query.ts for the mapping down to `SheetNusach`.
+   */
+  edah: z.enum(['ashkenaz', 'mizrahi']).default('ashkenaz').catch('ashkenaz'),
+  /** Only meaningful when `edah === 'ashkenaz'`; unset/invalid otherwise. */
+  nusachAshkenaz: z.enum(['ashkenaz', 'sefard']).optional().catch(undefined),
   name: z.string().max(100).optional().catch(undefined),
   parent: z.string().max(100).optional().catch(undefined),
   lineage: z.enum(['none', 'kohen', 'levi']).default('none').catch('none'),
@@ -110,3 +119,19 @@ export const WizardQuery = z.object({
 
 export type WizardQuery = z.infer<typeof WizardQuery>
 export type WizardDialog = z.infer<typeof WizardQuery>['dialog']
+
+/**
+ * Validity rule for the two-level עדה/נוסח choice, kept as an actual
+ * union (rather than a loose "is nusachAshkenaz set" check) so a Mizrahi
+ * selection can never be read as requiring — or wrongly carrying — an
+ * Ashkenaz נוסח. Gates step 2's Next button via `canAdvance` in
+ * step-registry.tsx.
+ */
+export const NusachSelection = z.discriminatedUnion('edah', [
+  z.object({ edah: z.literal('mizrahi') }),
+  z.object({ edah: z.literal('ashkenaz'), nusachAshkenaz: z.enum(['ashkenaz', 'sefard']) }),
+])
+
+export function isNusachSelectionValid(search: Pick<WizardQuery, 'edah' | 'nusachAshkenaz'>): boolean {
+  return NusachSelection.safeParse(search).success
+}

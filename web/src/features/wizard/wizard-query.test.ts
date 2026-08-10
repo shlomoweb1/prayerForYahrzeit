@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { DEFAULT_SECTIONS, WizardQuery } from '@/features/wizard/wizard-query'
+import { DEFAULT_SECTIONS, isNusachSelectionValid, WizardQuery } from '@/features/wizard/wizard-query'
 
 describe('WizardQuery schema', () => {
   it('parses a full URL query from string params', () => {
@@ -8,7 +8,7 @@ describe('WizardQuery schema', () => {
       step: '4',
       paper: 'letter',
       gender: 'female',
-      nusach: 'sefard',
+      edah: 'mizrahi',
       name: 'משה בן אברהם',
       parent: 'אברהם',
       font: 'noto-serif',
@@ -22,7 +22,7 @@ describe('WizardQuery schema', () => {
       step: 4,
       paper: 'letter',
       gender: 'female',
-      nusach: 'sefard',
+      edah: 'mizrahi',
       name: 'משה בן אברהם',
       parent: 'אברהם',
       font: 'noto-serif',
@@ -40,7 +40,7 @@ describe('WizardQuery schema', () => {
       step: 1,
       paper: 'a4',
       gender: 'male',
-      nusach: 'ashkenaz',
+      edah: 'ashkenaz',
       font: 'noto-serif',
       nikud: 1,
       deco: 1,
@@ -75,5 +75,18 @@ describe('WizardQuery schema', () => {
   it('handles optional dialog param', () => {
     expect(WizardQuery.parse({ dialog: 'print' }).dialog).toBe('print')
     expect(WizardQuery.parse({ dialog: 'nope' }).dialog).toBeUndefined()
+  })
+
+  describe('isNusachSelectionValid', () => {
+    it('requires nusachAshkenaz when edah is ashkenaz', () => {
+      expect(isNusachSelectionValid({ edah: 'ashkenaz', nusachAshkenaz: undefined })).toBe(false)
+      expect(isNusachSelectionValid({ edah: 'ashkenaz', nusachAshkenaz: 'sefard' })).toBe(true)
+      expect(isNusachSelectionValid({ edah: 'ashkenaz', nusachAshkenaz: 'ashkenaz' })).toBe(true)
+    })
+
+    it('is always valid for mizrahi, regardless of nusachAshkenaz', () => {
+      expect(isNusachSelectionValid({ edah: 'mizrahi', nusachAshkenaz: undefined })).toBe(true)
+      expect(isNusachSelectionValid({ edah: 'mizrahi', nusachAshkenaz: 'sefard' })).toBe(true)
+    })
   })
 })

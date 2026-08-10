@@ -165,7 +165,7 @@ div[data-page="a4"] {
 
 
 [data-content="kaddish"] {
-  @apply text-xl;
+  @apply text-lg;
   /* Base for the whole block — covers the joint (יהא שמיה רבא) and note
      lines too, which aren't individually font-controllable and read as part
      of the mourner's recitation. */
@@ -196,7 +196,10 @@ div[data-page="a4"] {
         /* "יהא שמיה רבא..." — the one line set apart, larger and bold, as
            it's presented in print. */
         &[data-chunk="joint"] {
-          @apply block text-center font-bold text-2xl my-1;
+          [data-speaker="joint-cue"]{
+            @apply inline me-2;
+          }
+          @apply block text-center font-bold text-2xl my-0.25;
         }
 
         /* Rubric note (e.g. the three-steps-back reminder) — its own small

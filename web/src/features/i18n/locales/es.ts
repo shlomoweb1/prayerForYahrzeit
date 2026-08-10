@@ -137,7 +137,8 @@ export const es = {
     labels: {
       paper: 'Tamaño de papel',
       gender: 'Género',
-      nusach: 'Nusaj',
+      edah: 'Comunidad',
+      nusachAshkenaz: 'Nusaj',
       name_male: 'Nombre del difunto',
       name_female: 'Nombre de la difunta',
       parent: 'Nombre del padre',
@@ -222,10 +223,13 @@ export const es = {
         male: 'Masculino',
         female: 'Femenino',
       },
-      nusach: {
+      edah: {
         ashkenaz: 'Askenazí',
-        ashkenazSefard: 'Nusaj Sefard',
-        sefard: 'Sefardí (mizrají)',
+        mizrahi: 'Sefardí (mizrají)',
+      },
+      nusachAshkenaz: {
+        ashkenaz: 'Nusaj Askenaz',
+        sefard: 'Nusaj Sefard',
       },
       acrostic: {
         both: 'Nombres del difunto y del padre',
@@ -273,10 +277,13 @@ export const es = {
         male: 'Ajusta el texto de la hoja a la forma masculina.',
         female: 'Ajusta el texto de la hoja a la forma femenina.',
       },
-      nusach: {
+      edah: {
+        ashkenaz: 'Comunidades askenazíes, con una elección de nusaj a continuación.',
+        mizrahi: 'El texto de oración usado en las comunidades sefardíes y mizrajíes.',
+      },
+      nusachAshkenaz: {
         ashkenaz: 'El texto de oración usado en las comunidades askenazíes.',
-        ashkenazSefard: 'El texto de oración jasídico, usado en las comunidades Nusaj Sefard (askenazíes-jasídicas).',
-        sefard: 'El texto de oración usado en las comunidades sefardíes y mizrajíes.',
+        sefard: 'El texto de oración jasídico, usado en las comunidades Nusaj Sefard (askenazíes-jasídicas).',
       },
       lineage: {
         kohen: 'Añade el título "HaCohen" antes de ז״ל.',
@@ -291,8 +298,9 @@ export const es = {
     deathDate: {
       instructions:
         'Toque el día del fallecimiento en el calendario de abajo: la fecha hebrea se muestra cada día.',
-      gregorianSelected: 'Ha seleccionado el {{date}}.',
+      dateSelected: 'Ha seleccionado el {{hebrew}} ({{gregorian}}, calendario civil).',
       sunsetQuestion: '¿El fallecimiento ocurrió antes o después de la puesta de sol (anochecer)?',
+      pickAnotherDay: 'Volver al calendario',
       before: 'Antes de la puesta de sol',
       beforeHint: 'La fecha hebrea mostrada es correcta tal como está.',
       after: 'Después de la puesta de sol (anochecer)',
@@ -300,6 +308,8 @@ export const es = {
       unsure: 'No estoy seguro/a',
       unsureHint: 'Usaremos la fecha hebrea de ese día — siempre puede corregirlo más adelante.',
       confirmedLabel: 'Fecha hebrea de fallecimiento',
+      nextStepHint: 'Siguiente: se generará automáticamente una hoja de oración en hebreo personalizada como PDF para imprimir.',
+      continueToSheet: 'Continuar a la hoja de oración',
       change: 'Elegir otra fecha',
       skip: 'Omitir — aún no tengo este dato',
       editMonthYear: 'Elegir otro mes o año',
