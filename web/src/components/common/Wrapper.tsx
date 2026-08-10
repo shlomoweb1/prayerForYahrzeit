@@ -15,6 +15,11 @@ export default function WrapperComponent() {
   // instead of growing with content (which would push the footer off-screen).
   const isAppShell =
     location.pathname === '/wizard' && (location.search as { step?: number })?.step === STEP_MAX
+  // The long tech documents (tools, folio) get the same pinned treatment:
+  // header and footer stay on screen, the document scrolls in its own region.
+  // (The routes are /tools/system and /tools/folio — a bare prefix match keeps
+  // this true for any future tool page without a route file edit.)
+  const isPinnedPage = location.pathname.startsWith('/tools')
   // The floating CTA's job is to route people into the wizard — hide it once
   // they're already inside the creation flow.
   const inWizard = location.pathname.startsWith('/wizard')
@@ -23,7 +28,7 @@ export default function WrapperComponent() {
     <div
       className={cn(
         'flex flex-col bg-cover bg-center bg-no-repeat',
-        isAppShell ? 'h-dvh overflow-hidden' : 'min-h-dvh',
+        isAppShell || isPinnedPage ? 'h-dvh overflow-hidden' : 'min-h-dvh',
       )}
       style={{ backgroundImage: 'var(--app-backdrop)' }}
     >
@@ -41,11 +46,11 @@ export default function WrapperComponent() {
           overflow-hidden alone doesn't stop it — which made the whole page
           scroll instead of just the inner panels. Layout containment cuts
           that propagation off here. */}
-      <main id="main" className={cn('flex w-full flex-1', isAppShell && 'min-h-0 overflow-hidden contain-layout')}>
+      <main id="main" className={cn('flex w-full flex-1', isAppShell || isPinnedPage ? 'min-h-0 overflow-hidden contain-layout' : undefined)}>
         <div
           className={cn(
             'mx-auto flex w-full items-center justify-center',
-            isAppShell && 'h-full min-h-0 items-stretch',
+            isAppShell || isPinnedPage ? 'h-full min-h-0 items-stretch' : undefined,
           )}
         >
           <Outlet />

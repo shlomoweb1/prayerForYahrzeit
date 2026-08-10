@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccessibilityRouteImport } from './routes/accessibility'
+import { Route as ToolsFolioRouteImport } from './routes/tools/folio'
+import { Route as ToolsSystemRouteImport } from './routes/tools/system'
 import { Route as WizardIndexRouteImport } from './routes/wizard/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +37,16 @@ const AccessibilityRoute = AccessibilityRouteImport.update({
   path: '/accessibility',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsFolioRoute = ToolsFolioRouteImport.update({
+  id: '/tools/folio',
+  path: '/tools/folio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsSystemRoute = ToolsSystemRouteImport.update({
+  id: '/tools/system',
+  path: '/tools/system',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WizardIndexRoute = WizardIndexRouteImport.update({
   id: '/wizard/',
   path: '/wizard/',
@@ -46,6 +58,8 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/tools/folio': typeof ToolsFolioRoute
+  '/tools/system': typeof ToolsSystemRoute
   '/wizard/': typeof WizardIndexRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +67,8 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/tools/folio': typeof ToolsFolioRoute
+  '/tools/system': typeof ToolsSystemRoute
   '/wizard': typeof WizardIndexRoute
 }
 export interface FileRoutesById {
@@ -61,14 +77,38 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/tools/folio': typeof ToolsFolioRoute
+  '/tools/system': typeof ToolsSystemRoute
   '/wizard/': typeof WizardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$' | '/about' | '/accessibility' | '/wizard/'
+  fullPaths:
+    | '/'
+    | '/$'
+    | '/about'
+    | '/accessibility'
+    | '/tools/folio'
+    | '/tools/system'
+    | '/wizard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$' | '/about' | '/accessibility' | '/wizard'
-  id: '__root__' | '/' | '/$' | '/about' | '/accessibility' | '/wizard/'
+  to:
+    | '/'
+    | '/$'
+    | '/about'
+    | '/accessibility'
+    | '/tools/folio'
+    | '/tools/system'
+    | '/wizard'
+  id:
+    | '__root__'
+    | '/'
+    | '/$'
+    | '/about'
+    | '/accessibility'
+    | '/tools/folio'
+    | '/tools/system'
+    | '/wizard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +116,8 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AboutRoute: typeof AboutRoute
   AccessibilityRoute: typeof AccessibilityRoute
+  ToolsFolioRoute: typeof ToolsFolioRoute
+  ToolsSystemRoute: typeof ToolsSystemRoute
   WizardIndexRoute: typeof WizardIndexRoute
 }
 
@@ -109,6 +151,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccessibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/folio': {
+      id: '/tools/folio'
+      path: '/tools/folio'
+      fullPath: '/tools/folio'
+      preLoaderRoute: typeof ToolsFolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/system': {
+      id: '/tools/system'
+      path: '/tools/system'
+      fullPath: '/tools/system'
+      preLoaderRoute: typeof ToolsSystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wizard/': {
       id: '/wizard/'
       path: '/wizard'
@@ -124,6 +180,8 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AboutRoute: AboutRoute,
   AccessibilityRoute: AccessibilityRoute,
+  ToolsFolioRoute: ToolsFolioRoute,
+  ToolsSystemRoute: ToolsSystemRoute,
   WizardIndexRoute: WizardIndexRoute,
 }
 export const routeTree = rootRouteImport

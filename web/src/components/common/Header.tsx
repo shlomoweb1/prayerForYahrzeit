@@ -1,36 +1,42 @@
 import { useTranslation } from 'react-i18next'
 
 import { LocalePicker } from '@/features/i18n/locale-picker'
-import { HomeIcon } from 'lucide-react'
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 
 export default function Header() {
   const { t } = useTranslation();
-  const location = useLocation();
-  
+
+
   return (
     <header className="sticky top-0 z-40 border-b bg-background/50 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <div className="flex items-center gap-2">
-
-
-          <span className="font-display text-xl text-gold lang-he:font-keter">
-            {t('common.siyata.he')}
-          </span>
+      <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 pb-3 pt-4">
+        <span
+          aria-hidden="true"
+          dir="rtl"
+          className="pointer-events-none absolute inset-s-4 top-[0.3em] text-[10px] leading-none text-muted-foreground lang-he:font-keter"
+        >
+          {t('common.siyata.he')}
+        </span>
+        <div className="flex items-center gap-4">
           {
-            location.pathname !== '/' && (
-              <Link to="/" className="group font-display text-xl text-muted-foreground lang-he:font-keter flex items-center gap-1 no-underline hover:text-gold">
-                <HomeIcon className="size-6 border rounded-sm p-0.75 border-muted-foreground group-hover:border-gold" />
-                <span>{t('common.nav.home')}</span>
-              </Link>
-            )
+            <Link to="/" className="group font-display text-xl text-muted-foreground lang-he:font-keter flex items-center gap-1 no-underline hover:text-gold">
+              <span>{t('common.nav.home')}</span>
+            </Link>
           }
           {
-            location.pathname !== '/about' && (
-              <Link to="/about" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
-                {t('common.nav.about')}
-              </Link>
-            )
+            <Link to="/about" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+              {t('common.nav.about')}
+            </Link>
+          }
+          {
+            <Link to="/tools/system" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+              {t('common.nav.tools')}
+            </Link>
+          }
+          {
+            <Link to="/tools/folio" className="font-display text-xl text-muted-foreground lang-he:font-keter no-underline hover:text-gold">
+              {t('common.nav.folio')}
+            </Link>
           }
         </div>
         <LocalePicker />

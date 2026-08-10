@@ -7,10 +7,13 @@ export const he = {
       en: "B'siyata D'shmaya",
     },
     skipLink: 'דלג לתוכן',
+    tocTitle: 'בעמוד זה',
     nav: {
       home: 'בית',
       wizard: 'יצירת דף',
       accessibility: 'נגישות',
+      tools: 'כלים',
+      folio: 'איך נוצר ה-PDF',
       about: 'אודות',
     },
     footer: {

@@ -9,10 +9,13 @@ export const en = {
       en: "B'siyata D'shmaya",
     },
     skipLink: 'Skip to content',
+    tocTitle: 'On this page',
     nav: {
       home: 'Home',
       wizard: 'Create sheet',
       accessibility: 'Accessibility',
+      tools: 'Tools',
+      folio: 'How PDFs work',
       about: 'About',
     },
     footer: {
