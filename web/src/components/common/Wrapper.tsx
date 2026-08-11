@@ -10,7 +10,7 @@ import { STEP_MAX } from '@/features/wizard/wizard-query'
 import { cn } from '@/lib/utils'
 
 export default function WrapperComponent() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const location = useRouterState({ select: (s) => s.location })
   // The route locale owns the UI language on content routes (bare path =
   // Hebrew, /en = English); the wizard is exempt and keeps the picker choice.
@@ -19,13 +19,16 @@ export default function WrapperComponent() {
   // own internal scroll region, so the shell must be pinned to the viewport
   // instead of growing with content (which would push the footer off-screen).
   const isAppShell =
-    location.pathname === '/wizard' && (location.search as { step?: number })?.step === STEP_MAX
+  location.pathname === '/wizard' && (location.search as { step?: number })?.step === STEP_MAX
   // The blog post pages get the same pinned treatment: header and footer stay
-  // on screen, the article scrolls in its own region. The /blog index keeps
-  // the trailing slash so it scrolls normally like the landing page - a bare
-  // prefix match keeps this true for any future post route without a route
-  // file edit.
-  const isPinnedPage = location.pathname.startsWith('/blog/')
+  // on screen, the article scrolls in its own region. The /blog (or /en/blog)
+  // index has no trailing slash, so it doesn't match and scrolls normally
+  // like the landing page - matching on `/blog/` (with the optional locale
+  // prefix) keeps this true for any future post route or locale without a
+  // route file edit.
+  // @ts-expect-error i18n types verify in browser
+  const supportedLangs = Object.keys(i18n.options.resources).filter(k=>k!=i18n.options.fallbackLng[0]);
+  const isPinnedPage = (new RegExp(`^\\/(?:(${supportedLangs.join("|")})\\/)?blog\\/`)).test(location.pathname)
   // The floating CTA's job is to route people into the wizard - hide it once
   // they're already inside the creation flow.
   const inWizard = location.pathname.startsWith('/wizard')

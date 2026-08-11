@@ -8,12 +8,12 @@ import { siteUrl } from '@/lib/site'
  */
 export function buildHreflang(
   path: string,
-): Array<{ rel: 'alternate'; hreflang: string; href: string }> {
+): Array<{ rel: 'alternate'; hrefLang: string; href: string }> {
   const bare = path === '/' ? '/' : path
   const enPath = path === '/' ? '/en' : `/en${path}`
   return [
-    { rel: 'alternate', hreflang: 'he', href: siteUrl(bare) },
-    { rel: 'alternate', hreflang: 'en', href: siteUrl(enPath) },
-    { rel: 'alternate', hreflang: 'x-default', href: siteUrl(bare) },
+    { rel: 'alternate', hrefLang: 'he', href: siteUrl(bare) },
+    { rel: 'alternate', hrefLang: 'en', href: siteUrl(enPath) },
+    { rel: 'alternate', hrefLang: 'x-default', href: siteUrl(bare) },
   ]
 }

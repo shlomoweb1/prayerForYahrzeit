@@ -1,8 +1,12 @@
 import { load as parseYaml } from 'js-yaml'
 
 import pdfEnRaw from '@/content/blog/pdf-in-the-browser.en.md?raw'
+import pdfEsRaw from '@/content/blog/pdf-in-the-browser.es.md?raw'
+import pdfFrRaw from '@/content/blog/pdf-in-the-browser.fr.md?raw'
 import pdfHeRaw from '@/content/blog/pdf-in-the-browser.he.md?raw'
 import toolsEnRaw from '@/content/blog/tools-behind-this-site.en.md?raw'
+import toolsEsRaw from '@/content/blog/tools-behind-this-site.es.md?raw'
+import toolsFrRaw from '@/content/blog/tools-behind-this-site.fr.md?raw'
 import toolsHeRaw from '@/content/blog/tools-behind-this-site.he.md?raw'
 
 export interface PostMeta {
@@ -69,19 +73,23 @@ function parsePost(raw: string): ParsedPost {
 
 const pdfEn = parsePost(pdfEnRaw)
 const pdfHe = parsePost(pdfHeRaw)
+const pdfFr = parsePost(pdfFrRaw)
+const pdfEs = parsePost(pdfEsRaw)
 const toolsEn = parsePost(toolsEnRaw)
 const toolsHe = parsePost(toolsHeRaw)
+const toolsFr = parsePost(toolsFrRaw)
+const toolsEs = parsePost(toolsEsRaw)
 
 export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: 'pdf-in-the-browser',
-    metaByLocale: { en: pdfEn.meta, he: pdfHe.meta },
-    contentByLocale: { en: pdfEn.content, he: pdfHe.content },
+    metaByLocale: { en: pdfEn.meta, he: pdfHe.meta, fr: pdfFr.meta, es: pdfEs.meta },
+    contentByLocale: { en: pdfEn.content, he: pdfHe.content, fr: pdfFr.content, es: pdfEs.content },
   },
   {
     slug: 'tools-behind-this-site',
-    metaByLocale: { en: toolsEn.meta, he: toolsHe.meta },
-    contentByLocale: { en: toolsEn.content, he: toolsHe.content },
+    metaByLocale: { en: toolsEn.meta, he: toolsHe.meta, fr: toolsFr.meta, es: toolsEs.meta },
+    contentByLocale: { en: toolsEn.content, he: toolsHe.content, fr: toolsFr.content, es: toolsEs.content },
   },
 ]
 

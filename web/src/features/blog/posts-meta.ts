@@ -36,22 +36,46 @@ export const POSTS_META: readonly PostMetaEntry[] = [
         excerpt:
           'כל דף זיכרון הופך ל-PDF - אבל החלק המעניין הוא איך. בלי שרת, בלי צילום מסך: מנוע פריסה אמיתי, מורכב ל-WebAssembly, בונה את המסמך מחדש ישירות בדפדפן - כולל העברית עם הניקוד.',
       },
+      fr: {
+        title: 'Comment un PDF peut-il être créé directement dans le navigateur ?',
+        date: '2026-08-10',
+        excerpt:
+          "Chaque feuille commémorative devient un PDF - mais la partie intéressante, c'est comment. Sans serveur, sans capture d'écran : un véritable moteur de mise en page compilé en WebAssembly reconstruit le document directement dans votre navigateur, voyelles hébraïques comprises.",
+      },
+      es: {
+        title: '¿Cómo se puede crear un PDF directamente en el navegador?',
+        date: '2026-08-10',
+        excerpt:
+          'Cada hoja conmemorativa se convierte en un PDF, pero lo interesante es cómo. Sin servidor, sin capturas de pantalla: un motor de maquetación real, compilado a WebAssembly, reconstruye el documento directamente en tu navegador, incluidas las vocales hebreas.',
+      },
     },
   },
   {
     slug: 'tools-behind-this-site',
     metaByLocale: {
       en: {
-        title: 'The Tools Behind This Website - Explained Simply',
+        title: "What's Behind This Website - Explained Simply",
         date: '2026-08-10',
         excerpt:
-          'What quietly powers this site - the open-source stack, the Hebrew fonts, and the choice to do all the work in your browser so your sheet never leaves your device.',
+          "What quietly runs this site - why it's built with free tools, how the Hebrew fonts are prepared, and why the work happens on your device, not ours",
       },
       he: {
-        title: 'הכלים שמאחורי האתר - מוסבר בפשטות',
+        title: 'מה יש מאחורי האתר - מוסבר בפשטות',
         date: '2026-08-10',
         excerpt:
-          'מה מריץ את האתר הזה בשקט - ערימת הקוד הפתוח, הגופנים העבריים, והבחירה לעשות את כל העבודה בדפדפן שלכם כדי שדף הזיכרון לעולם לא יעזוב את המכשיר שלכם.',
+          'מה מפעיל את האתר הזה בשקט - למה הוא בנוי מכלים חופשיים, איך הגופנים העבריים מוכנים, ולמה כל העבודה קורית אצלכם במכשיר ולא אצלנו',
+      },
+      fr: {
+        title: "Ce qu'il y a derrière ce site - expliqué simplement",
+        date: '2026-08-10',
+        excerpt:
+          "Ce qui fait fonctionner ce site en silence - pourquoi il est construit avec des outils libres, comment les polices hébraïques sont préparées, et pourquoi le travail se fait sur votre appareil, pas chez nous",
+      },
+      es: {
+        title: 'Qué hay detrás de este sitio - explicado con sencillez',
+        date: '2026-08-10',
+        excerpt:
+          'Qué hace funcionar este sitio en silencio - por qué está construido con herramientas libres, cómo se preparan las fuentes hebreas, y por qué el trabajo ocurre en tu dispositivo, no en el nuestro',
       },
     },
   },

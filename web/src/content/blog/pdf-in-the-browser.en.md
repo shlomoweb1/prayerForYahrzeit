@@ -280,7 +280,7 @@ We also need to know:
 
 ## Extending the PDF Engine for Hebrew and Nikud
 
-In the implementation I use, I extended the PDF engine to better handle the needs of Hebrew documents.
+The PDF engine we use is called **Folio**. It started as an open project, and we built our own version on top of it, extending it especially for the needs of Hebrew documents.
 
 Especially:
 
@@ -296,11 +296,11 @@ The goal is for the text to remain accurate and consistent when the page becomes
 
 Ultimately, we want this:
 
-**I create a PDF on my computer**
+**You create a PDF on your computer**
 
 ↓
 
-**I send it to someone else**
+**You send it to someone else**
 
 ↓
 
