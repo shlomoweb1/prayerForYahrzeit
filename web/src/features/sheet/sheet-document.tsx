@@ -410,16 +410,19 @@ export interface SheetDocumentProps {
 /** בס"ד + title chrome repeated on every page. */
 function PageHeader({ headerText, deathDateText }: { headerText: string; deathDateText?: string }) {
   return (
-    <div data-section="header">
-      <div data-content="bsd">בס"ד</div>
-      <div data-content="title">
-        <h1>סדר עלייה לקבר</h1>
-        <h2>
-          {headerText}
-          {deathDateText ? ` - ${deathDateText}` : ''}
-        </h2>
+    <>
+      <div data-section="header">
+        <div data-content="bsd">בס"ד</div>
+        <div data-content="title">
+          <h1>סדר עלייה לקבר</h1>
+          <h2>
+            {headerText}
+            {deathDateText ? ` - ${deathDateText}` : ''}
+          </h2>
+        </div>
       </div>
-    </div>
+      <div data-content="gniza-only-stament">נא לשמור על קדושת הגיליון גניזה בלבד</div>
+    </>
   )
 }
 

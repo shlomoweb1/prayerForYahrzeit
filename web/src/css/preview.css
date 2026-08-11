@@ -43,7 +43,7 @@
 }
 
 div[data-page] {
-  @apply flex flex-col bg-white;
+  @apply flex flex-col bg-white relative;
   padding: var(--izkor-margin-y, 1cm) var(--izkor-margin-x, 1cm);
   font-size: var(--izkor-base-font-size, 14.7px);
   line-height: var(--izkor-line-height, 1.45);
@@ -69,6 +69,28 @@ div[data-page] {
         margin: 0;
       }
     }
+  }
+  /* Sibling of [data-section="header"]/"content"/"footer", not nested inside
+     the header. Folio (go-html-to-pdf) resizes an absolutely-positioned
+     auto-height overlay's *layout height budget* to its containing block's
+     own normal-flow content height (go-html-to-pdf layout/div.go:745) - the
+     header (~34pt tall) silently truncated this element's wrapped text to
+     whatever fit in ~2 lines. Anchoring to div[data-page] instead (which is
+     the full page height) removes that budget ceiling.
+     Also: Folio's calc() parser mis-parses any `Nrem` term (matches Tailwind's
+     `em` unit branch before `rem` - go-html-to-pdf html/properties.go
+     parseCalcLeaf) so calc()-wrapped rem offsets like Tailwind's `-left-5`
+     silently resolve to nothing; use plain non-calc values instead. And
+     Folio's transform-origin for a `transform: scale()` box defaults to the
+     box's top edge (not center) whenever CSS height is auto - so avoid
+     `transform: scale()` here entirely and shrink via font-size/width. */
+  [data-content="gniza-only-stament"]{
+    @apply absolute text-[#3f3f3f] text-center border border-[#3f3f3f];
+    top: -0.625rem;
+    left: -0.625rem;
+    width: 1.25cm;
+    font-size: 0.5em;
+    padding: 0.01cm;
   }
   [data-section="content"]{
     @apply grow;

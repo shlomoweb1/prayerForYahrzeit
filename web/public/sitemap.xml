@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://izkor.example/</loc>
+    <loc>https://kadish-yatom.web.app/</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/en</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/about</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/en/about</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/accessibility</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/en/accessibility</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/blog</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/en/blog</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/contact</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/en/contact</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/privacy</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/en/privacy</loc>
+    <lastmod>2026-08-11</lastmod>
+  </url>
+  <url>
+    <loc>https://kadish-yatom.web.app/blog/pdf-in-the-browser</loc>
     <lastmod>2026-08-10</lastmod>
   </url>
   <url>
-    <loc>https://izkor.example/en</loc>
+    <loc>https://kadish-yatom.web.app/en/blog/pdf-in-the-browser</loc>
     <lastmod>2026-08-10</lastmod>
   </url>
   <url>
-    <loc>https://izkor.example/about</loc>
+    <loc>https://kadish-yatom.web.app/blog/tools-behind-this-site</loc>
     <lastmod>2026-08-10</lastmod>
   </url>
   <url>
-    <loc>https://izkor.example/en/about</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/accessibility</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/en/accessibility</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/blog</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/en/blog</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/contact</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/en/contact</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/privacy</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/en/privacy</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/blog/pdf-in-the-browser</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/en/blog/pdf-in-the-browser</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/blog/tools-behind-this-site</loc>
-    <lastmod>2026-08-10</lastmod>
-  </url>
-  <url>
-    <loc>https://izkor.example/en/blog/tools-behind-this-site</loc>
+    <loc>https://kadish-yatom.web.app/en/blog/tools-behind-this-site</loc>
     <lastmod>2026-08-10</lastmod>
   </url>
 </urlset>

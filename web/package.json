@@ -22,7 +22,8 @@
     "audit:lighthouse": "node scripts/audit-lighthouse.mjs",
     "audit:css-coverage": "node scripts/css-coverage/report-css-coverage.mjs",
     "audit:css-matrix": "node scripts/css-coverage/css-support-matrix.mjs",
-    "audit:css-selectors": "node scripts/css-coverage/selectors-atrules-functions-matrix.mjs"
+    "audit:css-selectors": "node scripts/css-coverage/selectors-atrules-functions-matrix.mjs",
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@hebcal/core": "^6.9.1",
@@ -78,6 +79,7 @@
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
+    "firebase-tools": "^15.26.0",
     "globals": "^17.9.0",
     "html-minifier-terser": "^7.2.0",
     "html-validate": "^11.6.2",

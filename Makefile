@@ -8,7 +8,7 @@
 NPM := npm --prefix web
 
 .PHONY: install dev build preview lint lint-fix format format-check \
-	typecheck test test-watch e2e lighthouse data fonts ci
+	typecheck test test-watch e2e lighthouse publish data fonts ci
 
 ## install - npm install in web/
 install:
@@ -63,6 +63,11 @@ e2e:
 ## lighthouse - audit dist (a11y/best-practices/seo) via its own static server
 lighthouse: build
 	$(NPM) run audit:lighthouse
+
+## publish - build, prerender static routes, and deploy dist/ to Firebase Hosting
+publish: build
+	$(NPM) run prerender
+	$(NPM) run deploy
 
 ## data - regenerate data/tehillim.json + data/letter-index.json
 data:
